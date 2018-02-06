@@ -43,5 +43,5 @@ export const configureStore = (state = initialState) => {
 };
 
 export default (BaseComponent) => {
-	return withRedux(configureStore)(nextReduxSaga(BaseComponent));
+	return withRedux(configureStore)(nextReduxSaga({ async: true })(BaseComponent));
 };

@@ -13,12 +13,10 @@ import withRoot from 'src/root';
 
 import AuthStorage from 'src/utils/AuthStorage';
 
-import MainLayout from 'src/layout/Main';
-
-import IndexPage from 'src/components/Pages/Index';
+import LoginForm from 'src/components/Form/Login';
 
 @withRoot
-export default class Consultor extends PureComponent {
+export default class Lesson extends PureComponent {
 	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
@@ -28,13 +26,12 @@ export default class Consultor extends PureComponent {
 
 	render() {
 		return (
-			<MainLayout>
+			<div>
 				<Head>
-					<title>IPP Education - Consultor</title>
+					<title>IPP Education - Lesson</title>
 				</Head>
-				Consultor
-				{/* <IndexPage /> */}
-			</MainLayout>
+				<LoginForm />
+			</div>
 		);
 	}
 }
