@@ -36,7 +36,7 @@ export default class Index extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Every Student is an Achiever</title>
+					<title>IPP Education - Admin</title>
 				</Head>
 				<IndexPage />
 			</MainLayout>
