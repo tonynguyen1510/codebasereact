@@ -32,7 +32,13 @@ export const configureStore = (state = initialState) => {
 		composeMiddleware,
 	);
 
-	store.sagaTask = sagaMiddleware.run(rootSaga);
+	store.runSagaTask = () => {
+		store.sagaTask = sagaMiddleware.run(rootSaga);
+	};
+
+	// run the rootSaga initially
+	store.runSagaTask();
+
 	return store;
 };
 

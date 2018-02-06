@@ -18,7 +18,7 @@ import MainLayout from 'src/layout/Main';
 import IndexPage from 'src/components/Pages/Index';
 
 @withRoot
-export default class Index extends PureComponent {
+export default class Consultor extends PureComponent {
 	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
@@ -27,12 +27,14 @@ export default class Index extends PureComponent {
 	}
 
 	render() {
+		console.log('this.props.', this.props);
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Admin</title>
+					<title>IPP Education - Consultor</title>
 				</Head>
-				<IndexPage />
+				Consultor
+				{/* <IndexPage /> */}
 			</MainLayout>
 		);
 	}

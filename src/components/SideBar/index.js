@@ -10,54 +10,75 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Icon } from 'antd';
 
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+import Link from 'next/link';
+import { withRouter } from 'next/router';
 
 const SideBar = (props) => {
-	const { } = props;
-
 	return (
 		<Menu
-			// onClick={this.handleClick}
-			style={{ width: 256 }}
-			defaultSelectedKeys={['1']}
-			defaultOpenKeys={['sub1']}
+			// onClick={handleClick}
+			style={{ width: 200 }}
+			defaultSelectedKeys={[props.router.pathname]}
 			mode="inline"
 		>
-			<SubMenu key="sub1" title={<span><Icon type="mail" /><span>Navigation One</span></span>}>
-				<MenuItemGroup key="g1" title="Item 1">
-					<Menu.Item key="1">Option 1</Menu.Item>
-					<Menu.Item key="2">Option 2</Menu.Item>
-				</MenuItemGroup>
-				<MenuItemGroup key="g2" title="Item 2">
-					<Menu.Item key="3">Option 3</Menu.Item>
-					<Menu.Item key="4">Option 4</Menu.Item>
-				</MenuItemGroup>
-			</SubMenu>
-			<SubMenu key="sub2" title={<span><Icon type="appstore" /><span>Navigation Two</span></span>}>
-				<Menu.Item key="5">Option 5</Menu.Item>
-				<Menu.Item key="6">Option 6</Menu.Item>
-				<SubMenu key="sub3" title="Submenu">
-					<Menu.Item key="7">Option 7</Menu.Item>
-					<Menu.Item key="8">Option 8</Menu.Item>
-				</SubMenu>
-			</SubMenu>
-			<SubMenu key="sub4" title={<span><Icon type="setting" /><span>Navigation Three</span></span>}>
-				<Menu.Item key="9">Option 9</Menu.Item>
-				<Menu.Item key="10">Option 10</Menu.Item>
-				<Menu.Item key="11">Option 11</Menu.Item>
-				<Menu.Item key="12">Option 12</Menu.Item>
-			</SubMenu>
+			<Menu.Item key="/">
+				<Link href="/">
+					<a>
+						<Icon type="home" />
+						<span>Dashboard</span>
+					</a>
+				</Link>
+			</Menu.Item>
+			<Menu.Item key="/consultor">
+				<Link href="/consultor">
+					<a>
+						<Icon type="solution" />
+						<span>Consultor</span>
+					</a>
+				</Link>
+			</Menu.Item>
+			<Menu.Item key="/teacher">
+				<Link href="/teacher">
+					<a>
+						<Icon type="contacts" />
+						<span>Teacher</span>
+					</a>
+				</Link>
+			</Menu.Item>
+			<Menu.Item key="/student">
+				<Link href="/student">
+					<a>
+						<Icon type="team" />
+						<span>Student</span>
+					</a>
+				</Link>
+			</Menu.Item>
+			<Menu.Item key="/lesson">
+				<Link href="/lesson">
+					<a>
+						<Icon type="calculator" />
+						<span>Lesson</span>
+					</a>
+				</Link>
+			</Menu.Item>
+			<Menu.Item key="/class">
+				<Link href="/class">
+					<a>
+						<Icon type="profile" />
+						<span>Class</span>
+					</a>
+				</Link>
+			</Menu.Item>
 		</Menu>
 	);
 };
 
 SideBar.propTypes = {
-	// classes: PropTypes.object.isRequired,
+	router: PropTypes.object.isRequired,
 };
 
 SideBar.defaultProps = {
 	// classes: {},
 };
 
-export default SideBar;
+export default withRouter(SideBar);

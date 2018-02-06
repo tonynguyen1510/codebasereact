@@ -37,7 +37,7 @@ const ToastWrapper = (props) => {
 				bodyClassName="body"
 				toastClassName="toast"
 			/>
-			<style jsx>{`
+			<style>{`
 				.progress {
 					height: 3px;
 				}
