@@ -7,6 +7,7 @@
 *------------------------------------------------------- */
 import React, { PureComponent } from 'react';
 import cookie from 'react-cookies';
+import NProgress from 'nprogress';
 
 import Router from 'next/router';
 
@@ -17,12 +18,12 @@ import { getUserAuth } from 'src/redux/actions/auth';
 
 import LoaderGlobal from 'src/components/LoaderGlobal';
 import ToastWrapper from 'src/components/ToastWrapper';
-// import LoginModal from 'src/components/Modals/Login';
-// import SignUpModal from 'src/components/Modals/SignUp';
 
-// Router.onRouteChangeStart = (e) => {
-// 	console.log('asd--------------', arguments);
-// };
+Router.onRouteChangeStart = (url) => {
+	NProgress.start();
+};
+Router.onRouteChangeComplete = () => NProgress.done();
+Router.onRouteChangeError = () => NProgress.done();
 
 const withRoot = (Child) => {
 	@withReduxSaga
@@ -45,7 +46,7 @@ const withRoot = (Child) => {
 
 		render() {
 			return ([
-				<LoaderGlobal key="loading-global" />,
+				// <LoaderGlobal key="loading-global" />,
 				<Child key="child" {...this.props} />,
 				<ToastWrapper key="toastify" />,
 				// <LoginModal key="login-modal" />,

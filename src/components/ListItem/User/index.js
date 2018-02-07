@@ -57,8 +57,8 @@ const UserListItem = (props) => {
 							<div className="loading-block" />
 						</div>
 						<div className={classNames.value} style={{ flex: 3 }}>
-							<p><div className="loading-block" /></p>
-							<p><div className="loading-block" /></p>
+							<div className="loading-block" />
+							<div className="loading-block" />
 						</div>
 					</div>
 				</div>
@@ -68,8 +68,8 @@ const UserListItem = (props) => {
 							<div className="loading-block" />
 						</div>
 						<div className={classNames.value} style={{ flex: 3 }}>
-							<p><div className="loading-block" /></p>
-							<p><div className="loading-block" /></p>
+							<div className="loading-block" />
+							<div className="loading-block" />
 						</div>
 					</div>
 				</div>
@@ -83,7 +83,7 @@ const UserListItem = (props) => {
 			<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 
 			<div className={classNames.avatarWrapper}>
-				<Avatar size="large" />
+				<Avatar size="large" src="https://yt3.ggpht.com/-DxJSAKyWCE4/AAAAAAAAAAI/AAAAAAAAAAA/M8DxVGU-fR0/s88-c-k-no-mo-rj-c0xffffff/photo.jpg" />
 				<div className={classNames.nameWrapper}>
 					<h4>Trần Đức Tiến</h4>
 					<i>Consultor</i>

@@ -14,6 +14,7 @@
     "next": "^4.2.3",
     "next-redux-saga": "^2.0.1",
     "next-redux-wrapper": "^1.3.5",
+    "nprogress": "^0.2.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-cookies": "^0.1.0",
@@ -55,8 +56,8 @@
     "trash": "^4.2.1"
   },
   "scripts": {
-    "dev": "next",
+    "dev": "next -p 3333",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p 3333"
   }
 }

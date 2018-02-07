@@ -14,7 +14,7 @@ import { Avatar } from 'antd';
 const AvatarCpn = (props) => {
 	const { src, ...rest } = props;
 
-	return src ? <Avatar {...rest} /> : <Avatar icon="user" {...rest} />;
+	return src ? <Avatar src={src} {...rest} /> : <Avatar icon="user" {...rest} />;
 };
 
 AvatarCpn.propTypes = {

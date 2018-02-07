@@ -87,7 +87,7 @@ const UserCard = (props) => {
 			<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 
 			<div className={classNames.avatarWrapper}>
-				<Avatar size="large" />
+				<Avatar size="large" src="https://yt3.ggpht.com/-DxJSAKyWCE4/AAAAAAAAAAI/AAAAAAAAAAA/M8DxVGU-fR0/s88-c-k-no-mo-rj-c0xffffff/photo.jpg" />
 				<div className={classNames.nameWrapper}>
 					<h4>Trần Đức Tiến</h4>
 					<i>Consultor</i>
