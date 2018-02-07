@@ -15,7 +15,7 @@ import AuthStorage from 'src/utils/AuthStorage';
 
 import MainLayout from 'src/layout/Main';
 
-import IndexPage from 'src/components/Pages/Index';
+import ConsultorPage from 'src/components/Pages/Consultor';
 
 @withRoot
 export default class Consultor extends PureComponent {
@@ -32,8 +32,7 @@ export default class Consultor extends PureComponent {
 				<Head>
 					<title>IPP Education - Consultor</title>
 				</Head>
-				Consultor
-				{/* <IndexPage /> */}
+				<ConsultorPage />
 			</MainLayout>
 		);
 	}

@@ -15,7 +15,7 @@ import AuthStorage from 'src/utils/AuthStorage';
 
 import MainLayout from 'src/layout/Main';
 
-import IndexPage from 'src/components/Pages/Index';
+import TeacherPage from 'src/components/Pages/Teacher';
 
 @withRoot
 export default class Teacher extends PureComponent {
@@ -32,8 +32,7 @@ export default class Teacher extends PureComponent {
 				<Head>
 					<title>IPP Education - Teacher</title>
 				</Head>
-				Teacher
-				<IndexPage />
+				<TeacherPage />
 			</MainLayout>
 		);
 	}

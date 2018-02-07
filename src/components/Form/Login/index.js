@@ -15,8 +15,6 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd';
 
 import { stylesheet, classNames } from './style.less';
 
-const FormItem = Form.Item;
-
 function mapStateToProps(state) {
 	return {
 		store: {
@@ -60,34 +58,37 @@ export default class LoginForm extends Component {
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
+		console.log('props', this.props);
 
 		return (
-			<Form onSubmit={this.handleSubmit} className={classNames.form}>
-				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
+			<div className={classNames.root}>
+				<Form onSubmit={this.handleSubmit} className={classNames.form}>
+					<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 
-				<FormItem>
-					{getFieldDecorator('userName', {
-						rules: [{ required: true, message: 'Please input your username!' }],
-					})(
-						<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
-					)}
-				</FormItem>
-				<FormItem>
-					{getFieldDecorator('password', {
-						rules: [{ required: true, message: 'Please input your Password!' }],
-					})(
-						<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
-					)}
-				</FormItem>
-				<FormItem>
-					<Button type="primary" htmlType="submit" className={classNames.btn}>
-						Log in
-					</Button>
-					<p className="text-center">
-						<a className="login-form-forgot" href="#">Forgot password</a>
-					</p>
-				</FormItem>
-			</Form>
+					<Form.Item>
+						{getFieldDecorator('email', {
+							rules: [{ required: true, message: 'Please input your email!' }, { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Email is invalid!' }],
+						})(
+							<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />,
+						)}
+					</Form.Item>
+					<Form.Item>
+						{getFieldDecorator('password', {
+							rules: [{ required: true, message: 'Please input your Password!' }, { min: 5 }],
+						})(
+							<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />,
+						)}
+					</Form.Item>
+					<Form.Item>
+						<Button type="primary" htmlType="submit" className={classNames.btn}>
+							Log in
+						</Button>
+						<p className="text-center">
+							<a className="login-form-forgot" href="#">Forgot password</a>
+						</p>
+					</Form.Item>
+				</Form>
+			</div>
 		);
 	}
 }

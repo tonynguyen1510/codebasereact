@@ -17,7 +17,7 @@ const SideBar = (props) => {
 	return (
 		<Menu
 			// onClick={handleClick}
-			style={{ width: 200 }}
+			style={{ width: 200, padding: '10px 0' }}
 			defaultSelectedKeys={[props.router.pathname]}
 			mode="inline"
 		>
