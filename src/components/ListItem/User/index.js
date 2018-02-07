@@ -35,28 +35,28 @@ const UserListItem = (props) => {
 
 				<div className={classNames.tr}>
 					<div className={classNames.item} >
-						<div className={classNames.label}>
+						<div className={classNames.label} style={{ flex: 1 }}>
 							<div className="loading-block" />
 						</div>
-						<div className={classNames.value}>
+						<div className={classNames.value} style={{ flex: 3 }}>
 							<div className="loading-block" />
 						</div>
 					</div>
 					<div className={classNames.item} >
-						<div className={classNames.label}>
+						<div className={classNames.label} style={{ flex: 1 }}>
 							<div className="loading-block" />
 						</div>
-						<div className={classNames.value}>
+						<div className={classNames.value} style={{ flex: 3 }}>
 							<div className="loading-block" />
 						</div>
 					</div>
 				</div>
 				<div className={classNames.tr}>
 					<div className={classNames.item} >
-						<div className={classNames.label}>
+						<div className={classNames.label} style={{ flex: 1 }}>
 							<div className="loading-block" />
 						</div>
-						<div className={classNames.value}>
+						<div className={classNames.value} style={{ flex: 3 }}>
 							<p><div className="loading-block" /></p>
 							<p><div className="loading-block" /></p>
 						</div>
@@ -64,10 +64,10 @@ const UserListItem = (props) => {
 				</div>
 				<div className={classNames.tr}>
 					<div className={classNames.item} >
-						<div className={classNames.label}>
+						<div className={classNames.label} style={{ flex: 1 }}>
 							<div className="loading-block" />
 						</div>
-						<div className={classNames.value}>
+						<div className={classNames.value} style={{ flex: 3 }}>
 							<p><div className="loading-block" /></p>
 							<p><div className="loading-block" /></p>
 						</div>
