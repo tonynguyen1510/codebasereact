@@ -11,28 +11,28 @@ import React, { PureComponent } from 'react';
 import Head from 'next/head';
 import withRoot from 'src/root';
 
-import AuthStorage from 'src/utils/AuthStorage';
+// import AuthStorage from 'src/utils/AuthStorage';
 
 import MainLayout from 'src/layout/Main';
 
-import ClassPage from 'src/components/Pages/Class';
+// import ClassPage from 'src/components/Pages/Class';
 
 @withRoot
-export default class ClassAction extends PureComponent {
-	static async getInitialProps(ctx) {
+export default class ConsultorDetail extends PureComponent {
+	static async getInitialProps({ query, res }) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
 		// }
-		// return { auth: ctx.store.getState().auth };
+		return { id: query.id };
 	}
 
 	render() {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Class - New</title>
+					<title>IPP Education - Consultor - {this.props.id}</title>
 				</Head>
-				Create class
+				Consultor id = {this.props.id}
 			</MainLayout>
 		);
 	}

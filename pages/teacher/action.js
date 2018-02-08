@@ -18,7 +18,7 @@ import MainLayout from 'src/layout/Main';
 import ClassPage from 'src/components/Pages/Class';
 
 @withRoot
-export default class ClassAction extends PureComponent {
+export default class TeacherAction extends PureComponent {
 	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
@@ -30,9 +30,9 @@ export default class ClassAction extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Class - New</title>
+					<title>IPP Education - Teacher - New</title>
 				</Head>
-				Create class
+				Create Teacher
 			</MainLayout>
 		);
 	}
