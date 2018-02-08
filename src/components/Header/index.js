@@ -45,7 +45,7 @@ const content = (
 
 const title = (
 	<div className={classNames.title}>
-		<Avatar size="large" />
+		<Avatar size="large" src="https://yt3.ggpht.com/-DxJSAKyWCE4/AAAAAAAAAAI/AAAAAAAAAAA/M8DxVGU-fR0/s88-c-k-no-mo-rj-c0xffffff/photo.jpg" />
 		<div className={classNames.info}>
 			<h4>Đức Tiến</h4>
 			<i>ductienas@gmail.com</i>
@@ -68,7 +68,7 @@ const Header = (props) => {
 				<div className={classNames.right}>
 					<NotiWidget />
 					<Popover content={content} title={title} trigger="click" placement="bottomRight">
-						<Avatar className={classNames.avatar} />
+						<Avatar className={classNames.avatar} src="https://yt3.ggpht.com/-DxJSAKyWCE4/AAAAAAAAAAI/AAAAAAAAAAA/M8DxVGU-fR0/s88-c-k-no-mo-rj-c0xffffff/photo.jpg" />
 					</Popover>
 				</div>
 			</div>

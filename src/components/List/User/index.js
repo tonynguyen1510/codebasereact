@@ -70,10 +70,25 @@ export default class UserList extends PureComponent {
 					this.state.viewMode === 'grid' ?
 						<div className={classNames.grid}>
 							<UserCard />
+							<UserCard />
+							<UserCard />
+							<UserCard />
+							<UserCard />
+							<UserCard />
+							<UserCard />
+							<UserCard />
 							<UserCard loading />
 							<UserCard loading />
 						</div> :
 						<div className={classNames.list}>
+							<UserListItem />
+							<UserListItem />
+							<UserListItem />
+							<UserListItem />
+							<UserListItem />
+							<UserListItem />
+							<UserListItem />
+							<UserListItem />
 							<UserListItem />
 							<UserListItem loading />
 							<UserListItem loading />

@@ -16,10 +16,10 @@ import withReduxSaga from 'src/redux/store';
 import AuthStorage from 'src/utils/AuthStorage';
 import { getUserAuth } from 'src/redux/actions/auth';
 
-import LoaderGlobal from 'src/components/LoaderGlobal';
+// import LoaderGlobal from 'src/components/LoaderGlobal';
 import ToastWrapper from 'src/components/ToastWrapper';
 
-Router.onRouteChangeStart = (url) => {
+Router.onRouteChangeStart = (/* url */) => {
 	NProgress.start();
 };
 Router.onRouteChangeComplete = () => NProgress.done();

@@ -9,12 +9,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Router from 'next/router';
+
 import Header from 'src/components/Header';
 import Footer from 'src/components/Footer';
 import SideBar from 'src/components/SideBar';
 
 const MainLayout = (props) => {
 	const { children, className } = props;
+	console.log('Router', Router);
 
 	return (
 		<div style={{ display: 'flex', flexFlow: 'column', minHeight: '100vh' }}>
