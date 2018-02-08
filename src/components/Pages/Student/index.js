@@ -11,7 +11,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Breadcrumb, Icon } from 'antd';
 import Link from 'next/link';
 
 import UserList from 'src/components/List/User';
@@ -56,12 +55,6 @@ export default class StudentPage extends Component {
 		return (
 			<div className={classNames.root}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
-				<Breadcrumb style={{ margin: '5px 0 15px 5px' }}>
-					<Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-					<Link href="/student">
-						<a>Student</a>
-					</Link>
-				</Breadcrumb>
 
 				<UserList />
 			</div>

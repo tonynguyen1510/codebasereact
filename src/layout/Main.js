@@ -9,22 +9,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Router from 'next/router';
-
 import Header from 'src/components/Header';
 import Footer from 'src/components/Footer';
 import SideBar from 'src/components/SideBar';
+import Breadcrumb from 'src/components/Breadcrumb';
 
 const MainLayout = (props) => {
 	const { children, className } = props;
-	console.log('Router', Router);
 
 	return (
 		<div style={{ display: 'flex', flexFlow: 'column', minHeight: '100vh' }}>
 			<Header />
 			<div style={{ display: 'flex', flex: 1 }}>
 				<SideBar />
-				<main style={{ flex: 1, padding: 15 }} className={className}>{children}</main>
+				<main style={{ flex: 1, padding: 15 }} className={className}>
+					<Breadcrumb />
+					{children}
+				</main>
 			</div>
 			<Footer />
 		</div>

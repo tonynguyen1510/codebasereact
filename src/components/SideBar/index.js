@@ -18,7 +18,7 @@ const SideBar = (props) => {
 		<Menu
 			// onClick={handleClick}
 			style={{ width: 200, padding: '10px 0' }}
-			defaultSelectedKeys={[props.router.pathname]}
+			defaultSelectedKeys={['/' + props.router.pathname.split('/')[1]]}
 			mode="inline"
 		>
 			<Menu.Item key="/">
