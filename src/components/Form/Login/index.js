@@ -11,23 +11,28 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import Router from 'next/router';
+import { Form, Icon, Input, Button } from 'antd';
+
+import { loginRequest } from 'src/redux/actions/auth';
+
+import AuthStorage from 'src/utils/AuthStorage';
 
 import { stylesheet, classNames } from './style.less';
 
 function mapStateToProps(state) {
 	return {
 		store: {
-			//modal: state.modal,
+			auth: state.auth,
 		},
 	};
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		//action: bindActionCreators({
-			//toggleLoginModal,
-		//}, dispatch),
+		action: bindActionCreators({
+			loginRequest,
+		}, dispatch),
 	};
 };
 
@@ -35,30 +40,53 @@ const mapDispatchToProps = (dispatch) => {
 @Form.create()
 export default class LoginForm extends Component {
 	static propTypes = {
-		// classes: PropTypes.object.isRequired,
+		form: PropTypes.object.isRequired,
 		// store
 		store: PropTypes.shape({
-			modal: PropTypes.object.isRequired,
+			auth: PropTypes.object.isRequired,
 		}).isRequired,
 		// action
 		action: PropTypes.shape({
-			toggleLoginModal: PropTypes.func.isRequired,
+			loginRequest: PropTypes.func.isRequired,
 		}).isRequired,
 	}
 
 	static defaultProps = {}
 
+	state = {
+		loading: false,
+	}
+
+	componentDidMount() {
+		if (AuthStorage.loggedIn) {
+			Router.push('/');
+		}
+	}
+
 	handleSubmit = (e) => {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				console.log('Received values of form: ', values);
+				this.setState({
+					loading: true,
+				});
+				this.props.action.loginRequest(values, () => {
+					if (AuthStorage.loggedIn && this.props.store.auth.id) {
+						Router.push('/');
+					}
+					this.setState({
+						loading: false,
+					});
+				}, () => {
+					this.setState({
+						loading: false,
+					});
+				});
 			}
 		});
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		console.log('props', this.props);
 
 		return (
 			<div className={classNames.root}>
@@ -80,7 +108,7 @@ export default class LoginForm extends Component {
 						)}
 					</Form.Item>
 					<Form.Item>
-						<Button type="primary" htmlType="submit" className={classNames.btn}>
+						<Button type="primary" htmlType="submit" className={classNames.btn} loading={this.state.loading}>
 							Log in
 						</Button>
 						<p className="text-center">

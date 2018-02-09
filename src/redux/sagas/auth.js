@@ -61,75 +61,6 @@ function* loginFlow() {
 	}
 }
 
-function* loginGoogleFlow() {
-	const INFINITE = true;
-
-	while (INFINITE) {
-		const { payload, next, nextErr } = yield take('LOGIN_GOOGLE');
-
-		const response = yield call(fetchApi, {
-			uri: 'users/login-google',
-			params: payload,
-			opt: { method: 'POST' },
-		});
-
-		if (response && !response.error) {
-			const data = {
-				token: response.id,
-				userId: response.userId,
-				loginType: response.user.loginType,
-			};
-			AuthStorage.value = data;
-
-			yield put({
-				type: 'LOGIN_SUCCESS',
-				payload: response.user,
-			});
-			if (typeof next === 'function') {
-				next();
-			}
-		} else {
-			if (typeof nextErr === 'function') {
-				nextErr();
-			}
-		}
-	}
-}
-
-function* loginFacebookFlow() {
-	const INFINITE = true;
-
-	while (INFINITE) {
-		const { payload, next, nextErr } = yield take('LOGIN_FACEBOOK');
-
-		const response = yield call(fetchApi, {
-			uri: 'users/login-facebook',
-			params: payload,
-			opt: { method: 'POST' },
-		});
-		if (response && !response.error) {
-			const data = {
-				token: response.id,
-				userId: response.userId,
-				loginType: response.user.loginType,
-			};
-			AuthStorage.value = data;
-
-			yield put({
-				type: 'LOGIN_SUCCESS',
-				payload: response.user,
-			});
-			if (typeof next === 'function') {
-				next();
-			}
-		} else {
-			if (typeof nextErr === 'function') {
-				nextErr();
-			}
-		}
-	}
-}
-
 function* logoutFlow() {
 	const INFINITE = true;
 
@@ -149,39 +80,7 @@ function* logoutFlow() {
 	}
 }
 
-function* signUpFlow() {
-	const INFINITE = true;
-
-	while (INFINITE) {
-		const { payload, next, nextErr } = yield take('SIGN_UP_REQUEST');
-
-		const response = yield call(fetchApi, {
-			uri: 'users',
-			params: payload,
-			opt: { method: 'POST' },
-			loading: false,
-		});
-
-		if (response && !response.error) {
-
-			const authorizeTask = yield fork(authorize, payload, next, nextErr);
-			const action = yield take(['LOGOUT_REQUEST', 'LOGIN_FAILED', REQUEST_ERROR]);
-
-			if (action.type === 'LOGOUT_REQUEST') {
-				yield cancel(authorizeTask);
-			}
-		} else {
-			if (typeof nextErr === 'function') {
-				nextErr();
-			}
-		}
-	}
-}
-
 export default function* authFlow() {
 	yield fork(loginFlow);
-	yield fork(loginGoogleFlow);
-	yield fork(loginFacebookFlow);
 	yield fork(logoutFlow);
-	yield fork(signUpFlow);
 }

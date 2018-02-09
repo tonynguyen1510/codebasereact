@@ -8,9 +8,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import Color from 'color';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import { Popover, Icon, Divider, Button, Badge } from 'antd';
+import Router from 'next/router';
+
+import { Popover, Icon, Divider } from 'antd';
 
 import Link from 'next/link';
 
@@ -19,41 +22,65 @@ import Link from 'next/link';
 import Avatar from 'src/components/Avatar';
 import NotiWidget from 'src/components/NotiWidget';
 
+import { logoutRequest } from 'src/redux/actions/auth';
+
 import { stylesheet, classNames } from './style.less';
 
-const content = (
-	<div className={classNames.content}>
-		<div className={classNames.itemWrapper}>
-			<div className={classNames.item}>
-				<Icon type="user" />
-				<span>Profile</span>
-			</div>
-			<div className={classNames.item}>
-				<Icon type="setting" />
-				<span>Setting</span>
-			</div>
-		</div>
-		<Divider className={classNames.divider} />
-		<div className={classNames.itemWrapper}>
-			<div className={classNames.item}>
-				<Icon type="logout" />
-				<span>Logout</span>
-			</div>
-		</div>
-	</div>
-);
+function mapStateToProps(state) {
+	return {
+		store: {
+			auth: state.auth,
+		},
+	};
+}
 
-const title = (
-	<div className={classNames.title}>
-		<Avatar size="large" src="https://yt3.ggpht.com/-DxJSAKyWCE4/AAAAAAAAAAI/AAAAAAAAAAA/M8DxVGU-fR0/s88-c-k-no-mo-rj-c0xffffff/photo.jpg" />
-		<div className={classNames.info}>
-			<h4>Đức Tiến</h4>
-			<i>ductienas@gmail.com</i>
-		</div>
-	</div>
-);
+const mapDispatchToProps = (dispatch) => {
+	return {
+		action: bindActionCreators({
+			logoutRequest,
+		}, dispatch),
+	};
+};
 
-const Header = (props) => {
+const Header = ({ store, action }) => {
+	const logout = () => {
+		action.logoutRequest(() => {
+			Router.push('/login');
+		});
+	};
+
+	const content = (
+		<div className={classNames.content}>
+			<div className={classNames.itemWrapper}>
+				<div className={classNames.item}>
+					<Icon type="user" />
+					<span>Profile</span>
+				</div>
+				<div className={classNames.item}>
+					<Icon type="setting" />
+					<span>Setting</span>
+				</div>
+			</div>
+			<Divider className={classNames.divider} />
+			<div className={classNames.itemWrapper}>
+				<div className={classNames.item} onClick={logout}>
+					<Icon type="logout" />
+					<span>Logout</span>
+				</div>
+			</div>
+		</div>
+	);
+
+	const title = (
+		<div className={classNames.title}>
+			<Avatar size="large" src={store.auth.avatar} />
+			<div className={classNames.info}>
+				<h4>{store.auth.fullName}</h4>
+				<i>{store.auth.email}</i>
+			</div>
+		</div>
+	);
+
 	return (
 		<header className={classNames.root}>
 			<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
@@ -68,7 +95,7 @@ const Header = (props) => {
 				<div className={classNames.right}>
 					<NotiWidget />
 					<Popover content={content} title={title} trigger="click" placement="bottomRight">
-						<Avatar className={classNames.avatar} src="https://yt3.ggpht.com/-DxJSAKyWCE4/AAAAAAAAAAI/AAAAAAAAAAA/M8DxVGU-fR0/s88-c-k-no-mo-rj-c0xffffff/photo.jpg" />
+						<Avatar className={classNames.avatar} src={store.auth.avatar} />
 					</Popover>
 				</div>
 			</div>
@@ -78,9 +105,18 @@ const Header = (props) => {
 
 Header.propTypes = {
 	// classes: PropTypes.object.isRequired,
+	// store
+	store: PropTypes.shape({
+		auth: PropTypes.object.isRequired,
+	}).isRequired,
+	// action
+	action: PropTypes.shape({
+		logoutRequest: PropTypes.func.isRequired,
+	}).isRequired,
 };
 
 Header.defaultProps = {
+	// classes: {},
 };
 
-export default Header;
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
