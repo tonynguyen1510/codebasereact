@@ -6,7 +6,8 @@
 * Created: 2018-01-13 18:13:59
 *------------------------------------------------------- */
 import { REQUEST_ERROR } from 'src/redux/actions/type';
-import { toast } from 'react-toastify';
+
+import { notification } from 'antd';
 
 export const initialState = false;
 
@@ -20,7 +21,10 @@ export default function (state = initialState, action) {
 			return false;
 		case REQUEST_ERROR: {
 			if (process.browser) {
-				toast.error(action.payload.message || action.payload);
+				notification.error({
+					message: 'Error Message',
+					description: action.payload.message || action.payload,
+				});
 			}
 			return false;
 		}

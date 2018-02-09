@@ -10,11 +10,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { toast } from 'react-toastify';
+
+import { notification, Button } from 'antd';
 
 import Link from 'next/link';
-
-import { Button } from 'antd';
 
 import { getFeedsFb } from 'src/redux/actions/feed';
 
@@ -62,10 +61,10 @@ export default class IndexPage extends PureComponent {
 	}
 
 	notify = () => {
-		this.toastId = toast('<Msg />', {
-			type: toast.TYPE.SUCCESS,
+		notification.open({
+			message: 'Notification Title',
+			description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
 		});
-		console.log('this.toastId', this.toastId);
 	}
 
 	render() {

@@ -17,7 +17,6 @@ import AuthStorage from 'src/utils/AuthStorage';
 import { getUserAuth } from 'src/redux/actions/auth';
 
 // import LoaderGlobal from 'src/components/LoaderGlobal';
-import ToastWrapper from 'src/components/ToastWrapper';
 
 Router.onRouteChangeStart = (/* url */) => {
 	NProgress.start();
@@ -48,7 +47,6 @@ const withRoot = (Child) => {
 			return ([
 				// <LoaderGlobal key="loading-global" />,
 				<Child key="child" {...this.props} />,
-				<ToastWrapper key="toastify" />,
 				// <LoginModal key="login-modal" />,
 				// <SignUpModal key="sign-up-modal" />,
 			]);
