@@ -6,6 +6,7 @@
 * Created: 2018-01-10 22:17:21
 *------------------------------------------------------- */
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import NProgress from 'nprogress';
 
@@ -27,6 +28,10 @@ Router.onRouteChangeError = () => NProgress.done();
 const withRoot = (Child) => {
 	@withReduxSaga
 	class WrappedComponent extends PureComponent {
+		static propTypes = {
+			url: PropTypes.object.isRequired,
+		}
+
 		static getInitialProps(ctx) {
 			if (!process.browser) {
 				cookie.plugToRequest(ctx.req, ctx.res);
@@ -43,13 +48,20 @@ const withRoot = (Child) => {
 			return {};
 		}
 
+		componentWillMount() {
+			if (!AuthStorage.loggedIn && this.props.url.pathname !== '/login') {
+				this.props.url.push('/login');
+			}
+		}
+
 		render() {
-			return ([
-				// <LoaderGlobal key="loading-global" />,
-				<Child key="child" {...this.props} />,
-				// <LoginModal key="login-modal" />,
-				// <SignUpModal key="sign-up-modal" />,
-			]);
+			if (!AuthStorage.loggedIn && this.props.url.pathname !== '/login') {
+				return null;
+			}
+
+			return (
+				<Child {...this.props} />
+			);
 		}
 	}
 
