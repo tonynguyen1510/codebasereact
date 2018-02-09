@@ -15,10 +15,10 @@ import AuthStorage from 'src/utils/AuthStorage';
 
 import MainLayout from 'src/layout/Main';
 
-import ClassPage from 'src/components/Pages/Class';
+import ClassAction from 'src/components/Pages/Class/Action';
 
 @withRoot
-export default class ClassAction extends PureComponent {
+export default class ClassActionPage extends PureComponent {
 	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
@@ -30,9 +30,9 @@ export default class ClassAction extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Class - New</title>
+					<title>IPP Education - Class - Action</title>
 				</Head>
-				Create class
+				<ClassAction />
 			</MainLayout>
 		);
 	}

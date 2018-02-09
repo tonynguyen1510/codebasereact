@@ -15,10 +15,10 @@ import AuthStorage from 'src/utils/AuthStorage';
 
 import MainLayout from 'src/layout/Main';
 
-import ConsultorPage from 'src/components/Pages/Consultor';
+import Consultor from 'src/components/Pages/Consultor';
 
 @withRoot
-export default class Consultor extends PureComponent {
+export default class ConsultorPage extends PureComponent {
 	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
@@ -32,7 +32,7 @@ export default class Consultor extends PureComponent {
 				<Head>
 					<title>IPP Education - Consultor</title>
 				</Head>
-				<ConsultorPage />
+				<Consultor />
 			</MainLayout>
 		);
 	}

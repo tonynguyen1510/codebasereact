@@ -18,7 +18,7 @@ import MainLayout from 'src/layout/Main';
 // import ClassPage from 'src/components/Pages/Class';
 
 @withRoot
-export default class LessonDetail extends PureComponent {
+export default class LessonDetailPage extends PureComponent {
 	static async getInitialProps({ query, res }) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());

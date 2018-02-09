@@ -18,7 +18,7 @@ import MainLayout from 'src/layout/Main';
 // import ClassPage from 'src/components/Pages/Class';
 
 @withRoot
-export default class ConsultorDetail extends PureComponent {
+export default class ConsultorDetailPage extends PureComponent {
 	static async getInitialProps({ query, res }) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());

@@ -11,7 +11,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Table } from 'antd';
+import { Router } from 'src/routes';
+
+import { Table, Divider, Icon, Button, DatePicker, Input } from 'antd';
 
 import { stylesheet, classNames } from './style.less';
 
@@ -34,64 +36,46 @@ const mapDispatchToProps = (dispatch) => {
 const columns = [{
 	title: 'Name',
 	dataIndex: 'name',
-	filters: [{
-		text: 'Joe',
-		value: 'Joe',
-	}, {
-		text: 'Jim',
-		value: 'Jim',
-	}, {
-		text: 'Submenu',
-		value: 'Submenu',
-		children: [{
-			text: 'Green',
-			value: 'Green',
-		}, {
-			text: 'Black',
-			value: 'Black',
-		}],
-	}],
-	// specify the condition of filtering result
-	// here is that finding the name started with `value`
-	onFilter: (value, record) => record.name.indexOf(value) === 0,
-	sorter: (a, b) => a.name.length - b.name.length,
 }, {
 	title: 'Created at',
 	dataIndex: 'createdAt',
-	defaultSortOrder: 'descend',
-	sorter: (a, b) => a.age - b.age,
 }, {
 	title: 'Created by',
 	dataIndex: 'createdBy',
-	filters: [{
-		text: 'London',
-		value: 'London',
-	}, {
-		text: 'New York',
-		value: 'New York',
-	}],
-	filterMultiple: false,
-	onFilter: (value, record) => record.address.indexOf(value) === 0,
-	sorter: (a, b) => a.address.length - b.address.length,
+}, {
+	title: 'Action',
+	key: 'action',
+	width: 150,
+	render: (text, record) => {
+		return (
+			<span>
+				<Button shape="circle" icon="eye-o" onClick={() => Router.pushRoute(`/class/${record.id}`)} />
+				<Divider type="vertical" />
+				<Button shape="circle" icon="edit" onClick={() => Router.pushRoute(`/class/edit/${record.id}`)} />
+				<Divider type="vertical" />
+				<Button shape="circle" icon="ellipsis" />
+			</span>
+		)
+	},
 }];
 
 const data = [{
-	key: '1',
+	id: '1',
 	name: 'John Brown',
 	createdAt: '2018-02-08 10:40:46',
 	createdBy: 'Đức Tiến',
 }, {
-	key: '2',
+	id: '2',
 	name: 'Jim Green',
 	createdAt: '2018-02-08 10:40:46',
 	createdBy: 'Đức Tiến',
 }, {
-	key: '3',
+	id: '3',
 	name: 'Joe Black',
 	createdAt: '2018-02-08 10:40:46',
 	createdBy: 'Đức Tiến',
 }, {
-	key: '4',
+	id: '4',
 	name: 'Jim Red',
 	createdAt: '2018-02-08 10:40:46',
 	createdBy: 'Đức Tiến',
@@ -124,7 +108,20 @@ export default class ClassPage extends PureComponent {
 		return (
 			<div className={classNames.root}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
-				<Table columns={columns} bordered dataSource={data} onChange={onChange} />
+				<div className={classNames.control}>
+					<div>
+						<Input.Search
+							placeholder="input search text"
+							onSearch={value => console.log(value)}
+							style={{ width: 200 }}
+						/>
+					</div>
+					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} /></div>
+					<div>
+						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/class/new')}>Create class</Button>
+					</div>
+				</div>
+				<Table size="small" columns={columns} bordered dataSource={data} onChange={onChange} />
 			</div>
 		);
 	}

@@ -21,7 +21,7 @@ export default class MyDocument extends Document {
 		return (
 			<html lang="en" dir="ltr">
 				<Head>
-					<title>IIP</title>
+					<title>IPP Education</title>
 					<link rel="shortcut icon" type="image/x-icon" href="/static/assets/favicon.ico" />
 					<meta charSet="utf-8" />
 					<meta

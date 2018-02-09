@@ -15,10 +15,10 @@ import AuthStorage from 'src/utils/AuthStorage';
 
 import MainLayout from 'src/layout/Main';
 
-import ClassPage from 'src/components/Pages/Class';
+import Class from 'src/components/Pages/Class';
 
 @withRoot
-export default class StudentAction extends PureComponent {
+export default class StudentActionPage extends PureComponent {
 	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
