@@ -11,9 +11,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import UserCard from 'src/components/Card/User';
+import { Button, DatePicker, Input, Pagination, Select } from 'antd';
+
+import Link from 'next/link';
+import { Router } from 'src/routes';
+
+import UserList from 'src/components/List/User';
 
 import { stylesheet, classNames } from './style.less';
+
+const { RangePicker } = DatePicker;
+const { Search } = Input;
 
 function mapStateToProps(state) {
 	return {
@@ -26,7 +34,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		//action: bindActionCreators({
-			//toggleLoginModal,
+		//toggleLoginModal,
 		//}, dispatch),
 	};
 };
@@ -48,15 +56,31 @@ export default class ConsultorPage extends Component {
 	static defaultProps = {}
 
 	render() {
-		const {  } = this.props;
+		const { } = this.props;
 
 		return (
 			<div className={classNames.root}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 
-				<UserCard />
-				<UserCard loading />
-				<UserCard loading />
+				<UserList>
+					<div>
+						<Search
+							placeholder="input search text"
+							onSearch={value => console.log(value)}
+							style={{ width: 200 }}
+						/>
+					</div>
+					<div>Created at: <RangePicker style={{ marginLeft: 10 }} /></div>
+					<div>
+						Gender:
+						<Select defaultValue="all" style={{ marginLeft: 10 }}>
+							<Select.Option value="all">All</Select.Option>
+							<Select.Option value="male">Male</Select.Option>
+							<Select.Option value="female">Female</Select.Option>
+						</Select>
+					</div>
+					<Button type="primary" icon="file-add" style={{ marginRight: 10 }} onClick={() => Router.pushRoute('/consultor/new')}>Create class</Button>
+				</UserList>
 			</div>
 		);
 	}

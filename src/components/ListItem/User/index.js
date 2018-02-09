@@ -9,7 +9,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Icon } from 'antd';
+import { Icon, Button, Divider } from 'antd';
+
+import { Router } from 'src/routes';
 
 import Avatar from 'src/components/Avatar';
 
@@ -73,7 +75,13 @@ const UserListItem = (props) => {
 						</div>
 					</div>
 				</div>
-
+				<div className={classNames.tr} style={{ width: 140, flex: 'none', textAlign: 'right' }}>
+					<div style={{ width: 20 }} className="loading-block" />
+					<Divider type="vertical" />
+					<div style={{ width: 20 }} className="loading-block" />
+					<Divider type="vertical" />
+					<div style={{ width: 20 }} className="loading-block" />
+				</div>
 			</div>
 		);
 	}
@@ -129,6 +137,14 @@ const UserListItem = (props) => {
 						<p>1212321323</p>
 					</div>
 				</div>
+			</div>
+
+			<div className={classNames.tr} style={{ width: 140, flex: 'none' }}>
+				<Button shape="circle" icon="eye-o" onClick={() => Router.pushRoute(`/class/123`)} />
+				<Divider type="vertical" />
+				<Button shape="circle" icon="edit" onClick={() => Router.pushRoute(`/class/edit/123`)} />
+				<Divider type="vertical" />
+				<Button shape="circle" icon="ellipsis" />
 			</div>
 
 		</div>

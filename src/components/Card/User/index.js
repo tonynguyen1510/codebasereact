@@ -11,6 +11,8 @@ import PropTypes from 'prop-types';
 
 import { Icon } from 'antd';
 
+import { Link } from 'src/routes';
+
 import Avatar from 'src/components/Avatar';
 
 import { stylesheet, classNames } from './style.less';
@@ -26,7 +28,7 @@ const UserCard = (props) => {
 
 					<div className={classNames.avatarWrapper}>
 						<div className={classNames.avatar + ' loading-block'} />
-						<div className={classNames.nameWrapper}>
+						<div className={classNames.nameWrapper} style={{ marginTop: -2 }}>
 							<div>
 								<div className="loading-block" style={{ width: 100 }} />
 							</div>
@@ -69,7 +71,7 @@ const UserCard = (props) => {
 								<div className="loading-block" />
 							</div>
 						</div>
-						<div className={classNames.item} >
+						{/* <div className={classNames.item} >
 							<div className={classNames.label}>
 								<div className="loading-block" />
 							</div>
@@ -78,6 +80,17 @@ const UserCard = (props) => {
 								<div className="loading-block" />
 								<div className="loading-block" />
 							</div>
+						</div> */}
+					</div>
+					<div className={classNames.control}>
+						<div className={classNames.controlItem}>
+							<div className="loading-block" />
+						</div>
+						<div className={classNames.controlItem}>
+							<div className="loading-block" />
+						</div>
+						<div className={classNames.controlItem}>
+							<div className="loading-block" />
 						</div>
 					</div>
 				</div>
@@ -132,7 +145,7 @@ const UserCard = (props) => {
 							<p>1212321323</p>
 						</div>
 					</div>
-					<div className={classNames.item} >
+					{/* <div className={classNames.item} >
 						<div className={classNames.label}>
 							<Icon type="environment-o" />
 							Address:
@@ -179,6 +192,29 @@ const UserCard = (props) => {
 						<div className={classNames.value}>
 							dents do not go to class within one week - they will automatically receive an email. If students do not to go class within 2 weeks - for each week absent they will have 2 LESSONS REMOVED. Consultant and teacher should
 						</div>
+					</div> */}
+				</div>
+				<div className={classNames.control}>
+					<div className={classNames.controlItem}>
+						<Link route="/class/1223">
+							<a>
+								<Icon type="eye-o" />
+							</a>
+						</Link>
+					</div>
+					<div className={classNames.controlItem}>
+						<Link route="/class/edit/1223">
+							<a>
+								<Icon type="edit" />
+							</a>
+						</Link>
+					</div>
+					<div className={classNames.controlItem}>
+						{/* <Link route="/class/1223"> */}
+						<a>
+							<Icon type="ellipsis" />
+						</a>
+						{/* </Link> */}
 					</div>
 				</div>
 			</div>

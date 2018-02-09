@@ -37,7 +37,7 @@ const withRoot = (Child) => {
 				cookie.plugToRequest(ctx.req, ctx.res);
 			}
 
-			if (AuthStorage.loggedIn) {
+			if (AuthStorage.loggedIn && !ctx.store.getState().auth.email) {
 				ctx.store.dispatch(getUserAuth());
 			}
 

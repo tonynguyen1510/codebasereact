@@ -9,22 +9,21 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, DatePicker, Input, Pagination, Select } from 'antd';
+import { Button, DatePicker, Input, Pagination } from 'antd';
 
 import UserCard from 'src/components/Card/User';
 import UserListItem from 'src/components/ListItem/User';
 
 import { stylesheet, classNames } from './style.less';
 
-const { RangePicker } = DatePicker;
-const { Search } = Input;
-
 export default class UserList extends PureComponent {
 	static propTypes = {
-		// classes: PropTypes.object.isRequired,
+		children: PropTypes.node,
 	}
 
-	static defaultProps = {}
+	static defaultProps = {
+		children: null,
+	}
 
 	state = {
 		viewMode: 'grid',
@@ -37,28 +36,17 @@ export default class UserList extends PureComponent {
 	}
 
 	render() {
-		const {  } = this.props;
+		const { children } = this.props;
 
 		return (
 			<div className={classNames.root}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 
 				<div className={classNames.control}>
-					<div>
-						<Search
-							placeholder="input search text"
-							onSearch={value => console.log(value)}
-							style={{ width: 200 }}
-						/>
-					</div>
-					<div>Created at: <RangePicker style={{ marginLeft: 10 }} /></div>
-					<div>
-						Gender:
-						<Select defaultValue="all" style={{ marginLeft: 10 }}>
-							<Select.Option value="all">All</Select.Option>
-							<Select.Option value="male">Male</Select.Option>
-							<Select.Option value="female">Female</Select.Option>
-						</Select>
+					<div className={classNames.controlRender}>
+						{
+							children
+						}
 					</div>
 					<div>
 						<Button type={this.state.viewMode === 'grid' ? 'primary' : ''} shape="circle" icon="appstore-o" onClick={() => this.handleChangeViewMode('grid')} style={{ marginRight: 5 }} />

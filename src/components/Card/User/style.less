@@ -63,4 +63,25 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  margin: 0;
+}
+
+.control {
+  border-top: 1px solid #e9ebee;
+  background: #fafafa;
+  display: flex;
+  justify-content: space-between;
+  .controlItem {
+    padding: 5px 15px;
+    margin: 10px 0;
+    border-right: 1px solid #e9ebee;
+    flex: 1;
+    text-align: center;
+    a {
+      display: block;
+    }
+    &:last-child {
+      border: 0;
+    }
+  }
 }
