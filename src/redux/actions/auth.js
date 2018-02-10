@@ -37,7 +37,7 @@ export const getUserAuth = (payload, next) => {
 	};
 };
 
-export const loginFirst = (payload, next, nextError) => {
+export const resetPassword = (payload, next, nextError) => {
 	return {
 		type: SINGLE_API,
 		payload: {
@@ -49,3 +49,17 @@ export const loginFirst = (payload, next, nextError) => {
 		},
 	};
 };
+
+export const forgotPassword = (payload, next, nextError) => {
+	return {
+		type: SINGLE_API,
+		payload: {
+			uri: 'users/reset',
+			params: { email: payload.email },
+			opt: { method: 'POST' },
+			afterSuccess: next,
+			afterError: nextError,
+		},
+	};
+};
+

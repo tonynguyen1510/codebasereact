@@ -49,13 +49,13 @@ const withRoot = (Child) => {
 		}
 
 		componentWillMount() {
-			if (!AuthStorage.loggedIn && this.props.url.pathname !== '/login' && this.props.url.pathname !== '/login-first') {
+			if (!AuthStorage.loggedIn && this.props.url.pathname !== '/login' && this.props.url.pathname !== '/login-first' && this.props.url.pathname !== '/forgot-password' && this.props.url.pathname !== '/reset-password') {
 				this.props.url.push('/login');
 			}
 		}
 
 		render() {
-			if (!AuthStorage.loggedIn && this.props.url.pathname !== '/login' && this.props.url.pathname !== '/login-first') {
+			if (!AuthStorage.loggedIn && this.props.url.pathname !== '/login' && this.props.url.pathname !== '/login-first' && this.props.url.pathname !== '/forgot-password' && this.props.url.pathname !== '/reset-password') {
 				return null;
 			}
 

@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux';
 import Router from 'next/router';
 import { Form, Icon, Input, Button } from 'antd';
 
-import { loginFirst, logoutRequest } from 'src/redux/actions/auth';
+import { resetPassword, logoutRequest } from 'src/redux/actions/auth';
 
 import AuthStorage from 'src/utils/AuthStorage';
 
@@ -31,7 +31,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
-			loginFirst,
+			resetPassword,
 			logoutRequest,
 		}, dispatch),
 	};
@@ -49,7 +49,7 @@ export default class SetPassword extends Component {
 		// }).isRequired,
 		// action
 		action: PropTypes.shape({
-			loginFirst: PropTypes.func.isRequired,
+			resetPassword: PropTypes.func.isRequired,
 			logoutRequest: PropTypes.func.isRequired,
 		}).isRequired,
 	}
@@ -73,7 +73,7 @@ export default class SetPassword extends Component {
 				this.setState({
 					loading: true,
 				});
-				this.props.action.loginFirst({ token: this.props.token, password: values.password }, () => {
+				this.props.action.resetPassword({ token: this.props.token, password: values.password }, () => {
 					Router.push('/login');
 				}, () => {
 					this.setState({

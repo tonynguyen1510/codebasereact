@@ -16,7 +16,7 @@ import AuthStorage from 'src/utils/AuthStorage';
 import LoginForm from 'src/components/Form/Login';
 
 @withRoot
-export default class Lesson extends PureComponent {
+export default class LoginPage extends PureComponent {
 	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
