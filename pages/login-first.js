@@ -13,11 +13,12 @@ import withRoot from 'src/root';
 
 import AuthStorage from 'src/utils/AuthStorage';
 
-import LoginForm from 'src/components/Form/Login';
+import SetPassword from 'src/components/Form/SetPassword';
 
 @withRoot
 export default class Lesson extends PureComponent {
 	static async getInitialProps(ctx) {
+		console.log('ctx', ctx);
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
 		// }
@@ -25,12 +26,13 @@ export default class Lesson extends PureComponent {
 	}
 
 	render() {
+		const { url } = this.props;
 		return (
 			<div>
 				<Head>
-					<title>IPP Education - Login</title>
+					<title>IPP Education - Set Password</title>
 				</Head>
-				<LoginForm />
+				<SetPassword token={url.query && url.query.access_token} />
 			</div>
 		);
 	}

@@ -22,8 +22,8 @@ class AuthStorage extends Storage {
 		return this.value && this.value.userId;
 	}
 
-	get type() {
-		return this.value && this.value.type;
+	get role() {
+		return this.value && this.value.role;
 	}
 }
 

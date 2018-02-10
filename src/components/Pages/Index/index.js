@@ -15,8 +15,6 @@ import { notification, Button } from 'antd';
 
 import Link from 'next/link';
 
-import { getFeedsFb } from 'src/redux/actions/feed';
-
 import AuthStorage from 'src/utils/AuthStorage';
 
 import { stylesheet, classNames } from './style.less';

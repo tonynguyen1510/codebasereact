@@ -14,24 +14,23 @@ import moment from 'moment';
 
 import Router from 'next/router';
 
-import { Icon, Input, Form, Select, InputNumber, DatePicker, Switch, Slider, Button } from 'antd';
+import { Input, Form, Select, DatePicker, Button } from 'antd';
 
-const FormItem = Form.Item;
-const Option = Select.Option;
+import { createUser } from 'src/redux/actions/user';
 
-function mapStateToProps(state) {
+function mapStateToProps(/* state */) {
 	return {
-		store: {
-			//modal: state.modal,
-		},
+		// store: {
+		// 	//modal: state.modal,
+		// },
 	};
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		//action: bindActionCreators({
-			//toggleLoginModal,
-		//}, dispatch),
+		action: bindActionCreators({
+			createUser,
+		}, dispatch),
 	};
 };
 
@@ -39,14 +38,14 @@ const mapDispatchToProps = (dispatch) => {
 @Form.create()
 export default class ConsultorAction extends Component {
 	static propTypes = {
-		// classes: PropTypes.object.isRequired,
+		form: PropTypes.object.isRequired,
 		// store
-		store: PropTypes.shape({
-			modal: PropTypes.object.isRequired,
-		}).isRequired,
+		// store: PropTypes.shape({
+		// 	modal: PropTypes.object.isRequired,
+		// }).isRequired,
 		// action
 		action: PropTypes.shape({
-			toggleLoginModal: PropTypes.func.isRequired,
+			createUser: PropTypes.func.isRequired,
 		}).isRequired,
 	}
 
@@ -60,7 +59,17 @@ export default class ConsultorAction extends Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				console.log('values', values);
+				const data = { ...values, phone: [values.phone], createdAt: new Date(), updatedAt: new Date(), role: 'consultor' };
+				this.setState({
+					loading: true,
+				});
+				this.props.action.createUser(data, (user) => {
+					Router.push('/consultor');
+				}, () => {
+					this.setState({
+						loading: false,
+					});
+				});
 			}
 		});
 	}
@@ -70,7 +79,7 @@ export default class ConsultorAction extends Component {
 
 		return (
 			<Form layout="horizontal" onSubmit={this.handleSubmit} style={{ margin: '100px 0' }}>
-				<FormItem
+				<Form.Item
 					label="Full Name"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
@@ -80,9 +89,9 @@ export default class ConsultorAction extends Component {
 					})(
 						<Input size="large" placeholder="Full name" />,
 					)}
-				</FormItem>
+				</Form.Item>
 
-				<FormItem
+				<Form.Item
 					label="Email"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
@@ -92,9 +101,9 @@ export default class ConsultorAction extends Component {
 					})(
 						<Input size="large" placeholder="Email" />,
 					)}
-				</FormItem>
+				</Form.Item>
 
-				<FormItem
+				<Form.Item
 					label="Phone"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
@@ -104,9 +113,9 @@ export default class ConsultorAction extends Component {
 					})(
 						<Input size="large" placeholder="Phone" />,
 					)}
-				</FormItem>
+				</Form.Item>
 
-				<FormItem
+				<Form.Item
 					label="Gender"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
@@ -116,26 +125,26 @@ export default class ConsultorAction extends Component {
 						// rules: [{ required: true, message: 'Please input your email!' }, { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Email is invalid!' }],
 					})(
 						<Select size="large" style={{ width: 192 }}>
-							<Option value="male">Male</Option>
-							<Option value="female">Female</Option>
+							<Select.Option value="male">Male</Select.Option>
+							<Select.Option value="female">Female</Select.Option>
 						</Select>,
 					)}
-				</FormItem>
+				</Form.Item>
 
-				<FormItem
+				<Form.Item
 					label="Birth Date"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
 				>
 					{getFieldDecorator('birthDate', {
-						// initialValue: moment('01/01/1990').format(),
+						initialValue: moment('1990-01-01', 'YYYY-MM-DD'),
 						// rules: [{ required: true, message: 'Please input your email!' }, { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Email is invalid!' }],
 					})(
 						<DatePicker size="large" format="DD-MM-YYYY" />,
 					)}
-				</FormItem>
+				</Form.Item>
 
-				<FormItem
+				<Form.Item
 					style={{ marginTop: 48 }}
 					wrapperCol={{ span: 8, offset: 8 }}
 				>
@@ -145,7 +154,7 @@ export default class ConsultorAction extends Component {
 					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.back()}>
 						Cancel
 					</Button>
-				</FormItem>
+				</Form.Item>
 			</Form>
 		);
 	}

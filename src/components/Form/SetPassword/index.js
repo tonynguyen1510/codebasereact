@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux';
 import Router from 'next/router';
 import { Form, Icon, Input, Button } from 'antd';
 
-import { loginRequest } from 'src/redux/actions/auth';
+import { loginFirst, logoutRequest } from 'src/redux/actions/auth';
 
 import AuthStorage from 'src/utils/AuthStorage';
 
@@ -31,23 +31,26 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
-			loginRequest,
+			loginFirst,
+			logoutRequest,
 		}, dispatch),
 	};
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
 @Form.create()
-export default class LoginForm extends Component {
+export default class SetPassword extends Component {
 	static propTypes = {
 		form: PropTypes.object.isRequired,
+		token: PropTypes.string.isRequired,
 		// store
-		store: PropTypes.shape({
-			auth: PropTypes.object.isRequired,
-		}).isRequired,
+		// store: PropTypes.shape({
+		// 	auth: PropTypes.object.isRequired,
+		// }).isRequired,
 		// action
 		action: PropTypes.shape({
-			loginRequest: PropTypes.func.isRequired,
+			loginFirst: PropTypes.func.isRequired,
+			logoutRequest: PropTypes.func.isRequired,
 		}).isRequired,
 	}
 
@@ -59,7 +62,7 @@ export default class LoginForm extends Component {
 
 	componentDidMount() {
 		if (AuthStorage.loggedIn) {
-			Router.push('/');
+			this.props.action.logoutRequest();
 		}
 	}
 
@@ -70,13 +73,8 @@ export default class LoginForm extends Component {
 				this.setState({
 					loading: true,
 				});
-				this.props.action.loginRequest(values, () => {
-					if (AuthStorage.loggedIn && this.props.store.auth.id) {
-						Router.push('/');
-					}
-					this.setState({
-						loading: false,
-					});
+				this.props.action.loginFirst({ token: this.props.token, password: values.password }, () => {
+					Router.push('/login');
 				}, () => {
 					this.setState({
 						loading: false,
@@ -86,7 +84,10 @@ export default class LoginForm extends Component {
 		});
 	}
 	render() {
-		const { getFieldDecorator } = this.props.form;
+		const { form: { getFieldDecorator }, token } = this.props;
+		if (!token) {
+			return <div>Token is invalid</div>;
+		}
 
 		return (
 			<div className={classNames.root}>
@@ -95,28 +96,24 @@ export default class LoginForm extends Component {
 					<div className={classNames.logo}>
 						<img src="/static/assets/images/logo/64x64.png" alt="ipp" />
 					</div>
-
-					<Form.Item>
-						{getFieldDecorator('email', {
-							rules: [{ required: true, message: 'Please input your email!' }, { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Email is invalid!' }],
-						})(
-							<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />,
-						)}
-					</Form.Item>
 					<Form.Item>
 						{getFieldDecorator('password', {
-							rules: [{ required: true, message: 'Please input your Password!' }, { min: 5 }],
+							rules: [{ required: true, message: 'Please input your password!' }, { min: 5 }],
 						})(
 							<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />,
 						)}
 					</Form.Item>
 					<Form.Item>
+						{getFieldDecorator('password-confirm', {
+							rules: [{ required: true, message: 'Please input your Password confirm!' }, { min: 5 }],
+						})(
+							<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password confirm" />,
+						)}
+					</Form.Item>
+					<Form.Item>
 						<Button type="primary" htmlType="submit" className={classNames.btn} loading={this.state.loading}>
-							Log in
+							Commit
 						</Button>
-						<p className="text-center">
-							<a className="login-form-forgot" href="#">Forgot password</a>
-						</p>
 					</Form.Item>
 				</Form>
 			</div>

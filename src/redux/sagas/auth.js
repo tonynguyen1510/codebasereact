@@ -24,7 +24,7 @@ function* authorize(payload, next, nextErr) {
 		const data = {
 			token: response.id,
 			userId: response.userId,
-			loginType: response.user.loginType,
+			role: response.user.role,
 		};
 
 		AuthStorage.value = data;

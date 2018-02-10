@@ -36,3 +36,16 @@ export const getUserAuth = (payload, next) => {
 		},
 	};
 };
+
+export const loginFirst = (payload, next, nextError) => {
+	return {
+		type: SINGLE_API,
+		payload: {
+			uri: 'users/reset-password?access_token=' + payload.token,
+			params: { newPassword: payload.password },
+			opt: { method: 'POST' },
+			afterSuccess: next,
+			afterError: nextError,
+		},
+	};
+};
