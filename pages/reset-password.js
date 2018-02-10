@@ -32,7 +32,7 @@ export default class ResetPasswordPage extends PureComponent {
 		return (
 			<div>
 				<Head>
-					<title>IPP Education - reset Password</title>
+					<title>IPP Admin - reset Password</title>
 				</Head>
 				<SetPassword token={url.query && url.query.access_token} />
 			</div>

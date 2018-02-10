@@ -21,12 +21,12 @@ export default class MyDocument extends Document {
 		return (
 			<html lang="en" dir="ltr">
 				<Head>
-					<title>IPP Education</title>
+					<title>IPP Admin</title>
 					<link rel="shortcut icon" type="image/x-icon" href="/static/assets/favicon.ico" />
 					<meta charSet="utf-8" />
 					<meta
 						name="description"
-						content="IPP Education - Every Student is an Achiever"
+						content="IPP Admin - Every Student is an Achiever"
 					/>
 					{/* Use minimum-scale=1 to enable GPU rasterization */}
 					<meta

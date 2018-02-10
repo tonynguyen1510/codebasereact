@@ -34,7 +34,7 @@ export default class LoginFirstPage extends PureComponent {
 		return (
 			<div>
 				<Head>
-					<title>IPP Education - Set Password</title>
+					<title>IPP Admin - Set Password</title>
 				</Head>
 				<SetPassword token={url.query && url.query.access_token} />
 			</div>

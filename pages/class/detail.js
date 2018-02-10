@@ -30,7 +30,7 @@ export default class ClassDetailPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Class - {this.props.id}</title>
+					<title>IPP Admin - Class - {this.props.id}</title>
 				</Head>
 				class id = {this.props.id}
 			</MainLayout>

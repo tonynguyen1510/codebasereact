@@ -30,7 +30,7 @@ export default class LessonActionPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Lesson - New</title>
+					<title>IPP Admin - Lesson - New</title>
 				</Head>
 				Create Lesson
 			</MainLayout>

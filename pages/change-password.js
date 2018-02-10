@@ -3,7 +3,7 @@
 * Email ductienas@gmail.com
 * Phone 0972970075
 *
-* Created: 2018-02-10 14:39:40
+* Created: 2018-01-10 23:32:12
 *------------------------------------------------------- */
 
 import React, { PureComponent } from 'react';
@@ -11,11 +11,13 @@ import React, { PureComponent } from 'react';
 import Head from 'next/head';
 import withRoot from 'src/root';
 
-import ForgotPassword from 'src/components/Form/ForgotPassword';
+import MainLayout from 'src/layout/Main';
+
+import ChangePass from 'src/components/Form/ChangePass';
 
 @withRoot
-export default class ForgotPasswordPage extends PureComponent {
-	static async getInitialProps(/* ctx */) {
+export default class IndexPage extends PureComponent {
+	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
 		// }
@@ -24,12 +26,12 @@ export default class ForgotPasswordPage extends PureComponent {
 
 	render() {
 		return (
-			<div>
+			<MainLayout>
 				<Head>
-					<title>IPP Admin - Forgot Password</title>
+					<title>IPP Admin - Change password</title>
 				</Head>
-				<ForgotPassword />
-			</div>
+				<ChangePass />
+			</MainLayout>
 		);
 	}
 }

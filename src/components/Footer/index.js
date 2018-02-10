@@ -33,7 +33,7 @@ const Footer = (/* props */) => {
 				</Col>
 			</Row>
 			<Row className={classNames.bottom}>
-				2017 © IPP EDUCATION - All Rights Reserved.
+				2017 © IPP Education - All Rights Reserved.
 			</Row>
 		</footer>
 	);

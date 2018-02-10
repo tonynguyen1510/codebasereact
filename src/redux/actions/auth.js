@@ -63,3 +63,17 @@ export const forgotPassword = (payload, next, nextError) => {
 	};
 };
 
+export const changePassword = (payload, next, nextError) => {
+	const { oldPassword, newPassword } = payload;
+	return {
+		type: SINGLE_API,
+		payload: {
+			uri: 'users/change-password',
+			params: { oldPassword, newPassword },
+			opt: { method: 'POST' },
+			afterSuccess: next,
+			afterError: nextError,
+		},
+	};
+};
+

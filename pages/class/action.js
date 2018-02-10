@@ -30,7 +30,7 @@ export default class ClassActionPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Class - Action</title>
+					<title>IPP Admin - Class - Action</title>
 				</Head>
 				<ClassAction />
 			</MainLayout>

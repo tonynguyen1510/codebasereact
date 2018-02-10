@@ -8,11 +8,17 @@
 
 import AuthStorage from 'src/utils/AuthStorage';
 
-import { SINGLE_API } from 'src/redux/actions/type';
+import { SINGLE_API, REQUEST_ERROR } from 'src/redux/actions/type';
 
 export const createUser = (payload, next, nextError) => {
-	if (!AuthStorage.loggedIn && AuthStorage.role !== 'admin') {
-		return;
+	if (!AuthStorage.loggedIn || AuthStorage.role !== 'admin') {
+		if (typeof nextError === 'function') {
+			nextError();
+		}
+		return {
+			type: REQUEST_ERROR,
+			payload: 'Permission denied!',
+		};
 	}
 	return {
 		type: SINGLE_API,

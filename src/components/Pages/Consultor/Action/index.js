@@ -149,7 +149,7 @@ export default class ConsultorAction extends Component {
 					wrapperCol={{ span: 8, offset: 8 }}
 				>
 					<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
-						OK
+						Submit
 					</Button>
 					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.back()}>
 						Cancel

@@ -30,7 +30,7 @@ export default class ConsultorDetailPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Consultor - {this.props.id}</title>
+					<title>IPP Admin - Consultor - {this.props.id}</title>
 				</Head>
 				Consultor id = {this.props.id}
 			</MainLayout>

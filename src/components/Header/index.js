@@ -56,9 +56,9 @@ const Header = ({ store, action }) => {
 					<Icon type="user" />
 					<span>Profile</span>
 				</div>
-				<div className={classNames.item}>
+				<div className={classNames.item} onClick={() => Router.push('/change-password')}>
 					<Icon type="setting" />
-					<span>Setting</span>
+					<span>Change Password</span>
 				</div>
 			</div>
 			<Divider className={classNames.divider} />

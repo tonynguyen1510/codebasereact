@@ -30,7 +30,7 @@ export default class TeacherActionPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Teacher - New</title>
+					<title>IPP Admin - Teacher - New</title>
 				</Head>
 				Create Teacher
 			</MainLayout>

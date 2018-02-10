@@ -30,7 +30,7 @@ export default class IndexPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Admin</title>
+					<title>IPP Admin - Dashboard</title>
 				</Head>
 				<Index />
 			</MainLayout>

@@ -30,7 +30,7 @@ export default class ConsultorPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Consultor</title>
+					<title>IPP Admin - Consultor</title>
 				</Head>
 				<Consultor />
 			</MainLayout>

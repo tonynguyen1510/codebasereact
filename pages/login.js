@@ -28,7 +28,7 @@ export default class LoginPage extends PureComponent {
 		return (
 			<div>
 				<Head>
-					<title>IPP Education - Login</title>
+					<title>IPP Admin - Login</title>
 				</Head>
 				<LoginForm />
 			</div>

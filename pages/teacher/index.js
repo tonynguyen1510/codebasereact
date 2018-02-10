@@ -30,7 +30,7 @@ export default class TeacherPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Education - Teacher</title>
+					<title>IPP Admin - Teacher</title>
 				</Head>
 				<Teacher />
 			</MainLayout>
