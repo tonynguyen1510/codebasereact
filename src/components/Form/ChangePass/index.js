@@ -55,6 +55,7 @@ export default class ChangePass extends Component {
 
 	state = {
 		loading: false,
+		confirmDirty: false,
 	}
 
 	handleSubmit = (e) => {
@@ -80,6 +81,29 @@ export default class ChangePass extends Component {
 			}
 		});
 	}
+
+	checkPassword = (rule, value, callback) => {
+		const { form } = this.props;
+		if (value && value !== form.getFieldValue('newPassword')) {
+			callback('Two passwords that you enter is inconsistent!');
+		} else {
+			callback();
+		}
+	}
+
+	checkConfirm = (rule, value, callback) => {
+		const { form } = this.props;
+		if (value && this.state.confirmDirty) {
+			form.validateFields(['passwordConfirm'], { force: true });
+		}
+		callback();
+	}
+
+	handleConfirmBlur = (e) => {
+		const { value } = e.target;
+		this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+	}
+
 	render() {
 		const { form: { getFieldDecorator } } = this.props;
 
@@ -96,16 +120,16 @@ export default class ChangePass extends Component {
 					</Form.Item>
 					<Form.Item>
 						{getFieldDecorator('newPassword', {
-							rules: [{ required: true, message: 'Please input your new password!' }, { min: 5 }],
+							rules: [{ required: true, message: 'Please input your new password!' }, { min: 5 }, { validator: this.checkConfirm }],
 						})(
 							<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="New Password" />,
 						)}
 					</Form.Item>
 					<Form.Item>
 						{getFieldDecorator('passwordConfirm', {
-							rules: [{ required: true, message: 'Please input your Password confirm!' }, { min: 5 }],
+							rules: [{ required: true, message: 'Please input your Password confirm!' }, { min: 5 }, { validator: this.checkPassword }],
 						})(
-							<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password confirm" />,
+							<Input onBlur={this.handleConfirmBlur} prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password confirm" />,
 						)}
 					</Form.Item>
 					<Form.Item>

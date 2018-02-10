@@ -103,13 +103,11 @@ export default function* ({ uri, params = {}, opt = {}, loading = true, uploadIm
 		response = { error };
 
 		if (error.statusCode === 401 && (error.code === 'INVALID_TOKEN' || error.code === 'AUTHORIZATION_REQUIRED')) {
-			// token is expired
+			// Access token has expired
 			yield call(AuthStorage.destroy);
 			yield put({ type: 'LOGOUT_SUCCESS' });
 
-			if (loading) {
-				yield put({ type: 'TOGGLE_LOADING' });
-			}
+			yield put({ type: REQUEST_ERROR, payload: 'Access token has expired' });
 		} else {
 			yield put({ type: REQUEST_ERROR, payload: error.message || error });
 		}

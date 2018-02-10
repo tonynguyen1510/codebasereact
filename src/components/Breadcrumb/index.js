@@ -19,7 +19,7 @@ const BreadcrumbCpn = (props) => {
 	const arrPath = router.asPath.split('/');
 
 	return (
-		<Breadcrumb style={{ margin: '5px 0 15px 5px' }}>
+		<Breadcrumb style={{ margin: '5px 0 15px' }}>
 			{
 				arrPath.map((el, i) => {
 					if (i === 0) {

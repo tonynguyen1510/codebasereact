@@ -9,7 +9,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, DatePicker, Input, Pagination } from 'antd';
+import { Button, Row, Col, Pagination } from 'antd';
 
 import UserCard from 'src/components/Card/User';
 import UserListItem from 'src/components/ListItem/User';
@@ -56,18 +56,35 @@ export default class UserList extends PureComponent {
 
 				{
 					this.state.viewMode === 'grid' ?
-						<div className={classNames.grid}>
-							<UserCard />
-							<UserCard />
-							<UserCard />
-							<UserCard />
-							<UserCard />
-							<UserCard />
-							<UserCard />
-							<UserCard />
-							<UserCard loading />
-							<UserCard loading />
-						</div> :
+						<Row gutter={15}>
+							<Col md={12} xl={8}>
+								<UserCard />
+							</Col>
+							<Col md={12} xl={8}>
+								<UserCard />
+							</Col>
+							<Col md={12} xl={8}>
+								<UserCard />
+							</Col>
+							<Col md={12} xl={8}>
+								<UserCard />
+							</Col>
+							<Col md={12} xl={8}>
+								<UserCard />
+							</Col>
+							<Col md={12} xl={8}>
+								<UserCard />
+							</Col>
+							<Col md={12} xl={8}>
+								<UserCard />
+							</Col>
+							<Col md={12} xl={8}>
+								<UserCard />
+							</Col>
+							<Col md={12} xl={8}>
+								<UserCard loading />
+							</Col>
+						</Row> :
 						<div className={classNames.list}>
 							<UserListItem />
 							<UserListItem />

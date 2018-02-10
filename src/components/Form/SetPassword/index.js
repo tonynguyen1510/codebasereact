@@ -83,6 +83,29 @@ export default class SetPassword extends Component {
 			}
 		});
 	}
+
+	handleConfirmBlur = (e) => {
+		const { value } = e.target;
+		this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+	}
+
+	checkPassword = (rule, value, callback) => {
+		const { form } = this.props;
+		if (value && value !== form.getFieldValue('password')) {
+			callback('Two passwords that you enter is inconsistent!');
+		} else {
+			callback();
+		}
+	}
+
+	checkConfirm = (rule, value, callback) => {
+		const { form } = this.props;
+		if (value && this.state.confirmDirty) {
+			form.validateFields(['passwordConfirm'], { force: true });
+		}
+		callback();
+	}
+
 	render() {
 		const { form: { getFieldDecorator }, token } = this.props;
 		if (!token) {
@@ -98,16 +121,16 @@ export default class SetPassword extends Component {
 					</div>
 					<Form.Item>
 						{getFieldDecorator('password', {
-							rules: [{ required: true, message: 'Please input your password!' }, { min: 5 }],
+							rules: [{ required: true, message: 'Please input your password!' }, { min: 5 }, { validator: this.checkConfirm }],
 						})(
 							<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />,
 						)}
 					</Form.Item>
 					<Form.Item>
-						{getFieldDecorator('password-confirm', {
-							rules: [{ required: true, message: 'Please input your Password confirm!' }, { min: 5 }],
+						{getFieldDecorator('passwordConfirm', {
+							rules: [{ required: true, message: 'Please input your Password confirm!' }, { min: 5 }, { validator: this.checkPassword }],
 						})(
-							<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password confirm" />,
+							<Input onBlur={this.handleConfirmBlur} prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password confirm" />,
 						)}
 					</Form.Item>
 					<Form.Item>
