@@ -10,6 +10,18 @@ import AuthStorage from 'src/utils/AuthStorage';
 
 import { SINGLE_API, REQUEST_ERROR } from 'src/redux/actions/type';
 
+const checkPermission = (nextError) => {
+	if (!AuthStorage.loggedIn || AuthStorage.role !== 'admin') {
+		if (typeof nextError === 'function') {
+			nextError();
+		}
+		return {
+			type: REQUEST_ERROR,
+			payload: 'Permission denied!',
+		};
+	}
+};
+
 export const createUser = (payload, next, nextError) => {
 	if (!AuthStorage.loggedIn || AuthStorage.role !== 'admin') {
 		if (typeof nextError === 'function') {
@@ -32,3 +44,19 @@ export const createUser = (payload, next, nextError) => {
 		},
 	};
 };
+
+export const getUserList = (payload, next, nextError) => {
+	checkPermission(nextError);
+
+	return {
+		type: SINGLE_API,
+		payload: {
+			uri: `users?filter=${JSON.stringify(payload.filter)}`,
+			beforeCallType: 'GET_USER_LIST_REQUEST',
+			successType: 'GET_USER_LIST_SUCCESS',
+			afterSuccess: next,
+			afterError: nextError,
+		},
+	};
+};
+

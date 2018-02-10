@@ -19,10 +19,13 @@ import { stylesheet, classNames } from './style.less';
 export default class UserList extends PureComponent {
 	static propTypes = {
 		children: PropTypes.node,
+		userList: PropTypes.object.isRequired,
+		onChangePagination: PropTypes.func,
 	}
 
 	static defaultProps = {
 		children: null,
+		onChangePagination: f => f,
 	}
 
 	state = {
@@ -35,8 +38,12 @@ export default class UserList extends PureComponent {
 		});
 	}
 
+	handleChange = (page, pageSize) => {
+		this.props.onChangePagination(page - 1);
+	}
+
 	render() {
-		const { children } = this.props;
+		const { children, userList = {} } = this.props;
 
 		return (
 			<div className={classNames.root}>
@@ -57,54 +64,54 @@ export default class UserList extends PureComponent {
 				{
 					this.state.viewMode === 'grid' ?
 						<Row gutter={15}>
-							<Col md={12} xl={8}>
-								<UserCard />
-							</Col>
-							<Col md={12} xl={8}>
-								<UserCard />
-							</Col>
-							<Col md={12} xl={8}>
-								<UserCard />
-							</Col>
-							<Col md={12} xl={8}>
-								<UserCard />
-							</Col>
-							<Col md={12} xl={8}>
-								<UserCard />
-							</Col>
-							<Col md={12} xl={8}>
-								<UserCard />
-							</Col>
-							<Col md={12} xl={8}>
-								<UserCard />
-							</Col>
-							<Col md={12} xl={8}>
-								<UserCard />
-							</Col>
-							<Col md={12} xl={8}>
-								<UserCard loading />
-							</Col>
+							{
+								!userList.loading ?
+									userList.data.map((user) => {
+										return (
+											<Col md={12} xl={8} key={user.id}>
+												<UserCard userData={user} />
+											</Col>
+										);
+									}) :
+									[1, 1, 1, 1, 1, 1, 1, 1, 1].map((el, i) => {
+										return (
+											<Col md={12} xl={8} key={i}>
+												<UserCard loading />
+											</Col>
+										);
+									})
+							}
 						</Row> :
 						<div className={classNames.list}>
-							<UserListItem />
-							<UserListItem />
-							<UserListItem />
-							<UserListItem />
-							<UserListItem />
-							<UserListItem />
-							<UserListItem />
-							<UserListItem />
-							<UserListItem />
-							<UserListItem loading />
-							<UserListItem loading />
+							{
+								!userList.loading ?
+									userList.data.map((user) => {
+										return (
+											<UserListItem
+												key={user.id}
+												userData={user}
+											/>
+										);
+									}) :
+									[1, 1, 1, 1, 1, 1, 1, 1, 1].map((el, i) => {
+										return (
+											<UserListItem
+												key={i}
+												loading
+											/>
+										);
+									})
+							}
 						</div>
 				}
 				<Pagination
 					className={classNames.pagination}
 					showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-					pageSize={20}
+					pageSize={userList.limit}
 					defaultCurrent={1}
-					total={70}
+					current={(userList.skip / userList.limit) + 1}
+					total={userList.total}
+					onChange={this.handleChange}
 				/>
 			</div>
 		);

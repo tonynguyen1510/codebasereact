@@ -18,6 +18,8 @@ import { Router } from 'src/routes';
 
 import UserList from 'src/components/List/User';
 
+import { getUserList } from 'src/redux/actions/user';
+
 import { stylesheet, classNames } from './style.less';
 
 const { RangePicker } = DatePicker;
@@ -26,16 +28,16 @@ const { Search } = Input;
 function mapStateToProps(state) {
 	return {
 		store: {
-			//modal: state.modal,
+			userList: state.user.userList,
 		},
 	};
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		//action: bindActionCreators({
-		//toggleLoginModal,
-		//}, dispatch),
+		action: bindActionCreators({
+			getUserList,
+		}, dispatch),
 	};
 };
 
@@ -45,24 +47,45 @@ export default class ConsultorPage extends Component {
 		// classes: PropTypes.object.isRequired,
 		// store
 		store: PropTypes.shape({
-			modal: PropTypes.object.isRequired,
+			userList: PropTypes.object.isRequired,
 		}).isRequired,
 		// action
 		action: PropTypes.shape({
-			toggleLoginModal: PropTypes.func.isRequired,
+			getUserList: PropTypes.func.isRequired,
 		}).isRequired,
 	}
 
 	static defaultProps = {}
 
+	componentDidMount() {
+		this.props.action.getUserList({ filter: this.filter });
+	}
+
+	filter = {
+		skip: 0,
+		limit: 12,
+		where: {
+			role: 'consultor',
+		},
+	}
+
+	handleChangePagination = (page) => {
+		this.filter.skip = page * this.filter.limit;
+
+		this.props.action.getUserList({ filter: this.filter });
+	}
+
 	render() {
-		const { } = this.props;
+		const { store: { userList } } = this.props;
 
 		return (
 			<div className={classNames.root}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 
-				<UserList>
+				<UserList
+					userList={userList}
+					onChangePagination={this.handleChangePagination}
+				>
 					<div>
 						<Search
 							placeholder="input search text"

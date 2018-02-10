@@ -8,6 +8,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import { Icon, Button, Divider } from 'antd';
 
@@ -18,7 +19,7 @@ import Avatar from 'src/components/Avatar';
 import { stylesheet, classNames } from './style.less';
 
 const UserListItem = (props) => {
-	const { loading } = props;
+	const { loading, userData } = props;
 
 	if (loading) {
 		return (
@@ -91,10 +92,10 @@ const UserListItem = (props) => {
 			<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 
 			<div className={classNames.avatarWrapper}>
-				<Avatar size="large" src="https://yt3.ggpht.com/-DxJSAKyWCE4/AAAAAAAAAAI/AAAAAAAAAAA/M8DxVGU-fR0/s88-c-k-no-mo-rj-c0xffffff/photo.jpg" />
+				<Avatar size="large" src={userData.avatar} />
 				<div className={classNames.nameWrapper}>
-					<h4>Trần Đức Tiến</h4>
-					<i>Consultor</i>
+					<h4>{userData.fullName}</h4>
+					<i>{userData.role}</i>
 				</div>
 			</div>
 
@@ -104,14 +105,14 @@ const UserListItem = (props) => {
 						<Icon type="calendar" />
 						Birth Date:
 					</div>
-					<div className={classNames.value}>1992-02-07</div>
+					<div className={classNames.value}>{userData.birthDate ? moment(userData.birthDate).format('DD-MM-YYYY') : '-'}</div>
 				</div>
 				<div className={classNames.item} >
 					<div className={classNames.label}>
 						<Icon type="user" />
 						Gender:
 					</div>
-					<div className={classNames.value}>Male</div>
+					<div className={classNames.value}>{userData.gender || '-'}</div>
 				</div>
 			</div>
 			<div className={classNames.tr}>
@@ -121,8 +122,8 @@ const UserListItem = (props) => {
 						Email:
 					</div>
 					<div className={classNames.value}>
-						<p>ductien@gmail.com</p>
-						<p>ductienas@gmail.com</p>
+						<p>{userData.email || '-'}</p>
+						{/* <p>ductienas@gmail.com</p> */}
 					</div>
 				</div>
 			</div>
@@ -133,8 +134,8 @@ const UserListItem = (props) => {
 						Phone:
 					</div>
 					<div className={classNames.value}>
-						<p>1223123213</p>
-						<p>1212321323</p>
+						<p>{userData.phone && userData.phone[0] ? userData.phone[0] : '-'}</p>
+						<p>{userData.phone && userData.phone[1] ? userData.phone[1] : '-'}</p>
 					</div>
 				</div>
 			</div>
@@ -153,10 +154,12 @@ const UserListItem = (props) => {
 
 UserListItem.propTypes = {
 	loading: PropTypes.bool,
+	userData: PropTypes.object,
 };
 
 UserListItem.defaultProps = {
 	loading: false,
+	userData: {},
 };
 
 export default UserListItem;
