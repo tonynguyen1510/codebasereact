@@ -77,6 +77,8 @@ export default class ConsultorAction extends Component {
 	render() {
 		const { form: { getFieldDecorator } } = this.props;
 
+		console.log('this.props.', this.props);
+
 		return (
 			<Form layout="horizontal" onSubmit={this.handleSubmit} style={{ margin: '100px 0' }}>
 				<Form.Item

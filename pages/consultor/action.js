@@ -19,11 +19,13 @@ import ConsultorAction from 'src/components/Pages/Consultor/Action';
 
 @withRoot
 export default class ConsultorActionPage extends PureComponent {
-	static async getInitialProps(ctx) {
-		// if (AuthStorage.loggedIn) {
-		// 	ctx.store.dispatch(getUserAuth());
-		// }
-		// return { auth: ctx.store.getState().auth };
+	static async getInitialProps({ query, res }) {
+
+		if (query.id && res) {
+			res.statusCode = 404;
+		}
+
+		return { consultorId: query.id };
 	}
 
 	render() {
@@ -32,7 +34,7 @@ export default class ConsultorActionPage extends PureComponent {
 				<Head>
 					<title>IPP Admin - Consultor - New</title>
 				</Head>
-				<ConsultorAction />
+				<ConsultorAction consultorId={this.props.consultorId} />
 			</MainLayout>
 		);
 	}

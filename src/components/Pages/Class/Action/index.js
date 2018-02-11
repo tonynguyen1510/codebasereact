@@ -11,6 +11,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import Router from 'next/router';
+
 import { Form, Select, InputNumber, DatePicker, Switch, Slider, Button } from 'antd';
 
 const FormItem = Form.Item;
@@ -50,6 +52,7 @@ export default class ClassAction extends Component {
 
 	render() {
 		const {  } = this.props;
+		console.log('this.props', Router.router && Router.router.query);
 
 		return (
 			<Form layout="horizontal">

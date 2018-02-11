@@ -139,14 +139,14 @@ const UserListItem = (props) => {
 					</div>
 					<div className={classNames.value}>
 						<p>{userData.phone && userData.phone[0] ? userData.phone[0] : '-'}</p>
-						<p>{userData.phone && userData.phone[1] ? userData.phone[1] : '-'}</p>
+						<p>{userData.phone && userData.phone[1]}</p>
 					</div>
 				</div>
 			</div>
 
 			<div className={classNames.tr + ' ' + classNames.actionWrapper}>
 				<div className={classNames.action}>
-					<Link route="/class/1223">
+					<Link route={'/' + userData.role + '/' + userData.id}>
 						<a>
 							<Icon type="eye-o" />
 						</a>
@@ -154,7 +154,7 @@ const UserListItem = (props) => {
 				</div>
 				<Divider type="vertical" />
 				<div className={classNames.action}>
-					<Link route="/class/edit/1223">
+					<Link route={'/' + userData.role + '/edit/' + userData.id}>
 						<a>
 							<Icon type="edit" />
 						</a>
