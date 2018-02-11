@@ -9,15 +9,18 @@
 import auth, { initialState as initialAuth } from './auth';
 import loading, { initialState as initialLoading } from './loading';
 import user, { initialState as initialUser } from './user';
+import classObject, { initialState as initialClass } from './class'
 
 export const initialState = {
 	auth: initialAuth,
 	loading: initialLoading,
 	user: initialUser,
+	classObject: initialClass
 };
 
 export default {
 	auth,
 	loading,
 	user,
+	classObject
 };
