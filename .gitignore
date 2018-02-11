@@ -45,5 +45,4 @@ gh-pages/
 # test coverage folder
 coverage
 
-static/assets
 static/server
