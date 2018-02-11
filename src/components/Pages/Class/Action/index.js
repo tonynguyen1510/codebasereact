@@ -9,43 +9,44 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as ClassActionRedux from '../../../../redux/actions/class';
-import Router from 'next/router'
+import * as ClassActionRedux from 'src/redux/actions/class';
+import Router from 'next/router';
+import { bindActionCreators } from 'redux';
 import { Form, Select, Input, DatePicker, Switch, Slider, Button } from 'antd';
 
 const FormItem = Form.Item;
 
-const mapDispatchToProps = {
-	...ClassActionRedux
-}
+const mapDispatchToProps = (dispatch) => {
+	return {
+		action: bindActionCreators({
+			...ClassActionRedux,
+		}, dispatch),
+	};
+};
 const mapStateToProps = (state) => {
 	return {
-		classObject: state.classObject.classInfo
-	}
-}
+		classObject: state.classObject.classInfo,
+	};
+};
 @connect(mapStateToProps, mapDispatchToProps)
 
 export default class ClassAction extends Component {
 	static propTypes = {
-		classObject: PropTypes.object,
-		getClassInfo: PropTypes.func,
-		upsertClass: PropTypes.func,
-		onValueChange: PropTypes.func,
-		resetStateClassInfo: PropTypes.func,
-		getClasses: PropTypes.func
+		classObject: PropTypes.object.isRequired,
+		action: PropTypes.object.isRequired,
 	}
 	componentDidMount() {
 		if (Router.router.query.id) {
-			this.props.getClassInfo(Router.router.query.id)
+			this.props.action.getClassInfo(Router.router.query.id);
 		} else {
-			this.props.resetStateClassInfo()
+			this.props.action.resetStateClassInfo();
 		}
 	}
 	upsertClass() {
-		this.props.upsertClass(this.props.classObject, Router.router.query.id)
+		this.props.action.upsertClass(this.props.classObject, Router.router.query.id);
 	}
 	render() {
-		const { classObject, onValueChange } = this.props;
+		const { classObject, action } = this.props;
 		return (
 			<Form layout="horizontal">
 				<FormItem
@@ -54,7 +55,7 @@ export default class ClassAction extends Component {
 					wrapperCol={{ span: 8 }}
 				>
 					<Input
-						onChange={(e) => onValueChange('name', e.target.value)}
+						onChange={(e) => action.onValueChange('name', e.target.value)}
 						value={classObject.name || ''}
 						size="large"
 						style={{ width: 200 }}
@@ -68,7 +69,7 @@ export default class ClassAction extends Component {
 					wrapperCol={{ span: 8 }}
 				>
 					<Input
-						onChange={(e) => onValueChange('desc', e.target.value)}
+						onChange={(e) => action.onValueChange('desc', e.target.value)}
 						value={classObject.desc || ''}
 						size="large"
 						style={{ width: 200 }}
@@ -82,10 +83,10 @@ export default class ClassAction extends Component {
 					wrapperCol={{ span: 8 }}
 				>
 					<Select
-						onChange={(value) => onValueChange('status', value)}
+						onChange={(value) => action.onValueChange('status', value)}
 						size="large"
 						style={{ width: 192 }}
-						defaultValue={classObject.status || 'active'} 
+						defaultValue={classObject.status || 'active'}
 					>
 						<Select.Option value="active" selected>Active</Select.Option>
 						<Select.Option value="inactive">inActive</Select.Option>

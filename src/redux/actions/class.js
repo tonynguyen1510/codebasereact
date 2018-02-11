@@ -45,18 +45,6 @@ export const upsertClass = (data, id) => {
 	};
 };
 
-export const deleteClass = (data, id) => {
-	return {
-		type: SINGLE_API,
-		payload: {
-			uri: 'classes/' + id,
-			params: { ...data, isDelete: true },
-			opt: { method: 'PUT' },
-			successType: 'DELETE_CLASS_SUCCESS',
-		},
-	};
-};
-
 export const onValueChange = (key, value) => {
 	return {
 		type: 'CLASS_VALUE_CHANGE',
@@ -90,5 +78,18 @@ export const getClasses = (next, filter) => {
 export const resetStateClassInfo = () => {
 	return {
 		type: 'CLASS_RESET_STATE_INFO',
+	};
+};
+
+export const deleteClass = (data, id, next) => {
+	return {
+		type: SINGLE_API,
+		payload: {
+			uri: 'classes/' + id,
+			params: { ...data, isDelete: true },
+			opt: { method: 'PUT' },
+			successType: 'DELETE_CLASS_SUCCESS',
+			afterSuccess: next,
+		},
 	};
 };

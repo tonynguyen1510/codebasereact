@@ -10,21 +10,25 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as ClassActionRedux from '../../../redux/actions/class';
-
+import { bindActionCreators } from 'redux';
 import { Router } from 'src/routes';
 
 import { Table, Divider, Icon, Button, DatePicker, Input, Modal } from 'antd';
 
 import { stylesheet, classNames } from './style.less';
 
-const mapDispatchToProps = {
-	...ClassActionRedux
-}
+const mapDispatchToProps = (dispatch) => {
+	return {
+		action: bindActionCreators({
+			...ClassActionRedux,
+		}, dispatch),
+	};
+};
 const mapStateToProps = (state) => {
 	return {
-		classList: state.classObject.classList
-	}
-}
+		classList: state.classObject.classList,
+	};
+};
 
 function onChange(pagination, filters, sorter) {
 	console.log('params', pagination, filters, sorter);
@@ -33,14 +37,13 @@ function onChange(pagination, filters, sorter) {
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ClassPage extends PureComponent {
 	static propTypes = {
-		getClasses: PropTypes.func,
-		classList: PropTypes.array,
-		deleteClass: PropTypes.func
+		classList: PropTypes.array.isRequired,
+		action: PropTypes.func.isRequired,
 	}
 
 	static defaultProps = {}
 	constructor(props) {
-		super(props)
+		super(props);
 		this.columns = [{
 			title: 'Name',
 			dataIndex: 'name',
@@ -69,20 +72,19 @@ export default class ClassPage extends PureComponent {
 								Modal.confirm({
 									title: 'Do you want to delete these items?',
 									onOk() {
-										props.deleteClass(record, record.id)
-										props.getClasses()
-									}
-								})
-								}
+										props.action.deleteClass(record, record.id, props.action.getClasses);
+									},
+								});
+							}
 							}
 						/>
 					</span>
-				)
+				);
 			},
-		}]
+		}];
 	}
 	componentDidMount() {
-		this.props.getClasses()
+		this.props.action.getClasses();
 	}
 
 	render() {
