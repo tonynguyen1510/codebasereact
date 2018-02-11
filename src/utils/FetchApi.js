@@ -8,6 +8,8 @@
 import merge from 'lodash/merge';
 import { put, call } from 'redux-saga/effects';
 
+import Router from 'next/router';
+
 import API from 'src/constants/api';
 import ENV from 'src/constants/env';
 
@@ -109,6 +111,7 @@ export default function* ({ uri, params = {}, opt = {}, loading = true, uploadIm
 			}
 
 			yield put({ type: REQUEST_ERROR, payload: 'Access token has expired' });
+			Router.push('/login');
 		} else if (error.statusCode === 401 && error.code === 'ACCOUNT_DISABLED') {
 			// Access token has expired
 			if (AuthStorage.loggedIn) {
@@ -116,6 +119,7 @@ export default function* ({ uri, params = {}, opt = {}, loading = true, uploadIm
 			}
 
 			yield put({ type: REQUEST_ERROR, payload: 'Account has been disabled' });
+			Router.push('/login');
 		} else {
 			yield put({ type: REQUEST_ERROR, payload: error.message || error });
 		}

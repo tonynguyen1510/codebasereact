@@ -3,69 +3,136 @@
 * Email ductienas@gmail.com
 * Phone 0972970075
 *
-* Created: 2018-02-11 10:23:26
+* Created: 2018-02-11 15:31:46
 *------------------------------------------------------- */
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Menu, Dropdown, Icon } from 'antd';
+import { Menu, Dropdown, Spin, Icon } from 'antd';
 
-const menu = (
-	<Menu>
-		<Menu.Item key="0">
-			Deactivate Account
-		</Menu.Item>
-		<Menu.Item key="1">
-			Resend Invitation
-		</Menu.Item>
-	</Menu>
-);
+import { updateUser, resendInvitation } from 'src/redux/actions/user';
 
 function mapStateToProps(state) {
 	return {
-		store: {
-			//modal: state.modal,
-		},
+		// store: {
+		// 	userList: state.user.userList,
+		// },
 	};
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		//action: bindActionCreators({
-			//toggleLoginModal,
-		//}, dispatch),
+		action: bindActionCreators({
+			updateUser,
+			resendInvitation,
+		}, dispatch),
 	};
 };
 
-const BtnUserActionMore = (props) => {
-	const {  } = props;
+@connect(mapStateToProps, mapDispatchToProps)
+export default class BtnUserActionMore extends PureComponent {
+	static propTypes = {
+		userData: PropTypes.object.isRequired,
+		// store
+		// store: PropTypes.shape({
+		// 	userList: PropTypes.object.isRequired,
+		// }).isRequired,
+		// action
+		action: PropTypes.shape({
+			updateUser: PropTypes.func.isRequired,
+			resendInvitation: PropTypes.func.isRequired,
+		}).isRequired,
+	}
 
-	return (
-		<Dropdown overlay={menu} trigger={['click']}>
-			<a className="ant-dropdown-link" href="#">
-				<Icon type="ellipsis" />
-			</a>
-		</Dropdown>
-	);
-};
+	static defaultProps = {}
 
-BtnUserActionMore.propTypes = {
-	// classes: PropTypes.object.isRequired,
-	// store
-	store: PropTypes.shape({
-		modal: PropTypes.object.isRequired,
-	}).isRequired,
-	// action
-	action: PropTypes.shape({
-		toggleLoginModal: PropTypes.func.isRequired,
-	}).isRequired,
-};
+	state = {
+		loading: false,
+	}
 
-BtnUserActionMore.defaultProps = {
-	// classes: {},
-};
+	handleChangeStatusUser = (newStatus) => {
+		const { id, status } = this.props.userData;
 
-export default connect(mapStateToProps, mapDispatchToProps)(BtnUserActionMore);
+		if (id && status !== 'pending') {
+			this.setState({
+				loading: true,
+			});
+			this.props.action.updateUser({ id, status: newStatus, updatedAt: new Date() }, () => {
+				this.setState({
+					loading: false,
+				});
+			}, () => {
+				this.setState({
+					loading: false,
+				});
+			});
+		}
+	}
+
+	handleResendInvitation = () => {
+		const { email, status } = this.props.userData;
+
+		if (email && status === 'pending') {
+			this.setState({
+				loading: true,
+			});
+			this.props.action.resendInvitation({ email }, () => {
+				this.setState({
+					loading: false,
+				});
+			}, () => {
+				this.setState({
+					loading: false,
+				});
+			});
+		}
+	}
+
+	render() {
+		const { userData } = this.props;
+
+		const menu = (
+			<Menu>
+				{
+					userData.status === 'active' &&
+					<Menu.Item key="0">
+						<a onClick={() => this.handleChangeStatusUser('inactive')}>
+							Deactivate Account
+						</a>
+					</Menu.Item>
+				}
+				{
+					userData.status === 'inactive' &&
+					<Menu.Item key="0">
+						<a onClick={() => this.handleChangeStatusUser('active')}>
+							Active Account
+						</a>
+					</Menu.Item>
+				}
+				{
+					userData.status === 'pending' &&
+					<Menu.Item key="1">
+						<a onClick={() => this.handleResendInvitation()}>
+							Resend Invitation
+						</a>
+					</Menu.Item>
+				}
+			</Menu>
+		);
+
+		return (
+			<Dropdown overlay={menu} trigger={['click']}>
+				{
+					this.state.loading ?
+						<Spin /> :
+						<a className="ant-dropdown-link">
+							<Icon type="ellipsis" />
+						</a>
+				}
+			</Dropdown>
+		);
+	}
+}

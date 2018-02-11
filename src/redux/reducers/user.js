@@ -24,6 +24,19 @@ export default (state = initialState, action) => {
 		case 'GET_USER_LIST_SUCCESS':
 			return { ...state, userList: { ...action.payload, loading: false } };
 
+		case 'UPDATE_USER_SUCCESS': {
+			const { id } = action.payload;
+			const { userList } = state;
+
+			const index = userList.data.findIndex((user) => {
+				return user.id === id;
+			});
+
+			userList.data[index] = action.payload;
+
+			return { ...state };
+		}
+
 		default:
 			return state;
 	}

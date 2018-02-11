@@ -154,7 +154,7 @@ const UserCard = (props) => {
 							Status:
 						</div>
 						<div className={classNames.value}>
-							<Badge type="success">
+							<Badge type={userData.status === 'active' ? 'success' : userData.status === 'inactive' ? 'error' : 'warning'}>
 								{userData.status}
 							</Badge>
 						</div>
@@ -224,7 +224,7 @@ const UserCard = (props) => {
 						</Link>
 					</div>
 					<div className={classNames.controlItem}>
-						<BtnUserActionMore />
+						<BtnUserActionMore userData={userData} />
 					</div>
 				</div>
 			</div>
