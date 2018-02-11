@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Menu, Dropdown, Spin, Icon } from 'antd';
+import { Menu, Dropdown, Spin, Icon, Popconfirm, notification } from 'antd';
 
 import { updateUser, resendInvitation } from 'src/redux/actions/user';
 
@@ -61,6 +61,10 @@ export default class BtnUserActionMore extends PureComponent {
 				loading: true,
 			});
 			this.props.action.updateUser({ id, status: newStatus, updatedAt: new Date() }, () => {
+				notification.success({
+					message: 'Congratulation',
+					description: (newStatus === 'inactive' ? 'Deactivate' : 'Activate') + ' account success! Thank you.',
+				});
 				this.setState({
 					loading: false,
 				});
@@ -80,6 +84,10 @@ export default class BtnUserActionMore extends PureComponent {
 				loading: true,
 			});
 			this.props.action.resendInvitation({ email }, () => {
+				notification.success({
+					message: 'Congratulation',
+					description: 'Invitation has been sent successfully! Thank you.',
+				});
 				this.setState({
 					loading: false,
 				});
@@ -99,25 +107,25 @@ export default class BtnUserActionMore extends PureComponent {
 				{
 					userData.status === 'active' &&
 					<Menu.Item key="0">
-						<a onClick={() => this.handleChangeStatusUser('inactive')}>
+						<Popconfirm title="Are you sure？" onConfirm={() => this.handleChangeStatusUser('inactive')}>
 							Deactivate Account
-						</a>
+						</Popconfirm>
 					</Menu.Item>
 				}
 				{
 					userData.status === 'inactive' &&
 					<Menu.Item key="0">
-						<a onClick={() => this.handleChangeStatusUser('active')}>
+						<Popconfirm title="Are you sure？" onConfirm={() => this.handleChangeStatusUser('active')}>
 							Active Account
-						</a>
+						</Popconfirm>
 					</Menu.Item>
 				}
 				{
 					userData.status === 'pending' &&
 					<Menu.Item key="1">
-						<a onClick={() => this.handleResendInvitation()}>
+						<Popconfirm title="Are you sure？" onConfirm={() => this.handleResendInvitation()}>
 							Resend Invitation
-						</a>
+						</Popconfirm>
 					</Menu.Item>
 				}
 			</Menu>

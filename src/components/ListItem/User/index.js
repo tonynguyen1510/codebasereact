@@ -12,9 +12,11 @@ import moment from 'moment';
 
 import { Icon, Button, Divider } from 'antd';
 
-import { Router } from 'src/routes';
+import { Link } from 'src/routes';
 
 import Avatar from 'src/components/Avatar';
+import Badge from 'src/components/Badge';
+import BtnUserActionMore from 'src/components/Form/BtnUserActionMore';
 
 import { stylesheet, classNames } from './style.less';
 
@@ -95,7 +97,9 @@ const UserListItem = (props) => {
 				<Avatar size="large" src={userData.avatar} />
 				<div className={classNames.nameWrapper}>
 					<h4>{userData.fullName}</h4>
-					<i>{userData.role}</i>
+					<Badge type={userData.status === 'active' ? 'success' : userData.status === 'inactive' ? 'error' : 'warning'}>
+						{userData.status}
+					</Badge>
 				</div>
 			</div>
 
@@ -140,12 +144,26 @@ const UserListItem = (props) => {
 				</div>
 			</div>
 
-			<div className={classNames.tr} style={{ width: 140, flex: 'none' }}>
-				<Button shape="circle" icon="eye-o" onClick={() => Router.pushRoute(`/class/123`)} />
+			<div className={classNames.tr + ' ' + classNames.actionWrapper}>
+				<div className={classNames.action}>
+					<Link route="/class/1223">
+						<a>
+							<Icon type="eye-o" />
+						</a>
+					</Link>
+				</div>
 				<Divider type="vertical" />
-				<Button shape="circle" icon="edit" onClick={() => Router.pushRoute(`/class/edit/123`)} />
+				<div className={classNames.action}>
+					<Link route="/class/edit/1223">
+						<a>
+							<Icon type="edit" />
+						</a>
+					</Link>
+				</div>
 				<Divider type="vertical" />
-				<Button shape="circle" icon="ellipsis" />
+				<div className={classNames.action}>
+					<BtnUserActionMore userData={userData} />
+				</div>
 			</div>
 
 		</div>

@@ -109,7 +109,10 @@ const UserCard = (props) => {
 					<Avatar size="large" src={userData.avatar} />
 					<div className={classNames.nameWrapper}>
 						<h4>{userData.fullName}</h4>
-						<i>{userData.role}</i>
+						{/* <i>{userData.role}</i> */}
+						<Badge type={userData.status === 'active' ? 'success' : userData.status === 'inactive' ? 'error' : 'warning'}>
+							{userData.status}
+						</Badge>
 					</div>
 				</div>
 
@@ -148,7 +151,7 @@ const UserCard = (props) => {
 							<p>{userData.phone && userData.phone[1] ? userData.phone[1] : '-'}</p>
 						</div>
 					</div>
-					<div className={classNames.item} >
+					{/* <div className={classNames.item} >
 						<div className={classNames.label}>
 							<Icon type="check-circle-o" />
 							Status:
@@ -158,7 +161,7 @@ const UserCard = (props) => {
 								{userData.status}
 							</Badge>
 						</div>
-					</div>
+					</div> */}
 					{/* <div className={classNames.item} >
 						<div className={classNames.label}>
 							<Icon type="environment-o" />
