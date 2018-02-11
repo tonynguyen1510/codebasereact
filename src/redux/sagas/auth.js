@@ -73,9 +73,10 @@ function* logoutFlow() {
 		});
 
 		if (response && !response.error) {
-			AuthStorage.destroy(next);
-
 			yield put({ type: 'LOGOUT_SUCCESS' });
+			if (typeof next === 'function') {
+				next();
+			}
 		}
 	}
 }

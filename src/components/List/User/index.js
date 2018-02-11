@@ -38,7 +38,7 @@ export default class UserList extends PureComponent {
 		});
 	}
 
-	handleChange = (page, pageSize) => {
+	handleChange = (page) => {
 		this.props.onChangePagination(page - 1);
 	}
 

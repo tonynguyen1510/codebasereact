@@ -104,10 +104,18 @@ export default function* ({ uri, params = {}, opt = {}, loading = true, uploadIm
 
 		if (error.statusCode === 401 && (error.code === 'INVALID_TOKEN' || error.code === 'AUTHORIZATION_REQUIRED')) {
 			// Access token has expired
-			yield call(AuthStorage.destroy);
-			yield put({ type: 'LOGOUT_SUCCESS' });
+			if (AuthStorage.loggedIn) {
+				yield put({ type: 'LOGOUT_SUCCESS' });
+			}
 
 			yield put({ type: REQUEST_ERROR, payload: 'Access token has expired' });
+		} else if (error.statusCode === 401 && error.code === 'ACCOUNT_DISABLED') {
+			// Access token has expired
+			if (AuthStorage.loggedIn) {
+				yield put({ type: 'LOGOUT_SUCCESS' });
+			}
+
+			yield put({ type: REQUEST_ERROR, payload: 'Account has been disabled' });
 		} else {
 			yield put({ type: REQUEST_ERROR, payload: error.message || error });
 		}

@@ -15,6 +15,8 @@ import { Icon } from 'antd';
 import { Link } from 'src/routes';
 
 import Avatar from 'src/components/Avatar';
+import Badge from 'src/components/Badge';
+import BtnUserActionMore from 'src/components/Form/BtnUserActionMore';
 
 import { stylesheet, classNames } from './style.less';
 
@@ -146,6 +148,17 @@ const UserCard = (props) => {
 							<p>{userData.phone && userData.phone[1] ? userData.phone[1] : '-'}</p>
 						</div>
 					</div>
+					<div className={classNames.item} >
+						<div className={classNames.label}>
+							<Icon type="check-circle-o" />
+							Status:
+						</div>
+						<div className={classNames.value}>
+							<Badge type="success">
+								{userData.status}
+							</Badge>
+						</div>
+					</div>
 					{/* <div className={classNames.item} >
 						<div className={classNames.label}>
 							<Icon type="environment-o" />
@@ -211,11 +224,7 @@ const UserCard = (props) => {
 						</Link>
 					</div>
 					<div className={classNames.controlItem}>
-						{/* <Link route="/class/1223"> */}
-						<a>
-							<Icon type="ellipsis" />
-						</a>
-						{/* </Link> */}
+						<BtnUserActionMore />
 					</div>
 				</div>
 			</div>
