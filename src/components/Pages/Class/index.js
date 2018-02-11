@@ -9,101 +9,84 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import * as ClassActionRedux from '../../../redux/actions/class';
 
 import { Router } from 'src/routes';
 
-import { Table, Divider, Icon, Button, DatePicker, Input } from 'antd';
+import { Table, Divider, Icon, Button, DatePicker, Input, Modal } from 'antd';
 
 import { stylesheet, classNames } from './style.less';
 
-function mapStateToProps(state) {
-	return {
-		store: {
-			//modal: state.modal,
-		},
-	};
+const mapDispatchToProps = {
+	...ClassActionRedux
 }
-
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
 	return {
-		//action: bindActionCreators({
-			//toggleLoginModal,
-		//}, dispatch),
-	};
-};
-
-const columns = [{
-	title: 'Name',
-	dataIndex: 'name',
-}, {
-	title: 'Created at',
-	dataIndex: 'createdAt',
-}, {
-	title: 'Created by',
-	dataIndex: 'createdBy',
-}, {
-	title: 'Action',
-	key: 'action',
-	width: 150,
-	render: (text, record) => {
-		return (
-			<span>
-				<Button shape="circle" icon="eye-o" onClick={() => Router.pushRoute(`/class/${record.id}`)} />
-				<Divider type="vertical" />
-				<Button shape="circle" icon="edit" onClick={() => Router.pushRoute(`/class/edit/${record.id}`)} />
-				<Divider type="vertical" />
-				<Button shape="circle" icon="ellipsis" />
-			</span>
-		)
-	},
-}];
-
-const data = [{
-	id: '1',
-	name: 'John Brown',
-	createdAt: '2018-02-08 10:40:46',
-	createdBy: 'Đức Tiến',
-}, {
-	id: '2',
-	name: 'Jim Green',
-	createdAt: '2018-02-08 10:40:46',
-	createdBy: 'Đức Tiến',
-}, {
-	id: '3',
-	name: 'Joe Black',
-	createdAt: '2018-02-08 10:40:46',
-	createdBy: 'Đức Tiến',
-}, {
-	id: '4',
-	name: 'Jim Red',
-	createdAt: '2018-02-08 10:40:46',
-	createdBy: 'Đức Tiến',
-}];
+		classList: state.classObject.classList
+	}
+}
 
 function onChange(pagination, filters, sorter) {
 	console.log('params', pagination, filters, sorter);
 }
 
-
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ClassPage extends PureComponent {
 	static propTypes = {
-		// classes: PropTypes.object.isRequired,
-		// store
-		store: PropTypes.shape({
-			modal: PropTypes.object.isRequired,
-		}).isRequired,
-		// action
-		action: PropTypes.shape({
-			toggleLoginModal: PropTypes.func.isRequired,
-		}).isRequired,
+		getClasses: PropTypes.func,
+		classList: PropTypes.array,
+		deleteClass: PropTypes.func
 	}
 
 	static defaultProps = {}
+	constructor(props) {
+		super(props)
+		this.columns = [{
+			title: 'Name',
+			dataIndex: 'name',
+		}, {
+			title: 'Description',
+			dataIndex: 'desc',
+		}, {
+			title: 'Status',
+			dataIndex: 'status',
+		}, {
+			title: 'Created at',
+			dataIndex: 'createdAt',
+		}, {
+			title: 'Action',
+			key: 'action',
+			width: 150,
+			render: (text, record) => {
+				return (
+					<span>
+						<Button shape="circle" icon="edit" onClick={() => Router.pushRoute(`/class/edit/${record.id}`)} />
+						<Divider type="vertical" />
+						<Button
+							shape="circle"
+							icon="delete"
+							onClick={() => {
+								Modal.confirm({
+									title: 'Do you want to delete these items?',
+									onOk() {
+										props.deleteClass(record, record.id)
+										props.getClasses()
+									}
+								})
+								}
+							}
+						/>
+					</span>
+				)
+			},
+		}]
+	}
+	componentDidMount() {
+		this.props.getClasses()
+	}
 
 	render() {
-		const {  } = this.props;
+		const { classList } = this.props;
 
 		return (
 			<div className={classNames.root}>
@@ -121,7 +104,7 @@ export default class ClassPage extends PureComponent {
 						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/class/new')}>Create class</Button>
 					</div>
 				</div>
-				<Table size="small" columns={columns} bordered dataSource={data} onChange={onChange} />
+				<Table size="small" columns={this.columns} bordered dataSource={classList} onChange={onChange} />
 			</div>
 		);
 	}

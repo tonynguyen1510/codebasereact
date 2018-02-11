@@ -1,7 +1,7 @@
 /* --------------------------------------------------------
-* Author Trần Đức Tiến
-* Email ductienas@gmail.com
-* Phone 0972970075
+* Author Ngo An Ninh
+* Email ninh.uit@gmail.com
+* Phone 0978108807
 *
 * Created: 2018-02-09 11:27:16
 *------------------------------------------------------- */
@@ -9,106 +9,96 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
-import Router from 'next/router';
-
-import { Form, Select, InputNumber, DatePicker, Switch, Slider, Button } from 'antd';
+import * as ClassActionRedux from '../../../../redux/actions/class';
+import Router from 'next/router'
+import { Form, Select, Input, DatePicker, Switch, Slider, Button } from 'antd';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 
-function mapStateToProps(state) {
-	return {
-		store: {
-			//modal: state.modal,
-		},
-	};
+const mapDispatchToProps = {
+	...ClassActionRedux
 }
-
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
 	return {
-		//action: bindActionCreators({
-			//toggleLoginModal,
-		//}, dispatch),
-	};
-};
-
+		classObject: state.classObject.classInfo
+	}
+}
 @connect(mapStateToProps, mapDispatchToProps)
+
 export default class ClassAction extends Component {
 	static propTypes = {
-		// classes: PropTypes.object.isRequired,
-		// store
-		store: PropTypes.shape({
-			modal: PropTypes.object.isRequired,
-		}).isRequired,
-		// action
-		action: PropTypes.shape({
-			toggleLoginModal: PropTypes.func.isRequired,
-		}).isRequired,
+		classObject: PropTypes.object,
+		getClassInfo: PropTypes.func,
+		upsertClass: PropTypes.func,
+		onValueChange: PropTypes.func,
+		resetStateClassInfo: PropTypes.func,
+		getClasses: PropTypes.func
 	}
-
-	static defaultProps = {}
-
+	componentDidMount() {
+		if (Router.router.query.id) {
+			this.props.getClassInfo(Router.router.query.id)
+		} else {
+			this.props.resetStateClassInfo()
+		}
+	}
+	upsertClass() {
+		this.props.upsertClass(this.props.classObject, Router.router.query.id)
+	}
 	render() {
-		const {  } = this.props;
-		console.log('this.props', Router.router && Router.router.query);
-
+		const { classObject, onValueChange } = this.props;
 		return (
 			<Form layout="horizontal">
 				<FormItem
-					label="Input Number"
+					label="Class Name*"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
 				>
-					<InputNumber size="large" min={1} max={10} style={{ width: 100 }} defaultValue={3} name="inputNumber" />
-					<a href="#">Link</a>
+					<Input
+						onChange={(e) => onValueChange('name', e.target.value)}
+						value={classObject.name || ''}
+						size="large"
+						style={{ width: 200 }}
+						name="classname"
+						placeholder="enter class name"
+					/>
 				</FormItem>
-
 				<FormItem
-					label="Switch"
+					label="Description"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
 				>
-					<Switch defaultChecked name="switch" />
+					<Input
+						onChange={(e) => onValueChange('desc', e.target.value)}
+						value={classObject.desc || ''}
+						size="large"
+						style={{ width: 200 }}
+						name="description"
+						placeholder="enter description"
+					/>
 				</FormItem>
-
 				<FormItem
-					label="Slider"
+					label="Status"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
 				>
-					<Slider defaultValue={70} />
-				</FormItem>
-
-				<FormItem
-					label="Select"
-					labelCol={{ span: 8 }}
-					wrapperCol={{ span: 8 }}
-				>
-					<Select size="large" defaultValue="lucy" style={{ width: 192 }} name="select">
-						<Option value="jack">jack</Option>
-						<Option value="lucy">lucy</Option>
-						<Option value="disabled" disabled>disabled</Option>
-						<Option value="yiminghe">yiminghe</Option>
+					<Select
+						onChange={(value) => onValueChange('status', value)}
+						size="large"
+						style={{ width: 192 }}
+						defaultValue={classObject.status || 'active'} 
+					>
+						<Select.Option value="active" selected>Active</Select.Option>
+						<Select.Option value="inactive">inActive</Select.Option>
 					</Select>
-				</FormItem>
-
-				<FormItem
-					label="DatePicker"
-					labelCol={{ span: 8 }}
-					wrapperCol={{ span: 8 }}
-				>
-					<DatePicker name="startDate" />
 				</FormItem>
 				<FormItem
 					style={{ marginTop: 48 }}
 					wrapperCol={{ span: 8, offset: 8 }}
 				>
-					<Button size="large" type="primary" htmlType="submit">
+					<Button size="large" type="primary" htmlType="submit" onClick={() => this.upsertClass()}>
 						OK
 					</Button>
-					<Button size="large" style={{ marginLeft: 8 }}>
+					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.back()} >
 						Cancel
 					</Button>
 				</FormItem>
