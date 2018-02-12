@@ -19,6 +19,7 @@ export const initialState = {
 		name: '',
 		desc: '',
 		type: '',
+		classId: '',
 		status: 'active',
 	},
 };
@@ -38,7 +39,7 @@ export default (state = initialState, action) => {
 		case 'LESSON_RESET_STATE_INFO':
 			return {
 				...state,
-				classInfo: initialState.classInfo,
+				lessonInfo: initialState.lessonInfo,
 			};
 		default:
 			return state;

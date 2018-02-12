@@ -77,7 +77,7 @@ export default class ClassAction extends Component {
 		});
 	}
 	render() {
-		const { form: { getFieldDecorator }, classObject } = this.props;
+		const { form: { getFieldDecorator } } = this.props;
 		return (
 			<div>
 				<Form layout="inline" onSubmit={this.handleSubmit}>
@@ -142,16 +142,16 @@ export default class ClassAction extends Component {
 						</Button>
 					</FormItem>
 				</Form>
-				{this.state.isCreatingLesson && classObject.id &&
+				{this.state.isCreatingLesson && Router.router && Router.router.query.id &&
 					<LessonActionPage
-						classId={classObject.id}
+						classId={Router.router.query.id}
 						lessonId={this.state.lessonId}
 						onFinishCreatingLesson={() => this.setState({ isCreatingLesson: false })}
 					/>
 				}
-				{!this.state.isCreatingLesson && classObject.id &&
+				{!this.state.isCreatingLesson && Router.router && Router.router.query.id &&
 					<LessonListPage
-						classId={classObject.id}
+						classId={Router.router.query.id}
 						onCreateLesson={(lessonId) => this.setState({ isCreatingLesson: true, lessonId })}
 					/>
 				}

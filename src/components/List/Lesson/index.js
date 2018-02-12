@@ -109,15 +109,15 @@ export default class LessonPage extends PureComponent {
 						},
 					},
 					{
+						classId: this.props.classId,
+					},
+					{
 						or: [
 							{ desc: { like: this.filter.filterText } },
 							{ name: { like: this.filter.filterText } },
 							{ type: { eq: this.filter.filterText } },
 							{ status: { eq: this.filter.filterText } },
 						],
-					},
-					{
-						classId: this.props.classId,
 					},
 				],
 			},

@@ -141,16 +141,12 @@ export default class LessonPage extends PureComponent {
 
 	render() {
 		const { lessonList } = this.props;
-		console.log('lessonList', lessonList)
 		return (
 			<div className={classNames.root}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 				<div className={classNames.control}>
 					<InputSearch onChange={(value) => this.changeFilter(value)} />
 					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} onChange={(momentdata, dateString) => this.changeDateRange(momentdata, dateString)} /></div>
-					<div>
-						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/lesson/new')}>Create lesson</Button>
-					</div>
 				</div>
 				<Table
 					size="small"

@@ -61,7 +61,7 @@ export default class LessonAction extends Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				const data = { ...values, updatedAt: new Date() };
+				const data = { ...values, updatedAt: new Date(), classId: this.props.lessonObject.classId };
 				this.setState({
 					loading: true,
 				});
