@@ -45,30 +45,12 @@ export const upsertClass = (data, id, next) => {
 	};
 };
 
-export const onValueChange = (key, value) => {
-	return {
-		type: 'CLASS_VALUE_CHANGE',
-		payload: {
-			key,
-			value,
-		},
-	};
-};
-
-export const getClasses = (next, filter) => {
-	let curFilter = filter || {};
-	curFilter = {
-		...filter,
-		where: {
-			'isDelete': {
-				'neq': true,
-			},
-		},
-	};
+export const getClasses = (filter, next) => {
 	return {
 		type: SINGLE_API,
+		beforeCallType: 'CLASS_CHANGE_FILTER_TEXT',
 		payload: {
-			uri: `classes?filter=${JSON.stringify(curFilter)}`,
+			uri: `classes?filter=${JSON.stringify(filter)}`,
 			successType: 'GET_CLASSES_SUCCESS',
 			afterSuccess: next,
 		},
@@ -82,6 +64,7 @@ export const resetStateClassInfo = () => {
 };
 
 export const deleteClass = (data, id, next) => {
+	console.log('deleteClass', data, id);
 	return {
 		type: SINGLE_API,
 		payload: {

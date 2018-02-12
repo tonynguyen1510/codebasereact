@@ -8,7 +8,13 @@
 import Router from 'next/router';
 
 export const initialState = {
-	classList: [],
+	classList: {
+		data: [],
+		total: 0,
+		skip: 0,
+		limit: 12,
+		loading: true,
+	},
 	classInfo: {
 		name: '',
 		desc: '',
@@ -18,18 +24,10 @@ export const initialState = {
 
 export default (state = initialState, action) => {
 	switch (action.type) {
-		case 'CLASS_VALUE_CHANGE':
-			return {
-				...state,
-				classInfo: {
-					...state.classInfo,
-					[action.payload.key]: action.payload.value,
-				},
-			};
 		case 'GET_CLASSES_SUCCESS':
 			return {
 				...state,
-				classList: action.payload.data,
+				classList: { ...action.payload, loading: false },
 			};
 		case 'GET_CLASS_SUCCESS':
 			return {

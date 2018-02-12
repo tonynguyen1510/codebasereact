@@ -51,6 +51,9 @@ export default class ClassAction extends Component {
 			});
 		} else {
 			this.props.action.resetStateClassInfo();
+			this.props.form.setFieldsValue({
+				status: this.props.classObject.status || 'active',
+			});
 		}
 	}
 	handleSubmit = (e) => {
