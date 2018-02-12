@@ -39,6 +39,11 @@ export default (state = initialState, action) => {
 				...state,
 				classInfo: initialState.classInfo,
 			};
+		case 'UPSERT_CLASS_SUCCESS':
+			return {
+				...state,
+				classInfo: action.payload,
+			}
 		default:
 			return state;
 	}

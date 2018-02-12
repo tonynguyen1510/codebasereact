@@ -33,7 +33,7 @@ export default (state = initialState, action) => {
 		case 'GET_LESSON_SUCCESS':
 			return {
 				...state,
-				classInfo: action.payload,
+				lessonInfo: action.payload,
 			};
 		case 'LESSON_RESET_STATE_INFO':
 			return {

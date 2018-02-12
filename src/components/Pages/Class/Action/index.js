@@ -13,6 +13,8 @@ import * as ClassActionRedux from 'src/redux/actions/class';
 import Router from 'next/router';
 import { bindActionCreators } from 'redux';
 import { Form, Select, Input, DatePicker, Switch, Slider, Button } from 'antd';
+import LessonListPage from 'src/components/List/Lesson/';
+import LessonActionPage from 'src/components/List/Lesson/Action/';
 
 const FormItem = Form.Item;
 
@@ -39,6 +41,8 @@ export default class ClassAction extends Component {
 	}
 	state = {
 		loading: false,
+		isCreatingLesson: false,
+		lessonId: null,
 	}
 	componentDidMount() {
 		if (Router.router.query.id) {
@@ -65,8 +69,6 @@ export default class ClassAction extends Component {
 					loading: true,
 				});
 				this.props.action.upsertClass(data, Router.router.query.id, () => {
-					Router.push('/class');
-				}, () => {
 					this.setState({
 						loading: false,
 					});
@@ -75,67 +77,85 @@ export default class ClassAction extends Component {
 		});
 	}
 	render() {
-		const { form: { getFieldDecorator } } = this.props;
+		const { form: { getFieldDecorator }, classObject } = this.props;
 		return (
-			<Form layout="horizontal" onSubmit={this.handleSubmit}>
-				<FormItem
-					label="Class Name"
-					labelCol={{ span: 8 }}
-					wrapperCol={{ span: 8 }}
-				>
-					{getFieldDecorator('name', {
-						rules: [{ required: true, message: 'Please input class name!' }],
-					})(
-						<Input
-							size="large"
-							style={{ width: 200 }}
-							placeholder="enter class name"
-						/>,
-					)}
-				</FormItem>
-				<FormItem
-					label="Description"
-					labelCol={{ span: 8 }}
-					wrapperCol={{ span: 8 }}
-				>	{getFieldDecorator('desc', {
-						rules: [{ required: false }],
-					})(
-						<Input
-							size="large"
-							style={{ width: 200 }}
-							placeholder="enter description"
-						/>,
-					)}
-				</FormItem>
-				<FormItem
-					label="Status"
-					labelCol={{ span: 8 }}
-					wrapperCol={{ span: 8 }}
-				>
-					{getFieldDecorator('status', {
-						rules: [{ required: false }],
-					})(
-						<Select
-							size="large"
-							style={{ width: 192 }}
-						>
-							<Select.Option value="active" selected>Active</Select.Option>
-							<Select.Option value="inactive">inActive</Select.Option>
-						</Select>,
-					)}
-				</FormItem>
-				<FormItem
-					style={{ marginTop: 48 }}
-					wrapperCol={{ span: 8, offset: 8 }}
-				>
-					<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
-						Submit
-					</Button>
-					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.back()} >
-						Cancel
-					</Button>
-				</FormItem>
-			</Form>
+			<div>
+				<Form layout="inline" onSubmit={this.handleSubmit}>
+					<FormItem
+						label="Class Name"
+						labelCol={{ span: 8 }}
+						wrapperCol={{ span: 8 }}
+					>
+						{getFieldDecorator('name', {
+							rules: [{ required: true, message: 'Please input class name!' }],
+						})(
+							<Input
+								size="large"
+								style={{ width: 200 }}
+								placeholder="enter class name"
+							/>,
+						)}
+					</FormItem>
+					<FormItem
+						label="Description"
+						labelCol={{ span: 8 }}
+						wrapperCol={{ span: 8 }}
+					>	{getFieldDecorator('desc', {
+							rules: [{ required: false }],
+						})(
+							<Input
+								size="large"
+								style={{ width: 200 }}
+								placeholder="enter description"
+							/>,
+						)}
+					</FormItem>
+					<FormItem
+						label="Status"
+						labelCol={{ span: 8 }}
+						wrapperCol={{ span: 8 }}
+					>
+						{getFieldDecorator('status', {
+							rules: [{ required: false }],
+						})(
+							<Select
+								size="large"
+								style={{ width: 200 }}
+							>
+								<Select.Option value="active" selected>Active</Select.Option>
+								<Select.Option value="inactive">inActive</Select.Option>
+							</Select>,
+						)}
+					</FormItem>
+					<FormItem
+						wrapperCol={{ span: 8, offset: 8 }}
+					>
+						<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
+							Submit
+						</Button>
+					</FormItem>
+					<FormItem
+						wrapperCol={{ span: 8, offset: 8 }}
+					>
+						<Button size="large" onClick={() => Router.back()} >
+							Cancel
+						</Button>
+					</FormItem>
+				</Form>
+				{this.state.isCreatingLesson && classObject.id &&
+					<LessonActionPage
+						classId={classObject.id}
+						lessonId={this.state.lessonId}
+						onFinishCreatingLesson={() => this.setState({ isCreatingLesson: false })}
+					/>
+				}
+				{!this.state.isCreatingLesson && classObject.id &&
+					<LessonListPage
+						classId={classObject.id}
+						onCreateLesson={(lessonId) => this.setState({ isCreatingLesson: true, lessonId })}
+					/>
+				}
+			</div>
 		);
 	}
 }

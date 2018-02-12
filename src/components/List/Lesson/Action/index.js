@@ -10,7 +10,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as LessonActionRedux from 'src/redux/actions/lesson';
-import Router from 'next/router';
 import { bindActionCreators } from 'redux';
 import { Form, Select, Input, DatePicker, Switch, Slider, Button } from 'antd';
 
@@ -36,13 +35,17 @@ export default class LessonAction extends Component {
 		lessonObject: PropTypes.object.isRequired,
 		action: PropTypes.object.isRequired,
 		form: PropTypes.object.isRequired,
+		lessonId: PropTypes.string,
+		onFinishCreatingLesson: PropTypes.func.isRequired,
+		classId: PropTypes.string.isRequired,
 	}
 	state = {
 		loading: false,
 	}
 	componentDidMount() {
-		if (Router.router.query.id) {
-			this.props.action.getLessonInfo(Router.router.query.id, () => {
+		if (this.props.lessonId) {
+			this.props.action.getLessonInfo(this.props.lessonId, () => {
+				console.log('setFieldsValue ====', this.props)
 				this.props.form.setFieldsValue({
 					name: this.props.lessonObject.name || '',
 					status: this.props.lessonObject.status || 'active',
@@ -57,16 +60,17 @@ export default class LessonAction extends Component {
 			});
 		}
 	}
+
 	handleSubmit = (e) => {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				const data = { ...values, updatedAt: new Date() };
+				const data = { ...values, updatedAt: new Date(), classId: this.props.classId };
 				this.setState({
 					loading: true,
 				});
-				this.props.action.upsertLesson(data, Router.router.query.id, () => {
-					Router.push('/lesson');
+				this.props.action.upsertLesson(data, this.props.lessonId, () => {
+					this.props.onFinishCreatingLesson();
 				}, () => {
 					this.setState({
 						loading: false,
@@ -76,7 +80,7 @@ export default class LessonAction extends Component {
 		});
 	}
 	render() {
-		const { form: { getFieldDecorator } } = this.props;
+		const { form: { getFieldDecorator }, onFinishCreatingLesson } = this.props;
 		return (
 			<Form layout="horizontal" onSubmit={this.handleSubmit}>
 				<FormItem
@@ -146,7 +150,7 @@ export default class LessonAction extends Component {
 					<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
 						Submit
 					</Button>
-					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.back()} >
+					<Button size="large" style={{ marginLeft: 8 }} onClick={() => onFinishCreatingLesson()} >
 						Cancel
 					</Button>
 				</FormItem>

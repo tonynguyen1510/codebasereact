@@ -63,7 +63,6 @@ export const resetStateClassInfo = () => {
 };
 
 export const deleteClass = (data, id, next) => {
-	console.log('deleteClass', data, id);
 	return {
 		type: SINGLE_API,
 		payload: {
