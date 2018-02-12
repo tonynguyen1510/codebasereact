@@ -20,7 +20,7 @@ export const getClassInfo = (id, next) => {
 	};
 };
 
-export const upsertClass = (data, id) => {
+export const upsertClass = (data, id, next) => {
 	if (!id) {
 		return {
 			type: SINGLE_API,
@@ -29,7 +29,7 @@ export const upsertClass = (data, id) => {
 				params: data,
 				opt: { method: 'POST' },
 				successType: 'UPSERT_CLASS_SUCCESS',
-				afterSuccess: Router.push('/class'),
+				afterSuccess: next,
 			},
 		};
 	}
@@ -40,7 +40,7 @@ export const upsertClass = (data, id) => {
 			params: data,
 			opt: { method: 'PUT' },
 			successType: 'UPSERT_CLASS_SUCCESS',
-			afterSuccess: Router.push('/class'),
+			afterSuccess: next,
 		},
 	};
 };

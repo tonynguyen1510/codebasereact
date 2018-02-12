@@ -39,7 +39,7 @@ export default (state = initialState, action) => {
 		case 'CLASS_RESET_STATE_INFO':
 			return {
 				...state,
-                classInfo: initialState.classInfo,
+				classInfo: initialState.classInfo,
 			};
 		default:
 			return state;
