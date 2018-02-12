@@ -10,15 +10,11 @@ import React, { PureComponent } from 'react';
 
 import Head from 'next/head';
 import withRoot from 'src/root';
-
-import AuthStorage from 'src/utils/AuthStorage';
-
 import MainLayout from 'src/layout/Main';
-
-import Index from 'src/components/Pages/Index';
+import LessonPage from 'src/components/Pages//Lesson/';
 
 @withRoot
-export default class LessonPage extends PureComponent {
+export default class Lesson extends PureComponent {
 	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
@@ -32,7 +28,7 @@ export default class LessonPage extends PureComponent {
 				<Head>
 					<title>IPP Admin - Lesson</title>
 				</Head>
-				Lesson
+				<LessonPage />
 			</MainLayout>
 		);
 	}

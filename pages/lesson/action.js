@@ -10,12 +10,8 @@ import React, { PureComponent } from 'react';
 
 import Head from 'next/head';
 import withRoot from 'src/root';
-
-import AuthStorage from 'src/utils/AuthStorage';
-
 import MainLayout from 'src/layout/Main';
-
-import Class from 'src/components/Pages/Class';
+import LessonAction from 'src/components/Pages/Lesson/Action';
 
 @withRoot
 export default class LessonActionPage extends PureComponent {
@@ -32,7 +28,7 @@ export default class LessonActionPage extends PureComponent {
 				<Head>
 					<title>IPP Admin - Lesson - New</title>
 				</Head>
-				Create Lesson
+				<LessonAction />
 			</MainLayout>
 		);
 	}

@@ -9,26 +9,26 @@
 import Router from 'next/router';
 import { SINGLE_API } from 'src/redux/actions/type';
 
-export const getClassInfo = (id, next) => {
+export const getLessonInfo = (id, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'classes/' + id,
-			successType: 'GET_CLASS_SUCCESS',
+			uri: 'lessons/' + id,
+			successType: 'GET_LESSON_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const upsertClass = (data, id, next) => {
+export const upsertLesson = (data, id, next) => {
 	if (!id) {
 		return {
 			type: SINGLE_API,
 			payload: {
-				uri: 'classes',
+				uri: 'lessons',
 				params: data,
 				opt: { method: 'POST' },
-				successType: 'UPSERT_CLASS_SUCCESS',
+				successType: 'UPSERT_LESSON_SUCCESS',
 				afterSuccess: next,
 			},
 		};
@@ -36,41 +36,40 @@ export const upsertClass = (data, id, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'classes/' + id,
+			uri: 'lessons/' + id,
 			params: data,
 			opt: { method: 'PUT' },
-			successType: 'UPSERT_CLASS_SUCCESS',
+			successType: 'UPSERT_LESSON_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const getClasses = (filter, next) => {
+export const getLessons = (filter, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: `classes?filter=${JSON.stringify(filter)}`,
-			successType: 'GET_CLASSES_SUCCESS',
+			uri: `lessons?filter=${JSON.stringify(filter)}`,
+			successType: 'GET_LESSONS_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const resetStateClassInfo = () => {
+export const resetStateLessonInfo = () => {
 	return {
-		type: 'CLASS_RESET_STATE_INFO',
+		type: 'LESSON_RESET_STATE_INFO',
 	};
 };
 
-export const deleteClass = (data, id, next) => {
-	console.log('deleteClass', data, id);
+export const deleteLesson = (data, id, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'classes/' + id,
+			uri: 'lessons/' + id,
 			params: { ...data, isDelete: true },
 			opt: { method: 'PUT' },
-			successType: 'DELETE_CLASS_SUCCESS',
+			successType: 'DELETE_LESSON_SUCCESS',
 			afterSuccess: next,
 		},
 	};
