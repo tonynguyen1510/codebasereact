@@ -40,6 +40,9 @@ export default (state = initialState, action) => {
 				levelInfo: initialState.levelInfo,
 			};
 		case 'UPSERT_LEVEL_SUCCESS':
+			if (!state.levelInfo.id) {
+				Router.push('/level/edit/' + action.payload.id);
+			}
 			return {
 				...state,
 				levelInfo: action.payload,

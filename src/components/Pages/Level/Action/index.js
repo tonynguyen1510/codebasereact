@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import * as LevelActionRedux from 'src/redux/actions/level';
 import Router from 'next/router';
 import { bindActionCreators } from 'redux';
-import { Form, Select, Input, DatePicker, Switch, Slider, Button } from 'antd';
+import { Form, Select, Input, DatePicker, Switch, Slider, Button, Row } from 'antd';
 import LessonContentListPage from 'src/components/List/LessonContent/';
 import LessonContentActionPage from 'src/components/List/LessonContent/Action/';
 
@@ -82,66 +82,72 @@ export default class LevelAction extends Component {
 			<div>
 				{!this.state.isCreatingLessonContent &&
 					<Form layout="inline" onSubmit={this.handleSubmit}>
-						<FormItem
-							label="Level Name"
-							labelCol={{ span: 8 }}
-							wrapperCol={{ span: 8 }}
-						>
-							{getFieldDecorator('name', {
-								rules: [{ required: true, message: 'Please input level name!' }],
-							})(
-								<Input
-									size="large"
-									style={{ width: 200 }}
-									placeholder="enter level name"
-								/>,
-							)}
-						</FormItem>
-						<FormItem
-							label="Description"
-							labelCol={{ span: 8 }}
-							wrapperCol={{ span: 8 }}
-						>	{getFieldDecorator('desc', {
-								rules: [{ required: false }],
-							})(
-								<Input
-									size="large"
-									style={{ width: 200 }}
-									placeholder="enter description"
-								/>,
-							)}
-						</FormItem>
-						<FormItem
-							label="Status"
-							labelCol={{ span: 8 }}
-							wrapperCol={{ span: 8 }}
-						>
-							{getFieldDecorator('status', {
-								rules: [{ required: false }],
-							})(
-								<Select
-									size="large"
-									style={{ width: 200 }}
+						<Row>
+							<FormItem
+								label="Level"
+								labelCol={{ span: 6 }}
+								wrapperCol={{ span: 8 }}
+							>
+								{getFieldDecorator('name', {
+									rules: [{ required: true, message: 'Please input level name!' }],
+								})(
+									<Input
+										size="large"
+										style={{ width: 200 }}
+										placeholder="enter level name"
+									/>,
+								)}
+							</FormItem>
+							<FormItem
+								label="Status"
+								labelCol={{ span: 8 }}
+								wrapperCol={{ span: 8 }}
+							>
+								{getFieldDecorator('status', {
+									rules: [{ required: false }],
+								})(
+									<Select
+										size="large"
+										style={{ width: 200 }}
+									>
+										<Select.Option value="active" selected>Active</Select.Option>
+										<Select.Option value="inactive">inActive</Select.Option>
+									</Select>,
+								)}
+							</FormItem>
+							<FormItem
+								label="Description"
+								labelCol={{ span: 5 }}
+								wrapperCol={{ span: 16 }}
+							>
+								{getFieldDecorator('desc', {
+									rules: [{ required: false }],
+								})(
+									<Input.TextArea
+										size="large"
+										style={{ width: 600 }}
+										rows={2}
+										placeholder="enter description"
+									/>,
+								)}
+							</FormItem>
+							<div style={{ float: 'right', marginRight: '50px' }}>
+								<FormItem
+									wrapperCol={{ span: 8, offset: 14 }}
 								>
-									<Select.Option value="active" selected>Active</Select.Option>
-									<Select.Option value="inactive">inActive</Select.Option>
-								</Select>,
-							)}
-						</FormItem>
-						<FormItem
-							wrapperCol={{ span: 8, offset: 8 }}
-						>
-							<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
-								Submit
-							</Button>
-						</FormItem>
-						<FormItem
-							wrapperCol={{ span: 8, offset: 8 }}
-						>
-							<Button size="large" onClick={() => Router.back()} >
-								Cancel
-							</Button>
-						</FormItem>
+									<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
+										Submit
+									</Button>
+								</FormItem>
+								<FormItem
+									wrapperCol={{ span: 8, offset: 14 }}
+								>
+									<Button size="large" onClick={() => Router.push('/level')} >
+										Cancel
+									</Button>
+								</FormItem>
+							</div>
+						</Row>
 					</Form>
 				}
 				{this.state.isCreatingLessonContent && Router.router && Router.router.query.id &&
