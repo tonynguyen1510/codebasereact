@@ -8,39 +8,42 @@
 import Router from 'next/router';
 
 export const initialState = {
-	lessonList: {
+	levelList: {
 		data: [],
 		total: 0,
 		skip: 0,
 		limit: 12,
 		loading: true,
 	},
-	lessonInfo: {
+	levelInfo: {
 		name: '',
 		desc: '',
-		type: '',
-		classId: '',
 		status: 'active',
 	},
 };
 
 export default (state = initialState, action) => {
 	switch (action.type) {
-		case 'GET_LESSONS_SUCCESS':
+		case 'GET_LEVELS_SUCCESS':
 			return {
 				...state,
-				lessonList: { ...action.payload, loading: false },
+				levelList: { ...action.payload, loading: false },
 			};
-		case 'GET_LESSON_SUCCESS':
+		case 'GET_LEVEL_SUCCESS':
 			return {
 				...state,
-				lessonInfo: action.payload,
+				levelInfo: action.payload,
 			};
-		case 'LESSON_RESET_STATE_INFO':
+		case 'LEVEL_RESET_STATE_INFO':
 			return {
 				...state,
-				lessonInfo: initialState.lessonInfo,
+				levelInfo: initialState.levelInfo,
 			};
+		case 'UPSERT_LEVEL_SUCCESS':
+			return {
+				...state,
+				levelInfo: action.payload,
+			}
 		default:
 			return state;
 	}

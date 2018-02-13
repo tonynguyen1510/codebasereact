@@ -9,26 +9,26 @@
 import Router from 'next/router';
 import { SINGLE_API } from 'src/redux/actions/type';
 
-export const getLessonInfo = (id, next) => {
+export const getLevelInfo = (id, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'lessons/' + id,
-			successType: 'GET_LESSON_SUCCESS',
+			uri: 'levels/' + id,
+			successType: 'GET_LEVEL_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const upsertLesson = (data, id, next) => {
+export const upsertLevel = (data, id, next) => {
 	if (!id) {
 		return {
 			type: SINGLE_API,
 			payload: {
-				uri: 'lessons',
+				uri: 'levels',
 				params: data,
 				opt: { method: 'POST' },
-				successType: 'UPSERT_LESSON_SUCCESS',
+				successType: 'UPSERT_LEVEL_SUCCESS',
 				afterSuccess: next,
 			},
 		};
@@ -36,40 +36,40 @@ export const upsertLesson = (data, id, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'lessons/' + id,
+			uri: 'levels/' + id,
 			params: data,
 			opt: { method: 'PUT' },
-			successType: 'UPSERT_LESSON_SUCCESS',
+			successType: 'UPSERT_LEVEL_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const getLessons = (filter, next) => {
+export const getLevels = (filter, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: `lessons?filter=${JSON.stringify(filter)}`,
-			successType: 'GET_LESSONS_SUCCESS',
+			uri: `levels?filter=${JSON.stringify(filter)}`,
+			successType: 'GET_LEVELS_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const resetStateLessonInfo = () => {
+export const resetStateLevelInfo = () => {
 	return {
-		type: 'LESSON_RESET_STATE_INFO',
+		type: 'LEVEL_RESET_STATE_INFO',
 	};
 };
 
-export const deleteLesson = (data, id, next) => {
+export const deleteLevel = (data, id, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'lessons/' + id,
+			uri: 'levels/' + id,
 			params: { ...data, isDelete: true },
 			opt: { method: 'PUT' },
-			successType: 'DELETE_LESSON_SUCCESS',
+			successType: 'DELETE_LEVEL_SUCCESS',
 			afterSuccess: next,
 		},
 	};

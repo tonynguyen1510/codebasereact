@@ -9,7 +9,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as LessonAction from 'src/redux/actions/lesson';
+import * as LessonContentActionRedux from 'src/redux/actions/lesson_content';
 import { bindActionCreators } from 'redux';
 import InputSearch from 'src/components/Form/InputSearch';
 import { Router } from 'src/routes';
@@ -21,23 +21,23 @@ import { stylesheet, classNames } from './style.less';
 const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
-			...LessonAction,
+			...LessonContentActionRedux,
 		}, dispatch),
 	};
 };
 const mapStateToProps = (state) => {
 	return {
-		lessonList: state.lesson.lessonList,
+		lessonContentList: state.lessonContent.lessonContentList,
 	};
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class LessonPage extends PureComponent {
+export default class LessonContentPage extends PureComponent {
 	static propTypes = {
-		lessonList: PropTypes.array.isRequired,
+		lessonContentList: PropTypes.array.isRequired,
 		action: PropTypes.func.isRequired,
-		onCreateLesson: PropTypes.func.isRequired,
-		classId: PropTypes.string.isRequired,
+		onCreateLessonContent: PropTypes.func.isRequired,
+		levelId: PropTypes.string.isRequired,
 	}
 
 	static defaultProps = {}
@@ -66,7 +66,7 @@ export default class LessonPage extends PureComponent {
 			render: (text, record) => {
 				return (
 					<span>
-						<Button shape="circle" icon="edit" onClick={() => props.onCreateLesson(record.id)} />
+						<Button shape="circle" icon="edit" onClick={() => props.onCreateLessonContent(record.id)} />
 						<Divider type="vertical" />
 						<Button
 							shape="circle"
@@ -75,7 +75,7 @@ export default class LessonPage extends PureComponent {
 								Modal.confirm({
 									title: 'Do you want to delete these items?',
 									onOk() {
-										props.action.deleteLesson(record, record.id, _this.getLessons);
+										props.action.deleteLessonContent(record, record.id, _this.getLessonContents);
 									},
 								});
 							}
@@ -89,13 +89,13 @@ export default class LessonPage extends PureComponent {
 			total: 0,
 			showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
 			defaultCurrent: 1,
-			onChange: (page) => _this.getLessons(page - 1),
+			onChange: (page) => _this.getLessonContents(page - 1),
 		};
 	}
 	componentDidMount() {
-		this.getLessons();
+		this.getLessonContents();
 	}
-	getLessons = (page) => {
+	getLessonContents = (page) => {
 		const cpage = page || 0;
 		this.filter.skip = cpage * this.filter.limit;
 		const curFilter = {
@@ -109,7 +109,7 @@ export default class LessonPage extends PureComponent {
 						},
 					},
 					{
-						classId: this.props.classId,
+						levelId: this.props.levelId,
 					},
 					{
 						or: [
@@ -126,15 +126,15 @@ export default class LessonPage extends PureComponent {
 			curFilter.where.and.push({ createdAt: { gte: this.filter.startDate } });
 			curFilter.where.and.push({ createdAt: { lte: this.filter.endDate } });
 		}
-		this.props.action.getLessons(curFilter);
+		this.props.action.getLessonContents(curFilter);
 	};
 	changeFilter = (value) => {
 		this.filter.filterText = value;
-		this.getLessons();
+		this.getLessonContents();
 	};
 	changeDateRange = (momentdata, dateString) => {
 		[this.filter.startDate, this.filter.endDate] = dateString;
-		this.getLessons();
+		this.getLessonContents();
 	}
 	filter = {
 		filterText: '',
@@ -145,7 +145,7 @@ export default class LessonPage extends PureComponent {
 	};
 
 	render() {
-		const { lessonList, onCreateLesson } = this.props;
+		const { lessonContentList, onCreateLessonContent } = this.props;
 		return (
 			<div className={classNames.root}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
@@ -153,19 +153,19 @@ export default class LessonPage extends PureComponent {
 					<InputSearch onChange={(value) => this.changeFilter(value)} />
 					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} onChange={(momentdata, dateString) => this.changeDateRange(momentdata, dateString)} /></div>
 					<div>
-						<Button type="primary" icon="file-add" onClick={() => onCreateLesson()}>Create lesson</Button>
+						<Button type="primary" icon="file-add" onClick={() => onCreateLessonContent()}>Create Lesson Content</Button>
 					</div>
 				</div>
 				<Table
 					size="small"
 					columns={this.columns}
 					bordered
-					dataSource={lessonList.data}
+					dataSource={lessonContentList.data}
 					pagination={{
 						...this.paginationConfig,
-						total: lessonList.total,
-						pageSize: lessonList.limit,
-						current: (lessonList.skip / lessonList.limit) + 1,
+						total: lessonContentList.total,
+						pageSize: lessonContentList.limit,
+						current: (lessonContentList.skip / lessonContentList.limit) + 1,
 					}}
 				/>
 			</div>

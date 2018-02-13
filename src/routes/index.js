@@ -8,9 +8,9 @@
 
 const routes = module.exports = require('next-routes')(); // eslint-disable-line
 
-routes.add({ pattern: '/class/new', page: 'class/action' });
-routes.add({ pattern: '/class/edit/:id', page: 'class/action' });
-routes.add({ pattern: '/class/:id', page: 'class/detail' });
+routes.add({ pattern: '/level/new', page: 'level/action' });
+routes.add({ pattern: '/level/edit/:id', page: 'level/action' });
+routes.add({ pattern: '/level/:id', page: 'level/detail' });
 
 routes.add({ pattern: '/lesson/new', page: 'lesson/action' });
 routes.add({ pattern: '/lesson/edit/:id', page: 'lesson/action' });

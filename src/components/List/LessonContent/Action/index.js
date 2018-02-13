@@ -9,7 +9,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as LessonActionRedux from 'src/redux/actions/lesson';
+import * as LessonContentActionRedux from 'src/redux/actions/lesson_content';
 import { bindActionCreators } from 'redux';
 import { Form, Select, Input, DatePicker, Switch, Slider, Button } from 'antd';
 
@@ -18,45 +18,44 @@ const FormItem = Form.Item;
 const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
-			...LessonActionRedux,
+			...LessonContentActionRedux,
 		}, dispatch),
 	};
 };
 const mapStateToProps = (state) => {
 	return {
-		lessonObject: state.lesson.lessonInfo,
+		lessonContentObject: state.lessonContent.lessonContentInfo,
 	};
 };
 @Form.create()
 @connect(mapStateToProps, mapDispatchToProps)
 
-export default class LessonAction extends Component {
+export default class LessonContentAction extends Component {
 	static propTypes = {
-		lessonObject: PropTypes.object.isRequired,
+		lessonContentObject: PropTypes.object.isRequired,
 		action: PropTypes.object.isRequired,
 		form: PropTypes.object.isRequired,
-		lessonId: PropTypes.string,
-		onFinishCreatingLesson: PropTypes.func.isRequired,
-		classId: PropTypes.string.isRequired,
+		lessonContentId: PropTypes.string,
+		onFinishCreatingLessonContent: PropTypes.func.isRequired,
+		levelId: PropTypes.string.isRequired,
 	}
 	state = {
 		loading: false,
 	}
 	componentDidMount() {
-		if (this.props.lessonId) {
-			this.props.action.getLessonInfo(this.props.lessonId, () => {
-				console.log('setFieldsValue ====', this.props)
+		if (this.props.lessonContentId) {
+			this.props.action.getLessonContentInfo(this.props.lessonContentId, () => {
 				this.props.form.setFieldsValue({
-					name: this.props.lessonObject.name || '',
-					status: this.props.lessonObject.status || 'active',
-					type: this.props.lessonObject.type || '',
-					desc: this.props.lessonObject.desc || '',
+					name: this.props.lessonContentObject.name || '',
+					status: this.props.lessonContentObject.status || 'active',
+					type: this.props.lessonContentObject.type || '',
+					desc: this.props.lessonContentObject.desc || '',
 				});
 			});
 		} else {
-			this.props.action.resetStateLessonInfo();
+			this.props.action.resetStateLessonContentInfo();
 			this.props.form.setFieldsValue({
-				status: this.props.lessonObject.status || 'active',
+				status: this.props.lessonContentObject.status || 'active',
 			});
 		}
 	}
@@ -65,12 +64,12 @@ export default class LessonAction extends Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				const data = { ...values, updatedAt: new Date(), classId: this.props.classId };
+				const data = { ...values, updatedAt: new Date(), levelId: this.props.levelId };
 				this.setState({
 					loading: true,
 				});
-				this.props.action.upsertLesson(data, this.props.lessonId, () => {
-					this.props.onFinishCreatingLesson();
+				this.props.action.upsertLessonContent(data, this.props.lessonContentId, () => {
+					this.props.onFinishCreatingLessonContent();
 				}, () => {
 					this.setState({
 						loading: false,
@@ -80,21 +79,21 @@ export default class LessonAction extends Component {
 		});
 	}
 	render() {
-		const { form: { getFieldDecorator }, onFinishCreatingLesson } = this.props;
+		const { form: { getFieldDecorator }, onFinishCreatingLessonContent } = this.props;
 		return (
 			<Form layout="horizontal" onSubmit={this.handleSubmit}>
 				<FormItem
-					label="Lesson Name"
+					label="Lesson Content Name"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
 				>
 					{getFieldDecorator('name', {
-						rules: [{ required: true, message: 'Please input lesson name!' }],
+						rules: [{ required: true, message: 'Please input lesson content name!' }],
 					})(
 						<Input
 							size="large"
 							style={{ width: 200 }}
-							placeholder="enter lesson name"
+							placeholder="enter lesson content name"
 						/>,
 					)}
 				</FormItem>
@@ -150,7 +149,7 @@ export default class LessonAction extends Component {
 					<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
 						Submit
 					</Button>
-					<Button size="large" style={{ marginLeft: 8 }} onClick={() => onFinishCreatingLesson()} >
+					<Button size="large" style={{ marginLeft: 8 }} onClick={() => onFinishCreatingLessonContent()} >
 						Cancel
 					</Button>
 				</FormItem>

@@ -9,21 +9,21 @@
 import auth, { initialState as initialAuth } from './auth';
 import loading, { initialState as initialLoading } from './loading';
 import user, { initialState as initialUser } from './user';
-import classObject, { initialState as initialClass } from './class';
-import lesson, { initialState as initialLesson } from './lesson.js';
+import level, { initialState as initialLevel } from './level';
+import lessonContent, { initialState as initialLessonContent } from './lesson_content';
 
 export const initialState = {
 	auth: initialAuth,
 	loading: initialLoading,
 	user: initialUser,
-	classObject: initialClass,
-	lesson: initialLesson,
+	level: initialLevel,
+	lesson: initialLessonContent,
 };
 
 export default {
 	auth,
 	loading,
 	user,
-	classObject,
-	lesson,
+	level,
+	lessonContent,
 };

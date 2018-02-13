@@ -1,9 +1,9 @@
 /* --------------------------------------------------------
-* Author Trần Đức Tiến
-* Email ductienas@gmail.com
-* Phone 0972970075
+* Author Ngô An Ninh
+* Email ninh.uit@gmail.com
+* Phone 0978 108 807
 *
-* Created: 2018-01-10 23:32:12
+* Created: \
 *------------------------------------------------------- */
 
 import React, { PureComponent } from 'react';
@@ -11,10 +11,10 @@ import React, { PureComponent } from 'react';
 import Head from 'next/head';
 import withRoot from 'src/root';
 import MainLayout from 'src/layout/Main';
-import LessonPage from 'src/components/Pages/Lesson/';
+import CoursePage from 'src/components/Pages/Course/';
 
 @withRoot
-export default class Lesson extends PureComponent {
+export default class Course extends PureComponent {
 	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
@@ -26,9 +26,9 @@ export default class Lesson extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Admin - Lesson</title>
+					<title>IPP Admin - Course</title>
 				</Head>
-				<LessonPage />
+				<CoursePage />
 			</MainLayout>
 		);
 	}

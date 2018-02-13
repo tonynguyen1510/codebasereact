@@ -10,15 +10,11 @@ import React, { PureComponent } from 'react';
 
 import Head from 'next/head';
 import withRoot from 'src/root';
-
-import AuthStorage from 'src/utils/AuthStorage';
-
 import MainLayout from 'src/layout/Main';
-
-import ClassAction from 'src/components/Pages/Class/Action';
+import LevelPage from 'src/components/Pages/Level';
 
 @withRoot
-export default class ClassActionPage extends PureComponent {
+export default class Level extends PureComponent {
 	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
@@ -30,9 +26,9 @@ export default class ClassActionPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Admin - Class - Action</title>
+					<title>IPP Admin - Level</title>
 				</Head>
-				<ClassAction />
+				<LevelPage />
 			</MainLayout>
 		);
 	}

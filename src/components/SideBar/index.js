@@ -53,19 +53,11 @@ const SideBar = (props) => {
 					</a>
 				</Link>
 			</Menu.Item>
-			<Menu.Item key="/lesson">
-				<Link href="/lesson">
-					<a>
-						<Icon type="calculator" />
-						<span>Lesson</span>
-					</a>
-				</Link>
-			</Menu.Item>
-			<Menu.Item key="/class">
-				<Link href="/class">
+			<Menu.Item key="/level">
+				<Link href="/level">
 					<a>
 						<Icon type="profile" />
-						<span>Class</span>
+						<span>Level</span>
 					</a>
 				</Link>
 			</Menu.Item>

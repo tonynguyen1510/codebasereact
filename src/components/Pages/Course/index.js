@@ -9,7 +9,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as ClassActionRedux from '../../../redux/actions/class';
+import * as LessonAction from 'src/redux/actions/lesson';
 import { bindActionCreators } from 'redux';
 import InputSearch from 'src/components/Form/InputSearch';
 import { Router } from 'src/routes';
@@ -21,20 +21,20 @@ import { stylesheet, classNames } from './style.less';
 const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
-			...ClassActionRedux,
+			...LessonAction,
 		}, dispatch),
 	};
 };
 const mapStateToProps = (state) => {
 	return {
-		classList: state.classObject.classList,
+		lessonList: state.lesson.lessonList,
 	};
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class ClassPage extends PureComponent {
+export default class LessonPage extends PureComponent {
 	static propTypes = {
-		classList: PropTypes.array.isRequired,
+		lessonList: PropTypes.array.isRequired,
 		action: PropTypes.func.isRequired,
 	}
 
@@ -49,6 +49,9 @@ export default class ClassPage extends PureComponent {
 			title: 'Description',
 			dataIndex: 'desc',
 		}, {
+			title: 'Type',
+			dataIndex: 'type',
+		}, {
 			title: 'Status',
 			dataIndex: 'status',
 		}, {
@@ -61,7 +64,7 @@ export default class ClassPage extends PureComponent {
 			render: (text, record) => {
 				return (
 					<span>
-						<Button shape="circle" icon="edit" onClick={() => Router.pushRoute(`/class/edit/${record.id}`)} />
+						<Button shape="circle" icon="edit" onClick={() => Router.pushRoute(`/lesson/edit/${record.id}`)} />
 						<Divider type="vertical" />
 						<Button
 							shape="circle"
@@ -70,7 +73,7 @@ export default class ClassPage extends PureComponent {
 								Modal.confirm({
 									title: 'Do you want to delete these items?',
 									onOk() {
-										props.action.deleteClass(record, record.id, _this.getClasses);
+										props.action.deleteLesson(record, record.id, _this.getLessons);
 									},
 								});
 							}
@@ -84,13 +87,13 @@ export default class ClassPage extends PureComponent {
 			total: 0,
 			showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
 			defaultCurrent: 1,
-			onChange: (page) => _this.getClasses(page - 1),
+			onChange: (page) => _this.getLessons(page - 1),
 		};
 	}
 	componentDidMount() {
-		this.getClasses();
+		this.getLessons();
 	}
-	getClasses = (page) => {
+	getLessons = (page) => {
 		const cpage = page || 0;
 		this.filter.skip = cpage * this.filter.limit;
 		const curFilter = {
@@ -107,6 +110,7 @@ export default class ClassPage extends PureComponent {
 						or: [
 							{ desc: { like: this.filter.filterText } },
 							{ name: { like: this.filter.filterText } },
+							{ type: { eq: this.filter.filterText } },
 							{ status: { eq: this.filter.filterText } },
 						],
 					},
@@ -117,15 +121,15 @@ export default class ClassPage extends PureComponent {
 			curFilter.where.and.push({ createdAt: { gte: this.filter.startDate } });
 			curFilter.where.and.push({ createdAt: { lte: this.filter.endDate } });
 		}
-		this.props.action.getClasses(curFilter);
+		this.props.action.getLessons(curFilter);
 	};
 	changeFilter = (value) => {
 		this.filter.filterText = value;
-		this.getClasses();
+		this.getLessons();
 	};
 	changeDateRange = (momentdata, dateString) => {
 		[this.filter.startDate, this.filter.endDate] = dateString;
-		this.getClasses();
+		this.getLessons();
 	}
 	filter = {
 		filterText: '',
@@ -136,27 +140,24 @@ export default class ClassPage extends PureComponent {
 	};
 
 	render() {
-		const { classList } = this.props;
+		const { lessonList } = this.props;
 		return (
 			<div className={classNames.root}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 				<div className={classNames.control}>
 					<InputSearch onChange={(value) => this.changeFilter(value)} />
 					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} onChange={(momentdata, dateString) => this.changeDateRange(momentdata, dateString)} /></div>
-					<div>
-						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/class/new')}>Create class</Button>
-					</div>
 				</div>
 				<Table
 					size="small"
 					columns={this.columns}
 					bordered
-					dataSource={classList.data}
+					dataSource={lessonList.data}
 					pagination={{
 						...this.paginationConfig,
-						total: classList.total,
-						pageSize: classList.limit,
-						current: (classList.skip / classList.limit) + 1,
+						total: lessonList.total,
+						pageSize: lessonList.limit,
+						current: (lessonList.skip / lessonList.limit) + 1,
 					}}
 				/>
 			</div>

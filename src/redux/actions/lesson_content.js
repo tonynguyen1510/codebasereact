@@ -9,26 +9,26 @@
 import Router from 'next/router';
 import { SINGLE_API } from 'src/redux/actions/type';
 
-export const getClassInfo = (id, next) => {
+export const getLessonContentInfo = (id, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'classes/' + id,
-			successType: 'GET_CLASS_SUCCESS',
+			uri: 'lesson_contents/' + id,
+			successType: 'GET_LESSON_CONTENT_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const upsertClass = (data, id, next) => {
+export const upsertLessonContent = (data, id, next) => {
 	if (!id) {
 		return {
 			type: SINGLE_API,
 			payload: {
-				uri: 'classes',
+				uri: 'lesson_contents',
 				params: data,
 				opt: { method: 'POST' },
-				successType: 'UPSERT_CLASS_SUCCESS',
+				successType: 'UPSERT_LESSON_CONTENT_SUCCESS',
 				afterSuccess: next,
 			},
 		};
@@ -36,40 +36,40 @@ export const upsertClass = (data, id, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'classes/' + id,
+			uri: 'lesson_contents/' + id,
 			params: data,
 			opt: { method: 'PUT' },
-			successType: 'UPSERT_CLASS_SUCCESS',
+			successType: 'UPSERT_LESSON_CONTENT_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const getClasses = (filter, next) => {
+export const getLessonContents = (filter, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: `classes?filter=${JSON.stringify(filter)}`,
-			successType: 'GET_CLASSES_SUCCESS',
+			uri: `lesson_contents?filter=${JSON.stringify(filter)}`,
+			successType: 'GET_LESSON_CONTENTS_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const resetStateClassInfo = () => {
+export const resetStateLessonContentInfo = () => {
 	return {
-		type: 'CLASS_RESET_STATE_INFO',
+		type: 'LESSON_CONTENT_RESET_STATE_INFO',
 	};
 };
 
-export const deleteClass = (data, id, next) => {
+export const deleteLessonContent = (data, id, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'classes/' + id,
+			uri: 'lesson_contents/' + id,
 			params: { ...data, isDelete: true },
 			opt: { method: 'PUT' },
-			successType: 'DELETE_CLASS_SUCCESS',
+			successType: 'DELETE_LESSON_CONTENT_SUCCESS',
 			afterSuccess: next,
 		},
 	};
