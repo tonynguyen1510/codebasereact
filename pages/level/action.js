@@ -15,7 +15,7 @@ import AuthStorage from 'src/utils/AuthStorage';
 
 import MainLayout from 'src/layout/Main';
 
-import ClassAction from 'src/components/Pages/Class/Action';
+import LevelAction from 'src/components/Pages/Level/Action';
 
 @withRoot
 export default class ClassActionPage extends PureComponent {
@@ -30,9 +30,9 @@ export default class ClassActionPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Admin - Class - Action</title>
+					<title>IPP Admin - Level - Action</title>
 				</Head>
-				<ClassAction />
+				<LevelAction />
 			</MainLayout>
 		);
 	}
