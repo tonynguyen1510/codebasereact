@@ -143,7 +143,7 @@ const Information = (props) => {
 				</div>
 			</div>
 			{
-				userData.role === 'student' &&
+				!userData.role &&
 				<Fragment>
 					<div className={classNames.item}>
 						<div className={classNames.left}>
@@ -170,7 +170,7 @@ const Information = (props) => {
 							Expected Target:
 						</div>
 						<div className={classNames.right}>
-							{userData.entryTest || '-'}
+							{userData.expectedTarget || '-'}
 						</div>
 					</div>
 				</Fragment>

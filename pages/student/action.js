@@ -11,28 +11,37 @@ import React, { PureComponent } from 'react';
 import Head from 'next/head';
 import withRoot from 'src/root';
 
-import AuthStorage from 'src/utils/AuthStorage';
+// import AuthStorage from 'src/utils/AuthStorage';
 
 import MainLayout from 'src/layout/Main';
 
-import Class from 'src/components/Pages/Class';
+import StudentAction from 'src/components/Pages/Student/Action';
+
+// import ErrorPage from 'next/error';
+
+// import { getUserData } from 'src/redux/actions/user';
 
 @withRoot
 export default class StudentActionPage extends PureComponent {
 	static async getInitialProps(ctx) {
-		// if (AuthStorage.loggedIn) {
-		// 	ctx.store.dispatch(getUserAuth());
-		// }
-		// return { auth: ctx.store.getState().auth };
+		const { query } = ctx;
+		return { studentId: query.id };
 	}
 
 	render() {
+		// if (this.props.errorCode) {
+		// 	return <ErrorPage statusCode={this.props.errorCode} />;
+		// }
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Admin - Student - New</title>
+					{
+						this.props.studentId ?
+							<title>IPP Admin - Student - Edit {this.props.studentId}</title> :
+							<title>IPP Admin - Student - New</title>
+					}
 				</Head>
-				Create Student
+				<StudentAction studentId={this.props.studentId} />
 			</MainLayout>
 		);
 	}

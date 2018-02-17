@@ -36,7 +36,7 @@ const Header = (props) => {
 	return (
 		<div className={classNames.cover}>
 			<div className={classNames.controlBtn}>
-				<Link route={'/' + userData.role + '/edit/' + userData.id}>
+				<Link route={'/' + (userData.role || 'student') + '/edit/' + userData.id}>
 					<Button type="primary" shape="circle" icon="edit" />
 				</Link>
 				<BtnUserActionMore userData={userData} root={<Button type="default" shape="circle" icon="ellipsis" />} />

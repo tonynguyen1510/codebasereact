@@ -11,9 +11,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Button, DatePicker, Input, Pagination, Select } from 'antd';
+import { Button, DatePicker, Input } from 'antd';
 
-import Link from 'next/link';
 import { Router } from 'src/routes';
 
 import UserList from 'src/components/List/User';
@@ -75,6 +74,35 @@ export default class ConsultorPage extends Component {
 		this.props.action.getUserList({ filter: this.filter });
 	}
 
+	handleChangeDate = (value) => {
+		if (value.length === 2) {
+			this.filter.where.createdAt = { between: value };
+		} else {
+			delete this.filter.where.createdAt;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getUserList({ filter: this.filter });
+	}
+
+	handleChangeSearch = (value) => {
+		if (value) {
+			const regex = '/' + value + '/i';
+
+			this.filter.where.or = [
+				{ fullName: { regexp: regex } },
+				{ desc: { regexp: regex } },
+				{ phone: { regexp: regex } },
+				{ email: { regexp: regex } },
+			];
+		} else {
+			delete this.filter.where.or;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getUserList({ filter: this.filter });
+	}
+
 	render() {
 		const { store: { userList } } = this.props;
 
@@ -88,21 +116,15 @@ export default class ConsultorPage extends Component {
 				>
 					<div>
 						<Search
-							placeholder="input search text"
-							onSearch={value => console.log(value)}
+							placeholder="Search name, phone..."
+							onSearch={this.handleChangeSearch}
 							style={{ width: 200 }}
 						/>
 					</div>
-					<div>Created at: <RangePicker style={{ marginLeft: 10 }} /></div>
 					<div>
-						Gender:
-						<Select defaultValue="all" style={{ marginLeft: 10 }}>
-							<Select.Option value="all">All</Select.Option>
-							<Select.Option value="male">Male</Select.Option>
-							<Select.Option value="female">Female</Select.Option>
-						</Select>
+						Created at: <RangePicker onChange={this.handleChangeDate} style={{ marginLeft: 10 }} />
 					</div>
-					<Button type="primary" icon="file-add" style={{ marginRight: 10 }} onClick={() => Router.pushRoute('/consultor/new')}>Create class</Button>
+					<Button type="primary" icon="file-add" style={{ marginRight: 10 }} onClick={() => Router.pushRoute('/consultor/new')}>Create Consultor</Button>
 				</UserList>
 			</div>
 		);

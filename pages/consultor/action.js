@@ -50,7 +50,11 @@ export default class ConsultorActionPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Admin - Consultor - New</title>
+					{
+						this.props.consultorId ?
+							<title>IPP Admin - Consultor - Edit {this.props.consultorId}</title> :
+							<title>IPP Admin - Consultor - New</title>
+					}
 				</Head>
 				<ConsultorAction consultorId={this.props.consultorId} />
 			</MainLayout>

@@ -16,12 +16,12 @@ import Router from 'next/router';
 
 import { Input, Form, Select, DatePicker, Button } from 'antd';
 
-import { createUser, getUserData, updateUser } from 'src/redux/actions/user';
+import { createStudent, getStudentData, updateStudent } from 'src/redux/actions/student';
 
 function mapStateToProps(state) {
 	return {
 		store: {
-			userView: state.user.userView,
+			studentView: state.student.studentView,
 		},
 	};
 }
@@ -29,9 +29,9 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
-			createUser,
-			getUserData,
-			updateUser,
+			createStudent,
+			getStudentData,
+			updateStudent,
 		}, dispatch),
 	};
 };
@@ -41,21 +41,21 @@ const mapDispatchToProps = (dispatch) => {
 export default class ConsultorAction extends Component {
 	static propTypes = {
 		form: PropTypes.object.isRequired,
-		consultorId: PropTypes.string,
+		studentId: PropTypes.string,
 		// store
-		store: PropTypes.shape({
-			userView: PropTypes.object.isRequired,
-		}).isRequired,
+		// store: PropTypes.shape({
+		// 	studentView: PropTypes.object.isRequired,
+		// }).isRequired,
 		// action
 		action: PropTypes.shape({
-			createUser: PropTypes.func.isRequired,
-			getUserData: PropTypes.func.isRequired,
-			updateUser: PropTypes.func.isRequired,
+			createStudent: PropTypes.func.isRequired,
+			getStudentData: PropTypes.func.isRequired,
+			updateStudent: PropTypes.func.isRequired,
 		}).isRequired,
 	}
 
 	static defaultProps = {
-		consultorId: undefined,
+		studentId: undefined,
 	}
 
 	state = {
@@ -63,8 +63,8 @@ export default class ConsultorAction extends Component {
 	}
 
 	componentDidMount() {
-		if (this.props.consultorId) {
-			this.props.action.getUserData({ id: this.props.consultorId }, (user) => {
+		if (this.props.studentId) {
+			this.props.action.getStudentData({ id: this.props.studentId }, (user) => {
 				this.props.form.setFieldsValue({
 					fullName: user.fullName,
 					email: user.email,
@@ -75,8 +75,11 @@ export default class ConsultorAction extends Component {
 					branch: user.branch,
 					address: user.address,
 					desc: user.desc,
+					expectedTarget: user.expectedTarget,
 					fbLink: user.facebook && user.facebook.link,
 					fbName: user.facebook && user.facebook.name,
+					entryTestDate: user.entryTest && moment(user.entryTest.date, 'YYYY-MM-DD'),
+					entryTestResult: user.entryTest && user.entryTest.result,
 					birthDate: moment(user.birthDate, 'YYYY-MM-DD'),
 				});
 			});
@@ -87,16 +90,16 @@ export default class ConsultorAction extends Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				const { fbName, fbLink, ...restUser } = values;
-				const data = { ...restUser, facebook: { link: fbLink, name: fbName }, updatedAt: new Date(), role: 'consultor' };
+				const { entryTestDate, entryTestResult, fbName, fbLink, ...restUser } = values;
+				const data = { ...restUser, facebook: { link: fbLink, name: fbName }, entryTest: { date: entryTestDate, result: entryTestResult }, updatedAt: new Date()};
 				this.setState({
 					loading: true,
 				});
-				if (this.props.consultorId) {
+				if (this.props.studentId) {
 					// edit user
-					data.id = this.props.consultorId;
-					this.props.action.updateUser(data, () => {
-						Router.push('/consultor');
+					data.id = this.props.studentId;
+					this.props.action.updateStudent(data, () => {
+						Router.push('/student');
 					}, () => {
 						this.setState({
 							loading: false,
@@ -104,8 +107,8 @@ export default class ConsultorAction extends Component {
 					});
 				} else {
 					// create user
-					this.props.action.createUser(data, () => {
-						Router.push('/consultor');
+					this.props.action.createStudent(data, () => {
+						Router.push('/student');
 					}, () => {
 						this.setState({
 							loading: false,
@@ -210,6 +213,43 @@ export default class ConsultorAction extends Component {
 				</Form.Item>
 
 				<Form.Item
+					label="Entry Test Date"
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8 }}
+				>
+					{getFieldDecorator('entryTestDate', {
+						// initialValue: moment('1990-01-01', 'YYYY-MM-DD'),
+						// rules: [{ required: true, message: 'Please input your email!' }, { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Email is invalid!' }],
+					})(
+						<DatePicker size="large" format="DD-MM-YYYY" />,
+					)}
+				</Form.Item>
+
+				<Form.Item
+					label="Entry Test Result"
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8 }}
+				>
+					{getFieldDecorator('entryTestResult', {
+						// rules: [{ required: true, message: 'Please input your Phone!' }],
+					})(
+						<Input size="large" placeholder="Entry Test Result" type="number" />,
+					)}
+				</Form.Item>
+
+				<Form.Item
+					label="Expected Target"
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8 }}
+				>
+					{getFieldDecorator('expectedTarget', {
+						// rules: [{ required: true, message: 'Please input your Phone!' }],
+					})(
+						<Input size="large" placeholder="Expected Target" type="number" />,
+					)}
+				</Form.Item>
+
+				<Form.Item
 					label="Address"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
@@ -277,7 +317,7 @@ export default class ConsultorAction extends Component {
 					<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
 						Submit
 					</Button>
-					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.push('/consultor')}>
+					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.push('/student')}>
 						Cancel
 					</Button>
 				</Form.Item>

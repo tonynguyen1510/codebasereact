@@ -43,9 +43,9 @@ export default class ConsultorAction extends Component {
 		form: PropTypes.object.isRequired,
 		consultorId: PropTypes.string,
 		// store
-		store: PropTypes.shape({
-			userView: PropTypes.object.isRequired,
-		}).isRequired,
+		// store: PropTypes.shape({
+		// 	userView: PropTypes.object.isRequired,
+		// }).isRequired,
 		// action
 		action: PropTypes.shape({
 			createUser: PropTypes.func.isRequired,
@@ -88,7 +88,7 @@ export default class ConsultorAction extends Component {
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const { fbName, fbLink, ...restUser } = values;
-				const data = { ...restUser, facebook: { link: fbLink, name: fbName }, updatedAt: new Date(), role: 'consultor' };
+				const data = { ...restUser, facebook: { link: fbLink, name: fbName }, updatedAt: new Date(), role: 'teacher' };
 				this.setState({
 					loading: true,
 				});
@@ -96,7 +96,7 @@ export default class ConsultorAction extends Component {
 					// edit user
 					data.id = this.props.consultorId;
 					this.props.action.updateUser(data, () => {
-						Router.push('/consultor');
+						Router.push('/teacher');
 					}, () => {
 						this.setState({
 							loading: false,
@@ -105,7 +105,7 @@ export default class ConsultorAction extends Component {
 				} else {
 					// create user
 					this.props.action.createUser(data, () => {
-						Router.push('/consultor');
+						Router.push('/teacher');
 					}, () => {
 						this.setState({
 							loading: false,
@@ -144,6 +144,7 @@ export default class ConsultorAction extends Component {
 						<Input size="large" placeholder="Email" />,
 					)}
 				</Form.Item>
+
 				<Form.Item
 					label="Email 2"
 					labelCol={{ span: 8 }}
@@ -277,7 +278,7 @@ export default class ConsultorAction extends Component {
 					<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
 						Submit
 					</Button>
-					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.push('/consultor')}>
+					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.push('/teacher')}>
 						Cancel
 					</Button>
 				</Form.Item>

@@ -127,7 +127,7 @@ const UserListItem = (props) => {
 					</div>
 					<div className={classNames.value}>
 						<p>{userData.email || '-'}</p>
-						{/* <p>ductienas@gmail.com</p> */}
+						<p>{userData.email2 || '-'}</p>
 					</div>
 				</div>
 			</div>
@@ -138,8 +138,8 @@ const UserListItem = (props) => {
 						Phone:
 					</div>
 					<div className={classNames.value}>
-						<p>{userData.phone && userData.phone[0] ? userData.phone[0] : '-'}</p>
-						<p>{userData.phone && userData.phone[1]}</p>
+						<p>{userData.phone || '-'}</p>
+						<p>{userData.phone2 || '-'}</p>
 					</div>
 				</div>
 			</div>

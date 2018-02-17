@@ -15,7 +15,7 @@ import withRoot from 'src/root';
 
 import MainLayout from 'src/layout/Main';
 
-// import ClassPage from 'src/components/Pages/Class';
+import Detail from 'src/components/Pages/Teacher/Detail';
 
 @withRoot
 export default class TeacherDetailPage extends PureComponent {
@@ -23,16 +23,16 @@ export default class TeacherDetailPage extends PureComponent {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
 		// }
-		return { id: query.id };
+		return { teacherId: query.id };
 	}
 
 	render() {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Admin - Teacher - {this.props.id}</title>
+					<title>IPP Admin - Teacher - {this.props.teacherId}</title>
 				</Head>
-				Teacher id = {this.props.id}
+				<Detail teacherId={this.props.teacherId} />
 			</MainLayout>
 		);
 	}

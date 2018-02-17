@@ -60,6 +60,10 @@ export default class UserList extends PureComponent {
 						<Button type={this.state.viewMode === 'list' ? 'primary' : ''} shape="circle" icon="bars" onClick={() => this.handleChangeViewMode('list')} />
 					</div>
 				</div>
+				{
+					!userList.loading && userList.data.length === 0 &&
+					<div style={{ background: '#fff', padding: '50px 15px', textAlign: 'center' }}>No data to show</div>
+				}
 
 				{
 					this.state.viewMode === 'grid' ?
