@@ -36,6 +36,7 @@ const mapDispatchToProps = (dispatch) => {
 export default class BtnUserActionMore extends PureComponent {
 	static propTypes = {
 		userData: PropTypes.object.isRequired,
+		root: PropTypes.node,
 		// store
 		// store: PropTypes.shape({
 		// 	userList: PropTypes.object.isRequired,
@@ -47,7 +48,9 @@ export default class BtnUserActionMore extends PureComponent {
 		}).isRequired,
 	}
 
-	static defaultProps = {}
+	static defaultProps = {
+		root: undefined,
+	}
 
 	state = {
 		loading: false,
@@ -100,7 +103,7 @@ export default class BtnUserActionMore extends PureComponent {
 	}
 
 	render() {
-		const { userData } = this.props;
+		const { userData, root } = this.props;
 
 		const menu = (
 			<Menu>
@@ -137,7 +140,11 @@ export default class BtnUserActionMore extends PureComponent {
 					this.state.loading ?
 						<Spin /> :
 						<a className="ant-dropdown-link">
-							<Icon type="ellipsis" />
+							{
+								root ?
+									root :
+									<Icon type="ellipsis" />
+							}
 						</a>
 				}
 			</Dropdown>

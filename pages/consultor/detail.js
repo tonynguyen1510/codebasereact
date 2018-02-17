@@ -15,7 +15,7 @@ import withRoot from 'src/root';
 
 import MainLayout from 'src/layout/Main';
 
-// import ClassPage from 'src/components/Pages/Class';
+import Detail from 'src/components/Pages/Consultor/Detail';
 
 @withRoot
 export default class ConsultorDetailPage extends PureComponent {
@@ -23,16 +23,16 @@ export default class ConsultorDetailPage extends PureComponent {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
 		// }
-		return { id: query.id };
+		return { consultorId: query.id };
 	}
 
 	render() {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Admin - Consultor - {this.props.id}</title>
+					<title>IPP Admin - Consultor - {this.props.consultorId}</title>
 				</Head>
-				Consultor id = {this.props.id}
+				<Detail consultorId={this.props.consultorId} />
 			</MainLayout>
 		);
 	}

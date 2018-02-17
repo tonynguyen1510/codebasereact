@@ -14,15 +14,24 @@ export const initialState = {
 		data: [],
 		loading: true,
 	},
+	userView: {
+		loading: true,
+	},
 };
 
 export default (state = initialState, action) => {
 	switch (action.type) {
 		case 'GET_USER_LIST_REQUEST':
-			return { ...state, userList: { ...initialState.userList } };
+			return { ...state, userView: { ...initialState.userList } };
 
 		case 'GET_USER_LIST_SUCCESS':
 			return { ...state, userList: { ...action.payload, loading: false } };
+
+		case 'GET_USER_DATA_REQUEST':
+			return { ...state, userView: { ...initialState.userView } };
+
+		case 'GET_USER_DATA_SUCCESS':
+			return { ...state, userView: { ...action.payload, loading: false } };
 
 		case 'UPDATE_USER_SUCCESS': {
 			const { id } = action.payload;

@@ -58,6 +58,21 @@ export const updateUser = (payload, next, nextError) => {
 	};
 };
 
+export const getUserData = (payload, next, nextError) => {
+	const { id } = payload;
+
+	return {
+		type: SINGLE_API,
+		payload: {
+			uri: 'users/' + id,
+			beforeCallType: 'GET_USER_DATA_REQUEST',
+			successType: 'GET_USER_DATA_SUCCESS',
+			afterSuccess: next,
+			afterError: nextError,
+		},
+	};
+};
+
 export const resendInvitation = (payload, next, nextError) => {
 	if (!AuthStorage.loggedIn || AuthStorage.role !== 'admin') {
 		if (typeof nextError === 'function') {

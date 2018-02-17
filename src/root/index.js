@@ -32,13 +32,13 @@ const withRoot = (Child) => {
 			url: PropTypes.object.isRequired,
 		}
 
-		static getInitialProps(ctx) {
+		static async getInitialProps(ctx) {
 			if (!process.browser) {
-				cookie.plugToRequest(ctx.req, ctx.res);
+				await cookie.plugToRequest(ctx.req, ctx.res);
 			}
 
 			if (AuthStorage.loggedIn && !ctx.store.getState().auth.email) {
-				ctx.store.dispatch(getUserAuth());
+				await ctx.store.dispatch(getUserAuth());
 			}
 
 			if (Child.getInitialProps) {

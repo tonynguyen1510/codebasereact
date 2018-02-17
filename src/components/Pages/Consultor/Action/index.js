@@ -16,13 +16,13 @@ import Router from 'next/router';
 
 import { Input, Form, Select, DatePicker, Button } from 'antd';
 
-import { createUser } from 'src/redux/actions/user';
+import { createUser, getUserData, updateUser } from 'src/redux/actions/user';
 
-function mapStateToProps(/* state */) {
+function mapStateToProps(state) {
 	return {
-		// store: {
-		// 	//modal: state.modal,
-		// },
+		store: {
+			userView: state.user.userView,
+		},
 	};
 }
 
@@ -30,6 +30,8 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
 			createUser,
+			getUserData,
+			updateUser,
 		}, dispatch),
 	};
 };
@@ -39,45 +41,80 @@ const mapDispatchToProps = (dispatch) => {
 export default class ConsultorAction extends Component {
 	static propTypes = {
 		form: PropTypes.object.isRequired,
+		consultorId: PropTypes.string,
 		// store
-		// store: PropTypes.shape({
-		// 	modal: PropTypes.object.isRequired,
-		// }).isRequired,
+		store: PropTypes.shape({
+			userView: PropTypes.object.isRequired,
+		}).isRequired,
 		// action
 		action: PropTypes.shape({
 			createUser: PropTypes.func.isRequired,
+			getUserData: PropTypes.func.isRequired,
+			updateUser: PropTypes.func.isRequired,
 		}).isRequired,
 	}
 
-	static defaultProps = {}
+	static defaultProps = {
+		consultorId: undefined,
+	}
 
 	state = {
 		loading: false,
+	}
+
+	componentDidMount() {
+		if (this.props.consultorId) {
+			this.props.action.getUserData({ id: this.props.consultorId }, (user) => {
+				this.props.form.setFieldsValue({
+					fullName: user.fullName,
+					email: user.email,
+					phone: user.phone[0],
+					phone2: user.phone[1],
+					gender: user.gender,
+					branch: user.branch,
+					address: user.address,
+					desc: user.desc,
+					birthDate: moment(user.birthDate, 'YYYY-MM-DD'),
+				});
+			});
+		}
 	}
 
 	handleSubmit = (e) => {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				const data = { ...values, phone: [values.phone], createdAt: new Date(), updatedAt: new Date(), role: 'consultor' };
+				const { phone, phone2, ...restUser } = values;
+				const data = { ...restUser, phone: [phone, phone2], createdAt: new Date(), updatedAt: new Date(), role: 'consultor' };
 				this.setState({
 					loading: true,
 				});
-				this.props.action.createUser(data, (user) => {
-					Router.push('/consultor');
-				}, () => {
-					this.setState({
-						loading: false,
+				if (this.props.consultorId) {
+					// edit user
+					data.id = this.props.consultorId;
+					this.props.action.updateUser(data, () => {
+						Router.push('/consultor');
+					}, () => {
+						this.setState({
+							loading: false,
+						});
 					});
-				});
+				} else {
+					// create user
+					this.props.action.createUser(data, () => {
+						Router.push('/consultor');
+					}, () => {
+						this.setState({
+							loading: false,
+						});
+					});
+				}
 			}
 		});
 	}
 
 	render() {
 		const { form: { getFieldDecorator } } = this.props;
-
-		console.log('this.props.', this.props);
 
 		return (
 			<Form layout="horizontal" onSubmit={this.handleSubmit} style={{ margin: '100px 0' }}>
@@ -118,6 +155,18 @@ export default class ConsultorAction extends Component {
 				</Form.Item>
 
 				<Form.Item
+					label=""
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8, offset: 8 }}
+				>
+					{getFieldDecorator('phone2', {
+						// rules: [{ required: true, message: 'Please input your Phone!' }],
+					})(
+						<Input size="large" placeholder="Phone 2" />,
+					)}
+				</Form.Item>
+
+				<Form.Item
 					label="Gender"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
@@ -147,13 +196,52 @@ export default class ConsultorAction extends Component {
 				</Form.Item>
 
 				<Form.Item
+					label="Address"
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8 }}
+				>
+					{getFieldDecorator('address', {
+						// rules: [{ required: true, message: 'Please input your email!' }, { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Email is invalid!' }],
+					})(
+						<Input.TextArea placeholder="Address" size="large" />,
+					)}
+				</Form.Item>
+
+				<Form.Item
+					label="Branch"
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8 }}
+				>
+					{getFieldDecorator('branch', {
+						initialValue: 'HN',
+					})(
+						<Select size="large" style={{ width: 192 }}>
+							<Select.Option value="HN">Hà Nội</Select.Option>
+							<Select.Option value="HCM">HCM</Select.Option>
+						</Select>,
+					)}
+				</Form.Item>
+
+				<Form.Item
+					label="Description"
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8 }}
+				>
+					{getFieldDecorator('desc', {
+						// rules: [{ required: true, message: 'Please input your email!' }, { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Email is invalid!' }],
+					})(
+						<Input.TextArea placeholder="Description" size="large" />,
+					)}
+				</Form.Item>
+
+				<Form.Item
 					style={{ marginTop: 48 }}
 					wrapperCol={{ span: 8, offset: 8 }}
 				>
 					<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
 						Submit
 					</Button>
-					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.back()}>
+					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.push('/consultor')}>
 						Cancel
 					</Button>
 				</Form.Item>
