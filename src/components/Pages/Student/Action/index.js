@@ -16,6 +16,8 @@ import Router from 'next/router';
 
 import { Input, Form, Select, DatePicker, Button } from 'antd';
 
+import SelectLevel from 'src/components/Form/SelectLevel';
+
 import { createStudent, getStudentData, updateStudent } from 'src/redux/actions/student';
 
 function mapStateToProps(state) {
@@ -75,6 +77,8 @@ export default class ConsultorAction extends Component {
 					branch: user.branch,
 					address: user.address,
 					desc: user.desc,
+					levelName: user.levelName,
+					status: user.status,
 					expectedTarget: user.expectedTarget,
 					fbLink: user.facebook && user.facebook.link,
 					fbName: user.facebook && user.facebook.name,
@@ -133,6 +137,39 @@ export default class ConsultorAction extends Component {
 						rules: [{ required: true, message: 'Please input your Full name!' }],
 					})(
 						<Input size="large" placeholder="Full name" />,
+					)}
+				</Form.Item>
+
+				<Form.Item
+					label="Status"
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8 }}
+				>
+					{getFieldDecorator('status', {
+						initialValue: 'inquiring',
+						// rules: [{ required: true, message: 'Please input your email!' }, { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Email is invalid!' }],
+					})(
+						<Select size="large">
+							<Select.Option value="inquiring">Course inquiring</Select.Option>
+							<Select.Option value="tested">Tested and consulted</Select.Option>
+							<Select.Option value="studying">Studying</Select.Option>
+							<Select.Option value="finished">Course finished</Select.Option>
+							<Select.Option value="suspending">Suspending</Select.Option>
+							<Select.Option value="old">Old students </Select.Option>
+						</Select>,
+					)}
+				</Form.Item>
+
+				<Form.Item
+					label="Level"
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8 }}
+				>
+					{getFieldDecorator('levelName', {
+						// initialValue: 'inquiring',
+						// rules: [{ required: true, message: 'Please input your email!' }, { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Email is invalid!' }],
+					})(
+						<SelectLevel />,
 					)}
 				</Form.Item>
 

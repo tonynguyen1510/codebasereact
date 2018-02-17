@@ -82,11 +82,29 @@ const Information = (props) => {
 					Status:
 				</div>
 				<div className={classNames.right}>
-					<Badge type={userData.status === 'active' ? 'success' : userData.status === 'inactive' ? 'error' : 'warning'}>
-						{userData.status}
-					</Badge>
+					{
+						userData.role ?
+							<Badge type={userData.status === 'active' ? 'success' : userData.status === 'inactive' ? 'error' : 'warning'}>
+								{userData.status}
+							</Badge> :
+							<Badge type={userData.status === 'studying' ? 'success' : userData.status === 'finished' ? 'warning' : userData.status === 'old' ? 'default' : userData.status === 'suspending' ? 'error' : 'info'}>
+								{userData.status}
+							</Badge>
+					}
 				</div>
 			</div>
+			{
+				!userData.role &&
+				<div className={classNames.item}>
+					<div className={classNames.left}>
+						<Icon type="calendar" />
+						Level:
+					</div>
+					<div className={classNames.right}>
+						{userData.levelName || '-'}
+					</div>
+				</div>
+			}
 			<div className={classNames.item}>
 				<div className={classNames.left}>
 					<Icon type="calendar" />

@@ -110,13 +110,27 @@ const UserCard = (props) => {
 					<div className={classNames.nameWrapper}>
 						<h4>{userData.fullName}</h4>
 						{/* <i>{userData.role}</i> */}
-						<Badge type={userData.status === 'active' ? 'success' : userData.status === 'inactive' ? 'error' : 'warning'}>
-							{userData.status}
-						</Badge>
+						{
+							userData.role ?
+								<Badge type={userData.status === 'active' ? 'success' : userData.status === 'inactive' ? 'error' : 'warning'}>
+									{userData.status}
+								</Badge> :
+								<Badge type={userData.status === 'studying' ? 'success' : userData.status === 'finished' ? 'warning' : userData.status === 'old' ? 'default' : userData.status === 'suspending' ? 'error' : 'info'}>
+									{userData.status}
+								</Badge>
+						}
+
 					</div>
 				</div>
 
 				<div className={classNames.infoWrapper}>
+					<div className={classNames.item} >
+						<div className={classNames.label}>
+							<Icon type="idcard" />
+							Level:
+						</div>
+						<div className={classNames.value}>{userData.levelName || '-'}</div>
+					</div>
 					<div className={classNames.item} >
 						<div className={classNames.label}>
 							<Icon type="calendar" />

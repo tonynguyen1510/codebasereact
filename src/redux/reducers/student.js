@@ -35,13 +35,17 @@ export default (state = initialState, action) => {
 
 		case 'UPDATE_STUDENT_SUCCESS': {
 			const { id } = action.payload;
-			const { studentList } = state;
+			const { studentList, studentView } = state;
 
 			const index = studentList.data.findIndex((user) => {
 				return user.id === id;
 			});
 
 			studentList.data[index] = action.payload;
+
+			if (studentView.id) {
+				return { ...state, studentView: { ...action.payload, loading: false } };
+			}
 
 			return { ...state };
 		}

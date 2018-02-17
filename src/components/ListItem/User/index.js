@@ -97,9 +97,15 @@ const UserListItem = (props) => {
 				<Avatar size="large" src={userData.avatar} />
 				<div className={classNames.nameWrapper}>
 					<h4>{userData.fullName}</h4>
-					<Badge type={userData.status === 'active' ? 'success' : userData.status === 'inactive' ? 'error' : 'warning'}>
-						{userData.status}
-					</Badge>
+					{
+						userData.role ?
+							<Badge type={userData.status === 'active' ? 'success' : userData.status === 'inactive' ? 'error' : 'warning'}>
+								{userData.status}
+							</Badge> :
+							<Badge type={userData.status === 'studying' ? 'success' : userData.status === 'finished' ? 'warning' : userData.status === 'old' ? 'default' : userData.status === 'suspending' ? 'error' : 'info'}>
+								{userData.status}
+							</Badge>
+					}
 				</div>
 			</div>
 
@@ -146,7 +152,7 @@ const UserListItem = (props) => {
 
 			<div className={classNames.tr + ' ' + classNames.actionWrapper}>
 				<div className={classNames.action}>
-					<Link route={'/' + userData.role + '/' + userData.id}>
+					<Link route={'/' + (userData.role || 'student') + '/' + userData.id}>
 						<a>
 							<Icon type="eye-o" />
 						</a>
@@ -154,7 +160,7 @@ const UserListItem = (props) => {
 				</div>
 				<Divider type="vertical" />
 				<div className={classNames.action}>
-					<Link route={'/' + userData.role + '/edit/' + userData.id}>
+					<Link route={'/' + (userData.role || 'student') + '/edit/' + userData.id}>
 						<a>
 							<Icon type="edit" />
 						</a>
