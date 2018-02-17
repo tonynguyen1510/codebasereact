@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Menu, Dropdown, Spin, Icon, Popconfirm, notification, Modal, Select } from 'antd';
+import { Menu, Dropdown, Spin, Icon, Popconfirm, notification, Modal } from 'antd';
 
 import { updateUser, resendInvitation } from 'src/redux/actions/user';
 import { updateStudent } from 'src/redux/actions/student';
@@ -172,74 +172,80 @@ export default class BtnUserActionMore extends PureComponent {
 		});
 	}
 
+	handleSelectMenu = ({ key }) => {
+		Modal.confirm({
+			title: 'Are you sure?',
+			onOk: () => {
+				if (key === 'resendInvitation') {
+					this.handleResendInvitation();
+				} else {
+					this.handleChangeStatusUser(key);
+				}
+			},
+		});
+	}
+
+	handleSelectMenuStudent = ({ key }) => {
+		Modal.confirm({
+			title: 'Are you sure?',
+			onOk: () => {
+				if (key === 'assign') {
+					this.handleAssign();
+				} else {
+					this.handleChangeStatusStudent(key);
+				}
+			},
+		});
+	}
+
 	render() {
 		const { userData, root } = this.props;
 
 		const menu = userData.role ? (
-			<Menu>
+			<Menu onClick={this.handleSelectMenu}>
 				{
 					userData.status === 'active' &&
-					<Menu.Item key="0">
-						<Popconfirm title="Are you sure？" onConfirm={() => this.LevelStatusUser('inactive')}>
-							Deactivate Account
-						</Popconfirm>
+					<Menu.Item key="inactive">
+						Deactivate Account
 					</Menu.Item>
 				}
 				{
 					userData.status === 'inactive' &&
-					<Menu.Item key="0">
-						<Popconfirm title="Are you sure？" onConfirm={() => this.handleChangeStatusUser('active')}>
-							Active Account
-						</Popconfirm>
+					<Menu.Item key="active">
+						Active Account
 					</Menu.Item>
 				}
 				{
 					userData.status === 'pending' &&
-					<Menu.Item key="1">
-						<Popconfirm title="Are you sure？" onConfirm={() => this.handleResendInvitation()}>
-							Resend Invitation
-						</Popconfirm>
+					<Menu.Item key="resendInvitation">
+						Resend Invitation
 					</Menu.Item>
 				}
 			</Menu>
 		) : (
-			<Menu>
+			<Menu onClick={this.handleSelectMenuStudent}>
 				<Menu.SubMenu title="Change status">
-					<Menu.Item disabled={userData.status === 'inquiring'} value="inquiring">
-						<Popconfirm title="Are you sure？" onConfirm={() => this.handleChangeStatusStudent('inquiring')}>
-							Course inquiring
-						</Popconfirm>
+					<Menu.Item disabled={userData.status === 'inquiring'} key="inquiring">
+						Course inquiring
 					</Menu.Item>
-					<Menu.Item disabled={userData.status === 'tested'} value="tested">
-						<Popconfirm title="Are you sure？" onConfirm={() => this.handleChangeStatusStudent('tested')}>
-							Tested and consulted
-						</Popconfirm>
+					<Menu.Item disabled={userData.status === 'tested'} key="tested">
+						Tested and consulted
 					</Menu.Item>
-					<Menu.Item disabled={userData.status === 'studying'} value="studying">
-						<Popconfirm title="Are you sure？" onConfirm={() => this.handleChangeStatusStudent('studying')}>
-							Studying
-						</Popconfirm>
+					<Menu.Item disabled={userData.status === 'studying'} key="studying">
+						Studying
 					</Menu.Item>
-					<Menu.Item disabled={userData.status === 'finished'} value="finished">
-						<Popconfirm title="Are you sure？" onConfirm={() => this.handleChangeStatusStudent('finished')}>
-							Course finished
-						</Popconfirm>
+					<Menu.Item disabled={userData.status === 'finished'} key="finished">
+						Course finished
 					</Menu.Item>
-					<Menu.Item disabled={userData.status === 'suspending'} value="suspending">
-						<Popconfirm title="Are you sure？" onConfirm={() => this.handleChangeStatusStudent('suspending')}>
-							Suspending
-						</Popconfirm>
+					<Menu.Item disabled={userData.status === 'suspending'} key="suspending">
+						Suspending
 					</Menu.Item>
-					<Menu.Item disabled={userData.status === 'old'} value="old">
-						<Popconfirm title="Are you sure？" onConfirm={() => this.handleChangeStatusStudent('old')}>
-							Old students
-						</Popconfirm>
+					<Menu.Item disabled={userData.status === 'old'} key="old">
+						Old students
 					</Menu.Item>
 				</Menu.SubMenu>
-				<Menu.Item key="1">
-					<a onClick={this.handleAssign}>
-						Assign into a level
-					</a>
+				<Menu.Item key="assign">
+					Assign into a level
 				</Menu.Item>
 			</Menu>
 		);

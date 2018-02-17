@@ -5,7 +5,6 @@
  *
  * Created: 2018-01-10 23:20:59
  *-------------------------------------------------------*/
-import Router from 'next/router';
 
 export const initialState = {
 	levelList: {
@@ -40,13 +39,10 @@ export default (state = initialState, action) => {
 				levelInfo: initialState.levelInfo,
 			};
 		case 'UPSERT_LEVEL_SUCCESS':
-			if (!state.levelInfo.id) {
-				Router.push('/level/edit/' + action.payload.id);
-			}
 			return {
 				...state,
 				levelInfo: action.payload,
-			}
+			};
 		default:
 			return state;
 	}

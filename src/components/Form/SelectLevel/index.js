@@ -11,6 +11,10 @@ import PropTypes from 'prop-types';
 
 import { Spin, Select } from 'antd';
 
+import API from 'src/constants/api';
+
+const { BASE_URL } = API;
+
 export default class SelectLevel extends Component {
 	static propTypes = {
 		onChange: PropTypes.func,
@@ -23,19 +27,16 @@ export default class SelectLevel extends Component {
 	}
 
 	state = {
-		level: '',
 		levelList: [],
 	}
 
 	handleLevelClick = () => {
-		console.log('fetching user');
 		this.setState({
 			levelList: [],
 		});
-		fetch('http://localhost:3005/api/v1/levels')
+		fetch(BASE_URL + 'levels')
 			.then(response => response.json())
 			.then((body) => {
-				console.log('body', body);
 				this.setState({
 					levelList: body.data,
 				});
@@ -44,12 +45,7 @@ export default class SelectLevel extends Component {
 	}
 
 	handleChangeLevel = (level) => {
-		console.log('level', level);
-		this.setState({
-			level,
-		}, () => {
-			this.props.onChange(level);
-		});
+		this.props.onChange(level);
 	}
 
 	render() {

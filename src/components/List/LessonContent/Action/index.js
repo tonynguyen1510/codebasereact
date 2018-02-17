@@ -9,7 +9,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as LessonContentActionRedux from 'src/redux/actions/lesson_content';
+import * as LessonContentActionRedux from 'src/redux/actions/lesson';
 import { bindActionCreators } from 'redux';
 import { Form, Select, Input, DatePicker, Switch, Slider, Button } from 'antd';
 

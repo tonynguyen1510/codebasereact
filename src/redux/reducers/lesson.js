@@ -5,17 +5,15 @@
  *
  * Created: 2018-01-10 23:20:59
  *-------------------------------------------------------*/
-import Router from 'next/router';
-
 export const initialState = {
-	lessonContentList: {
+	lessonList: {
 		data: [],
 		total: 0,
 		skip: 0,
 		limit: 12,
 		loading: true,
 	},
-	lessonContentInfo: {
+	lessonInfo: {
 		name: '',
 		desc: '',
 		type: '',
@@ -26,25 +24,25 @@ export const initialState = {
 
 export default (state = initialState, action) => {
 	switch (action.type) {
-		case 'GET_LESSON_CONTENTS_SUCCESS':
+		case 'GET_LESSONS_SUCCESS':
 			return {
 				...state,
-				lessonContentList: { ...action.payload, loading: false },
+				lessonList: { ...action.payload, loading: false },
 			};
-		case 'GET_LESSON_CONTENT_SUCCESS':
+		case 'GET_LESSON_SUCCESS':
 			return {
 				...state,
-				lessonContentInfo: action.payload,
+				lessonInfo: action.payload,
 			};
 		case 'LESSON_RESET_STATE_INFO':
 			return {
 				...state,
-				lessonContentInfo: initialState.lessonContentInfo,
+				lessonInfo: initialState.lessonInfo,
 			};
-		case 'UPSERT_LESSON_CONTENT_SUCCESS':
+		case 'UPSERT_LESSON_SUCCESS':
 			return {
 				...state,
-				lessonContentInfo: action.payload,
+				lessonInfo: action.payload,
 			};
 		default:
 			return state;

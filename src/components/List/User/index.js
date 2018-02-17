@@ -72,14 +72,14 @@ export default class UserList extends PureComponent {
 								!userList.loading ?
 									userList.data.map((user) => {
 										return (
-											<Col md={12} xl={8} key={user.id}>
+											<Col md={12} lg={8} xl={6} key={user.id}>
 												<UserCard userData={user} />
 											</Col>
 										);
 									}) :
 									[1, 1, 1, 1, 1, 1, 1, 1, 1].map((el, i) => {
 										return (
-											<Col md={12} xl={8} key={i}>
+											<Col md={12} lg={8} xl={6} key={i}>
 												<UserCard loading />
 											</Col>
 										);

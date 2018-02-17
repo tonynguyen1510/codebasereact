@@ -169,7 +169,7 @@ export default class ConsultorAction extends Component {
 						// initialValue: 'inquiring',
 						// rules: [{ required: true, message: 'Please input your email!' }, { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Email is invalid!' }],
 					})(
-						<SelectLevel />,
+						<SelectLevel size="large" />,
 					)}
 				</Form.Item>
 

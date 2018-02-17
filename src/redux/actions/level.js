@@ -6,27 +6,31 @@
  * Created: 2018-01-10 23:20:59
  *-------------------------------------------------------*/
 
-import Router from 'next/router';
 import { SINGLE_API } from 'src/redux/actions/type';
 
-export const getLevelInfo = (id, next) => {
+export const getLevelInfo = (payload, next, nextError) => {
+	const { id, filter } = payload;
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'levels/' + id,
+			uri: 'levels/' + id + (filter ? `?filter=${JSON.stringify(payload.filter)}` : ''),
+			beforeCallType: 'LEVEL_RESET_STATE_INFO',
 			successType: 'GET_LEVEL_SUCCESS',
 			afterSuccess: next,
+			afterError: nextError,
 		},
 	};
 };
 
-export const upsertLevel = (data, id, next) => {
+export const upsertLevel = (payload, next) => {
+	const { id, ...level } = payload;
+
 	if (!id) {
 		return {
 			type: SINGLE_API,
 			payload: {
 				uri: 'levels',
-				params: data,
+				params: level,
 				opt: { method: 'POST' },
 				successType: 'UPSERT_LEVEL_SUCCESS',
 				afterSuccess: next,
@@ -37,19 +41,19 @@ export const upsertLevel = (data, id, next) => {
 		type: SINGLE_API,
 		payload: {
 			uri: 'levels/' + id,
-			params: data,
-			opt: { method: 'PUT' },
+			params: level,
+			opt: { method: 'PATCH' },
 			successType: 'UPSERT_LEVEL_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const getLevels = (filter, next) => {
+export const getLevels = (payload, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: `levels?filter=${JSON.stringify(filter)}`,
+			uri: `levels?filter=${JSON.stringify(payload.filter)}`,
 			successType: 'GET_LEVELS_SUCCESS',
 			afterSuccess: next,
 		},
@@ -62,13 +66,15 @@ export const resetStateLevelInfo = () => {
 	};
 };
 
-export const deleteLevel = (data, id, next) => {
+export const deleteLevel = (payload, next) => {
+	const { id, ...level } = payload;
+
 	return {
 		type: SINGLE_API,
 		payload: {
 			uri: 'levels/' + id,
-			params: { ...data, isDelete: true },
-			opt: { method: 'PUT' },
+			params: { ...level, isDelete: true },
+			opt: { method: 'PATCH' },
 			successType: 'DELETE_LEVEL_SUCCESS',
 			afterSuccess: next,
 		},

@@ -9,7 +9,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as LessonContentActionRedux from 'src/redux/actions/lesson_content';
+import * as LessonContentActionRedux from 'src/redux/actions/lesson';
 import { bindActionCreators } from 'redux';
 import InputSearch from 'src/components/Form/InputSearch';
 import { Router } from 'src/routes';
@@ -27,14 +27,14 @@ const mapDispatchToProps = (dispatch) => {
 };
 const mapStateToProps = (state) => {
 	return {
-		lessonContentList: state.lessonContent.lessonContentList,
+		lessonList: state.lesson.lessonList,
 	};
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class LessonContentPage extends PureComponent {
 	static propTypes = {
-		lessonContentList: PropTypes.array.isRequired,
+		lessonList: PropTypes.array.isRequired,
 		action: PropTypes.func.isRequired,
 		onCreateLessonContent: PropTypes.func.isRequired,
 		levelId: PropTypes.string.isRequired,
@@ -145,7 +145,7 @@ export default class LessonContentPage extends PureComponent {
 	};
 
 	render() {
-		const { lessonContentList, onCreateLessonContent } = this.props;
+		const { lessonList, onCreateLessonContent } = this.props;
 		return (
 			<div className={classNames.root}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
@@ -160,12 +160,12 @@ export default class LessonContentPage extends PureComponent {
 					size="small"
 					columns={this.columns}
 					bordered
-					dataSource={lessonContentList.data}
+					dataSource={lessonList.data}
 					pagination={{
 						...this.paginationConfig,
-						total: lessonContentList.total,
-						pageSize: lessonContentList.limit,
-						current: (lessonContentList.skip / lessonContentList.limit) + 1,
+						total: lessonList.total,
+						pageSize: lessonList.limit,
+						current: (lessonList.skip / lessonList.limit) + 1,
 					}}
 				/>
 			</div>

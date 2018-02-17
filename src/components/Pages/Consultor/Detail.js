@@ -62,9 +62,7 @@ export default class ConsultorDetail extends Component {
 
 	componentDidMount() {
 		if (this.props.consultorId) {
-			console.log('-dsd', );
 			this.props.action.getUserData({ id: this.props.consultorId }, () => {
-				console.log('dsadas--------');
 				this.setState({
 					loading: false,
 				});

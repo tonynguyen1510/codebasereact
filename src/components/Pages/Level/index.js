@@ -9,149 +9,210 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as LevelActionRedux from 'src/redux/actions/level';
 import { bindActionCreators } from 'redux';
-import InputSearch from 'src/components/Form/InputSearch';
-import { Router } from 'src/routes';
+import moment from 'moment';
 
-import { Table, Divider, Icon, Button, DatePicker, Input, Modal, Pagination } from 'antd';
+import { Table, Divider, Icon, Button, DatePicker, notification, Modal, Select } from 'antd';
+
+import { Router, Link } from 'src/routes';
+
+import InputSearch from 'src/components/Form/InputSearch';
+
+import { getLevels, deleteLevel, upsertLevel } from 'src/redux/actions/level';
 
 import { stylesheet, classNames } from './style.less';
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
-			...LevelActionRedux,
+			getLevels,
+			deleteLevel,
+			upsertLevel,
 		}, dispatch),
 	};
 };
 const mapStateToProps = (state) => {
 	return {
-		levelList: state.level.levelList,
+		store: {
+			levelList: state.level.levelList,
+		},
 	};
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class LevelPage extends PureComponent {
 	static propTypes = {
-		levelList: PropTypes.array.isRequired,
-		action: PropTypes.func.isRequired,
+		// store
+		store: PropTypes.shape({
+			levelList: PropTypes.object.isRequired,
+		}).isRequired,
+		// action
+		action: PropTypes.shape({
+			getLevels: PropTypes.func.isRequired,
+			deleteLevel: PropTypes.func.isRequired,
+			upsertLevel: PropTypes.func.isRequired,
+		}).isRequired,
 	}
 
 	static defaultProps = {}
-	constructor(props) {
-		super(props);
-		const _this = this;
-		this.columns = [{
-			title: 'Name',
-			dataIndex: 'name',
-		}, {
-			title: 'Description',
-			dataIndex: 'desc',
-		}, {
-			title: 'Status',
-			dataIndex: 'status',
-		}, {
-			title: 'Created at',
-			dataIndex: 'createdAt',
-		}, {
-			title: 'Action',
-			key: 'action',
-			width: 150,
-			render: (text, record) => {
-				return (
-					<span>
-						<Button shape="circle" icon="edit" onClick={() => Router.pushRoute(`/level/edit/${record.id}`)} />
-						<Divider type="vertical" />
-						<Button
-							shape="circle"
-							icon="delete"
+
+	componentDidMount() {
+		this.props.action.getLevels({ filter: this.filter });
+	}
+
+	columns = [{
+		title: 'Name',
+		dataIndex: 'name',
+		key: 'name',
+	}, {
+		title: 'Description',
+		dataIndex: 'desc',
+		key: 'desc',
+	}, {
+		title: 'Created at',
+		dataIndex: 'createdAt',
+		key: 'createdAt',
+		render: (text) => {
+			return moment(text).format('DD-MM-YYYY HH:mm');
+		},
+	}, {
+		title: 'Status',
+		dataIndex: 'status',
+		key: 'status',
+		className: 'text-center',
+		width: 130,
+		render: (text, record) => {
+			return (
+				<Select value={text} style={{ width: 100 }} onChange={(val) => this.handleChangeStatus(val, record)}>
+					<Select.Option value="active">Active</Select.Option>
+					<Select.Option value="inactive">Inactive</Select.Option>
+				</Select>
+			);
+		},
+	}, {
+		title: 'Action',
+		key: 'action',
+		className: 'text-center',
+		width: 150,
+		render: (text, record) => {
+			return (
+				<div className={classNames.actionWrapper}>
+					<div className={classNames.action}>
+						<Link route={'/level/edit/' + record.id}>
+							<a>
+								<Icon type="edit" />
+							</a>
+						</Link>
+					</div>
+					<Divider type="vertical" />
+					<div className={classNames.action}>
+						<a
 							onClick={() => {
 								Modal.confirm({
 									title: 'Do you want to delete these items?',
-									onOk() {
-										props.action.deleteLevel(record, record.id, _this.getLevels);
+									onOk: () => {
+										this.props.action.deleteLevel(record, () => {
+											notification.success({
+												message: 'Congratulation',
+												description: 'Delete level success!',
+											});
+											this.props.action.getLevels({ filter: this.filter });
+										});
 									},
 								});
-							}
-							}
-						/>
-					</span>
-				);
-			},
-		}];
-		this.paginationConfig = {
-			total: 0,
-			showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-			defaultCurrent: 1,
-			onChange: (page) => _this.getLevels(page - 1),
-		};
+							}}
+						>
+							<Icon type="delete" />
+						</a>
+					</div>
+					{/* <Divider type="vertical" />
+						<div className={classNames.action}>
+							<Icon type="ells" />
+						</div> */}
+				</div>
+			);
+		},
+	}]
+
+	paginationConfig = {
+		total: 0,
+		showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+		defaultCurrent: 1,
+		onChange: (page) => {
+			this.filter.skip = (page - 1) * this.filter.limit;
+
+			this.props.action.getLevels({ filter: this.filter });
+		},
 	}
-	componentDidMount() {
-		this.getLevels();
-	}
-	getLevels = (page) => {
-		const cpage = page || 0;
-		this.filter.skip = cpage * this.filter.limit;
-		const curFilter = {
-			skip: this.filter.skip,
-			limit: this.filter.limit,
-			where: {
-				and: [
-					{
-						isDelete: {
-							neq: true,
-						},
-					},
-					{
-						or: [
-							{ desc: { like: this.filter.filterText } },
-							{ name: { like: this.filter.filterText } },
-							{ status: { eq: this.filter.filterText } },
-						],
-					},
-				],
-			},
-		};
-		if (this.filter.startDate !== '' && this.filter.endDate !== '') {
-			curFilter.where.and.push({ createdAt: { gte: this.filter.startDate } });
-			curFilter.where.and.push({ createdAt: { lte: this.filter.endDate } });
-		}
-		this.props.action.getLevels(curFilter);
-	};
-	changeFilter = (value) => {
-		this.filter.filterText = value;
-		this.getLevels();
-	};
-	changeDateRange = (momentdata, dateString) => {
-		[this.filter.startDate, this.filter.endDate] = dateString;
-		this.getLevels();
-	}
+
 	filter = {
-		filterText: '',
-		startDate: '',
-		endDate: '',
 		skip: 0,
 		limit: 12,
-	};
+		where: {
+			isDelete: false,
+		},
+	}
+
+	handleChangeStatus = (val, record) => {
+		Modal.confirm({
+			title: 'Are you sure?',
+			onOk: () => {
+				this.props.action.upsertLevel({ id: record.id, updatedAt: new Date(), status: val }, () => {
+					notification.success({
+						message: 'Congratulation',
+						description: 'Change status success!',
+					});
+					this.props.action.getLevels({ filter: this.filter });
+				});
+			},
+		});
+	}
+
+	handleChangeDate = (value) => {
+		if (value.length === 2) {
+			this.filter.where.createdAt = { between: value };
+		} else {
+			delete this.filter.where.createdAt;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getLevels({ filter: this.filter });
+	}
+
+	handleChangeSearch = (value) => {
+		if (value) {
+			const regex = '/' + value + '/i';
+
+			this.filter.where.or = [
+				{ name: { regexp: regex } },
+				{ desc: { regexp: regex } },
+			];
+		} else {
+			delete this.filter.where.or;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getLevels({ filter: this.filter });
+	}
 
 	render() {
-		const { levelList } = this.props;
+		const { store: { levelList } } = this.props;
+
 		return (
 			<div className={classNames.root}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 				<div className={classNames.control}>
-					<InputSearch onChange={(value) => this.changeFilter(value)} />
-					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} onChange={(momentdata, dateString) => this.changeDateRange(momentdata, dateString)} /></div>
+					<InputSearch onChange={this.handleChangeSearch} />
+					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} onChange={this.handleChangeDate} /></div>
 					<div>
 						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/level/new')}>Create Level</Button>
 					</div>
 				</div>
 				<Table
-					size="small"
 					columns={this.columns}
 					bordered
 					dataSource={levelList.data}
+					rowKey={(record) => record.id}
 					pagination={{
 						...this.paginationConfig,
 						total: levelList.total,
