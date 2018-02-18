@@ -36,7 +36,7 @@ export default class SelectLevel extends Component {
 		this.setState({
 			levelList: [],
 		});
-		fetch(BASE_URL + 'levels')
+		fetch(BASE_URL + 'levels?filter={"skip":0,"limit":1000,"where":{"isDelete":false, "status": "active"}}')
 			.then(response => response.json())
 			.then((body) => {
 				this.setState({

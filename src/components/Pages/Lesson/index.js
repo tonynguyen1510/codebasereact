@@ -112,7 +112,7 @@ export default class LessonPage extends PureComponent {
 			return (
 				<div className={classNames.actionWrapper}>
 					<div className={classNames.action}>
-						<Link route={'/level/edit/' + record.id}>
+						<Link route={'/lesson/edit/' + record.id}>
 							<a>
 								<Icon type="edit" />
 							</a>
@@ -248,7 +248,7 @@ export default class LessonPage extends PureComponent {
 					<InputSearch onChange={this.handleChangeSearch} />
 					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} onChange={this.handleChangeDate} /></div>
 					<div>
-						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/level/new')}>Create Lesson</Button>
+						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/lesson/new')}>Create Lesson</Button>
 					</div>
 				</div>
 				<Table
