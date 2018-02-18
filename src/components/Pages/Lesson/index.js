@@ -1,158 +1,263 @@
-/*--------------------------------------------------------
- * Author Ngo An Ninh
- * Email ninh.uit@gmail.com
- * Phone 0978 108 807
- *
- * Created: 2018-01-10 23:20:59
- *-------------------------------------------------------*/
+/* --------------------------------------------------------
+* Author Trần Đức Tiến
+* Email ductienas@gmail.com
+* Phone 0972970075
+*
+* Created: 2018-02-18 10:27:35
+*------------------------------------------------------- */
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as LessonAction from 'src/redux/actions/lesson';
 import { bindActionCreators } from 'redux';
-import InputSearch from 'src/components/Form/InputSearch';
-import { Router } from 'src/routes';
+import moment from 'moment';
 
-import { Table, Divider, Icon, Button, DatePicker, Input, Modal, Pagination } from 'antd';
+import { Table, Divider, Icon, Button, DatePicker, notification, Modal, Select } from 'antd';
+
+import { Router, Link } from 'src/routes';
+
+import InputSearch from 'src/components/Form/InputSearch';
+import SelectLevel from 'src/components/Form/SelectLevel';
+
+import { getLessons, deleteLesson, upsertLesson } from 'src/redux/actions/lesson';
 
 import { stylesheet, classNames } from './style.less';
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
-			...LessonAction,
+			getLessons,
+			deleteLesson,
+			upsertLesson,
 		}, dispatch),
 	};
 };
 const mapStateToProps = (state) => {
 	return {
-		lessonList: state.lesson.lessonList,
+		store: {
+			lessonList: state.lesson.lessonList,
+		},
 	};
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class LessonPage extends PureComponent {
 	static propTypes = {
-		lessonList: PropTypes.array.isRequired,
-		action: PropTypes.func.isRequired,
+		// store
+		store: PropTypes.shape({
+			lessonList: PropTypes.object.isRequired,
+		}).isRequired,
+		// action
+		action: PropTypes.shape({
+			getLessons: PropTypes.func.isRequired,
+			deleteLesson: PropTypes.func.isRequired,
+			upsertLesson: PropTypes.func.isRequired,
+		}).isRequired,
 	}
 
 	static defaultProps = {}
-	constructor(props) {
-		super(props);
-		const _this = this;
-		this.columns = [{
-			title: 'Name',
-			dataIndex: 'name',
-		}, {
-			title: 'Description',
-			dataIndex: 'desc',
-		}, {
-			title: 'Type',
-			dataIndex: 'type',
-		}, {
-			title: 'Status',
-			dataIndex: 'status',
-		}, {
-			title: 'Created at',
-			dataIndex: 'createdAt',
-		}, {
-			title: 'Action',
-			key: 'action',
-			width: 150,
-			render: (text, record) => {
-				return (
-					<span>
-						<Button shape="circle" icon="edit" onClick={() => Router.pushRoute(`/lesson/edit/${record.id}`)} />
-						<Divider type="vertical" />
-						<Button
-							shape="circle"
-							icon="delete"
+
+	componentDidMount() {
+		this.props.action.getLessons({ filter: this.filter });
+	}
+
+	columns = [{
+		title: 'Name',
+		dataIndex: 'name',
+		key: 'name',
+		sorter: true,
+	}, {
+		title: 'Level Name',
+		dataIndex: 'levelName',
+		key: 'levelName',
+		sorter: true,
+	}, {
+		title: 'Description',
+		dataIndex: 'desc',
+		key: 'desc',
+	}, {
+		title: 'Created at',
+		dataIndex: 'createdAt',
+		key: 'createdAt',
+		defaultSortOrder: 'descend',
+		sorter: true,
+		render: (text) => {
+			return moment(text).format('DD-MM-YYYY HH:mm');
+		},
+	}, {
+		title: 'Status',
+		dataIndex: 'status',
+		key: 'status',
+		className: 'text-center',
+		width: 130,
+		sorter: true,
+		render: (text, record) => {
+			return (
+				<Select value={text} style={{ width: 100 }} onChange={(val) => this.handleChangeStatus(val, record)}>
+					<Select.Option value="active">Active</Select.Option>
+					<Select.Option value="inactive">Inactive</Select.Option>
+				</Select>
+			);
+		},
+		filters: [
+			{ text: 'Active', value: 'active' },
+			{ text: 'Inactive', value: 'inactive' },
+		],
+	}, {
+		title: 'Action',
+		key: 'action',
+		className: 'text-center',
+		width: 150,
+		render: (text, record) => {
+			return (
+				<div className={classNames.actionWrapper}>
+					<div className={classNames.action}>
+						<Link route={'/level/edit/' + record.id}>
+							<a>
+								<Icon type="edit" />
+							</a>
+						</Link>
+					</div>
+					<Divider type="vertical" />
+					<div className={classNames.action}>
+						<a
 							onClick={() => {
 								Modal.confirm({
 									title: 'Do you want to delete these items?',
-									onOk() {
-										props.action.deleteLesson(record, record.id, _this.getLessons);
+									onOk: () => {
+										this.props.action.deleteLesson(record, () => {
+											notification.success({
+												message: 'Congratulation',
+												description: 'Delete level success!',
+											});
+											this.props.action.getLessons({ filter: this.filter });
+										});
 									},
 								});
-							}
-							}
-						/>
-					</span>
-				);
-			},
-		}];
-		this.paginationConfig = {
-			total: 0,
-			showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-			defaultCurrent: 1,
-			onChange: (page) => _this.getLessons(page - 1),
-		};
+							}}
+						>
+							<Icon type="delete" />
+						</a>
+					</div>
+					{/* <Divider type="vertical" />
+						<div className={classNames.action}>
+							<Icon type="ells" />
+						</div> */}
+				</div>
+			);
+		},
+	}]
+
+	paginationConfig = {
+		total: 0,
+		showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+		defaultCurrent: 1,
+		onChange: (page) => {
+			this.filter.skip = (page - 1) * this.filter.limit;
+
+			this.props.action.getLessons({ filter: this.filter });
+		},
 	}
-	componentDidMount() {
-		this.getLessons();
-	}
-	getLessons = (page) => {
-		const cpage = page || 0;
-		this.filter.skip = cpage * this.filter.limit;
-		const curFilter = {
-			skip: this.filter.skip,
-			limit: this.filter.limit,
-			where: {
-				and: [
-					{
-						isDelete: {
-							neq: true,
-						},
-					},
-					{
-						or: [
-							{ desc: { like: this.filter.filterText } },
-							{ name: { like: this.filter.filterText } },
-							{ type: { eq: this.filter.filterText } },
-							{ status: { eq: this.filter.filterText } },
-						],
-					},
-				],
-			},
-		};
-		if (this.filter.startDate !== '' && this.filter.endDate !== '') {
-			curFilter.where.and.push({ createdAt: { gte: this.filter.startDate } });
-			curFilter.where.and.push({ createdAt: { lte: this.filter.endDate } });
-		}
-		this.props.action.getLessons(curFilter);
-	};
-	changeFilter = (value) => {
-		this.filter.filterText = value;
-		this.getLessons();
-	};
-	changeDateRange = (momentdata, dateString) => {
-		[this.filter.startDate, this.filter.endDate] = dateString;
-		this.getLessons();
-	}
+
 	filter = {
-		filterText: '',
-		startDate: '',
-		endDate: '',
 		skip: 0,
 		limit: 12,
-	};
+		where: {
+			isDelete: false,
+		},
+	}
+
+	handleChangeStatus = (val, record) => {
+		Modal.confirm({
+			title: 'Are you sure?',
+			onOk: () => {
+				this.props.action.upsertLesson({ id: record.id, updatedAt: new Date(), status: val }, () => {
+					notification.success({
+						message: 'Congratulation',
+						description: 'Change status success!',
+					});
+					this.props.action.getLessons({ filter: this.filter });
+				});
+			},
+		});
+	}
+
+	handleChangeDate = (value) => {
+		if (value.length === 2) {
+			this.filter.where.createdAt = { between: value };
+		} else {
+			delete this.filter.where.createdAt;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getLessons({ filter: this.filter });
+	}
+
+	handleChangeSearch = (value) => {
+		if (value) {
+			const regex = '/' + value + '/i';
+
+			this.filter.where.or = [
+				{ name: { regexp: regex } },
+				{ desc: { regexp: regex } },
+			];
+		} else {
+			delete this.filter.where.or;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getLessons({ filter: this.filter });
+	}
+
+	handleChangeLevel = (value) => {
+		if (value) {
+			this.filter.where.levelName = value;
+		} else {
+			delete this.filter.where.levelName;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getLessons({ filter: this.filter });
+	}
+
+	handleTableChange = (pagination, filters, sorter) => {
+		if (filters.status && filters.status.length > 0) {
+			this.filter.where.status = { inq: filters.status };
+		} else {
+			delete this.filter.where.status;
+		}
+
+		if (sorter.order && sorter.field) {
+			this.filter.order = sorter.field + ' ' + (sorter.order === 'ascend' ? 'ASC' : 'DESC');
+		} else {
+			delete this.filter.order;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getLessons({ filter: this.filter });
+	}
 
 	render() {
-		const { lessonList } = this.props;
+		const { store: { lessonList } } = this.props;
+
 		return (
 			<div className={classNames.root}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 				<div className={classNames.control}>
-					<InputSearch onChange={(value) => this.changeFilter(value)} />
-					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} onChange={(momentdata, dateString) => this.changeDateRange(momentdata, dateString)} /></div>
+					<SelectLevel onChange={this.handleChangeLevel} style={{ width: 120 }} search />
+					<InputSearch onChange={this.handleChangeSearch} />
+					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} onChange={this.handleChangeDate} /></div>
+					<div>
+						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/level/new')}>Create Lesson</Button>
+					</div>
 				</div>
 				<Table
-					size="small"
 					columns={this.columns}
-					bordered
+					size="small"
+					loading={lessonList.loading}
 					dataSource={lessonList.data}
+					rowKey={(record) => record.id}
+					onChange={this.handleTableChange}
 					pagination={{
 						...this.paginationConfig,
 						total: lessonList.total,

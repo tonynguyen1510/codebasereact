@@ -13,7 +13,7 @@ export const getLevelInfo = (payload, next, nextError) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'levels/' + id + (filter ? `?filter=${JSON.stringify(payload.filter)}` : ''),
+			uri: 'levels/' + id + (filter ? `?filter=${JSON.stringify(filter)}` : ''),
 			beforeCallType: 'LEVEL_RESET_STATE_INFO',
 			successType: 'GET_LEVEL_SUCCESS',
 			afterSuccess: next,

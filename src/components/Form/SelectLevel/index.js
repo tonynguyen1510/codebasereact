@@ -19,11 +19,13 @@ export default class SelectLevel extends Component {
 	static propTypes = {
 		onChange: PropTypes.func,
 		onFocus: PropTypes.func,
+		search: PropTypes.bool,
 	}
 
 	static defaultProps = {
 		onChange: f => f,
 		onFocus: f => f,
+		search: false,
 	}
 
 	state = {
@@ -49,7 +51,7 @@ export default class SelectLevel extends Component {
 	}
 
 	render() {
-		const { onChange, onFocus, ...rest } = this.props;
+		const { onChange, onFocus, search, ...rest } = this.props;
 
 		return (
 			<Select
@@ -60,6 +62,10 @@ export default class SelectLevel extends Component {
 				onFocus={this.handleLevelClick}
 				onChange={this.handleChangeLevel}
 			>
+				{
+					search && <Select.Option key="all" value="">All</Select.Option>
+				}
+
 				{
 					this.state.levelList.map((level) => {
 						return <Select.Option key={level.id} value={level.name}>{level.name}</Select.Option>;

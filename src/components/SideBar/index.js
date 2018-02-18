@@ -61,6 +61,14 @@ const SideBar = (props) => {
 					</a>
 				</Link>
 			</Menu.Item>
+			<Menu.Item key="/lesson">
+				<Link href="/lesson">
+					<a>
+						<Icon type="profile" />
+						<span>Lesson</span>
+					</a>
+				</Link>
+			</Menu.Item>
 		</Menu>
 	);
 };

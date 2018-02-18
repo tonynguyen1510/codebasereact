@@ -4,6 +4,7 @@
  * Phone 0978 108 807
  *
  * Created: 2018-01-10 23:20:59
+ * Edit by Duc Tien at 2018-02-18 10:27:01
  *-------------------------------------------------------*/
 
 import React, { PureComponent } from 'react';
@@ -64,6 +65,7 @@ export default class LevelPage extends PureComponent {
 		title: 'Name',
 		dataIndex: 'name',
 		key: 'name',
+		sorter: true,
 	}, {
 		title: 'Description',
 		dataIndex: 'desc',
@@ -72,6 +74,8 @@ export default class LevelPage extends PureComponent {
 		title: 'Created at',
 		dataIndex: 'createdAt',
 		key: 'createdAt',
+		defaultSortOrder: 'descend',
+		sorter: true,
 		render: (text) => {
 			return moment(text).format('DD-MM-YYYY HH:mm');
 		},
@@ -81,6 +85,7 @@ export default class LevelPage extends PureComponent {
 		key: 'status',
 		className: 'text-center',
 		width: 130,
+		sorter: true,
 		render: (text, record) => {
 			return (
 				<Select value={text} style={{ width: 100 }} onChange={(val) => this.handleChangeStatus(val, record)}>
@@ -89,6 +94,10 @@ export default class LevelPage extends PureComponent {
 				</Select>
 			);
 		},
+		filters: [
+			{ text: 'Active', value: 'active' },
+			{ text: 'Inactive', value: 'inactive' },
+		],
 	}, {
 		title: 'Action',
 		key: 'action',
@@ -195,6 +204,23 @@ export default class LevelPage extends PureComponent {
 		this.props.action.getLevels({ filter: this.filter });
 	}
 
+	handleTableChange = (pagination, filters, sorter) => {
+		if (filters.status && filters.status.length > 0) {
+			this.filter.where.status = { inq: filters.status };
+		} else {
+			delete this.filter.where.status;
+		}
+
+		if (sorter.order && sorter.field) {
+			this.filter.order = sorter.field + ' ' + (sorter.order === 'ascend' ? 'ASC' : 'DESC');
+		} else {
+			delete this.filter.order;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getLevels({ filter: this.filter });
+	}
+
 	render() {
 		const { store: { levelList } } = this.props;
 
@@ -210,9 +236,11 @@ export default class LevelPage extends PureComponent {
 				</div>
 				<Table
 					columns={this.columns}
-					bordered
+					size="small"
+					loading={levelList.loading}
 					dataSource={levelList.data}
 					rowKey={(record) => record.id}
+					onChange={this.handleTableChange}
 					pagination={{
 						...this.paginationConfig,
 						total: levelList.total,

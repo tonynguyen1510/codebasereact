@@ -11,19 +11,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Button, DatePicker, Input } from 'antd';
+import { Button, DatePicker } from 'antd';
 
-import Link from 'next/link';
 import { Router } from 'src/routes';
 
 import UserList from 'src/components/List/User';
+import InputSearch from 'src/components/Form/InputSearch';
 
 import { getUserList } from 'src/redux/actions/user';
 
 import { stylesheet, classNames } from './style.less';
 
 const { RangePicker } = DatePicker;
-const { Search } = Input;
 
 function mapStateToProps(state) {
 	return {
@@ -116,9 +115,9 @@ export default class TeacherPage extends Component {
 					onChangePagination={this.handleChangePagination}
 				>
 					<div>
-						<Search
+						<InputSearch
 							placeholder="Search name, phone..."
-							onSearch={this.handleChangeSearch}
+							onChange={this.handleChangeSearch}
 							style={{ width: 200 }}
 						/>
 					</div>

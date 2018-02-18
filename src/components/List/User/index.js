@@ -77,7 +77,7 @@ export default class UserList extends PureComponent {
 											</Col>
 										);
 									}) :
-									[1, 1, 1, 1, 1, 1, 1, 1, 1].map((el, i) => {
+									[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((el, i) => {
 										return (
 											<Col md={12} lg={8} xl={6} key={i}>
 												<UserCard loading />
@@ -97,7 +97,7 @@ export default class UserList extends PureComponent {
 											/>
 										);
 									}) :
-									[1, 1, 1, 1, 1, 1, 1, 1, 1].map((el, i) => {
+									[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((el, i) => {
 										return (
 											<UserListItem
 												key={i}

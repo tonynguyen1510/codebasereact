@@ -21,15 +21,16 @@ const handleSearch = (e, search, isPressEnter) => {
 };
 
 const InputSearch = (props) => {
-	const { onChange } = props;
+	const { onChange, ...rest } = props;
 
 	return (
 		<div>
 			<Input.Search
-				placeholder="input search text"
+				placeholder="Input search text"
+				style={{ width: 180 }}
+				{...rest}
 				onChange={(e) => handleSearch(e, onChange)}
 				onPressEnter={(e) => handleSearch(e, onChange, true)}
-				style={{ width: 200 }}
 			/>
 		</div>
 	);

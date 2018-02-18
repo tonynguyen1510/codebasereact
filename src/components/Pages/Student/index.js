@@ -11,19 +11,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Button, DatePicker, Input } from 'antd';
+import { Button, DatePicker } from 'antd';
 
 // import Link from 'next/link';
 import { Router } from 'src/routes';
 
 import UserList from 'src/components/List/User';
+import InputSearch from 'src/components/Form/InputSearch';
+import SelectLevel from 'src/components/Form/SelectLevel';
 
 import { getStudentList } from 'src/redux/actions/student';
 
 import { stylesheet, classNames } from './style.less';
 
 const { RangePicker } = DatePicker;
-const { Search } = Input;
 
 function mapStateToProps(state) {
 	return {
@@ -102,6 +103,17 @@ export default class StudentPage extends Component {
 		this.props.action.getStudentList({ filter: this.filter });
 	}
 
+	handleChangeLevel = (value) => {
+		if (value) {
+			this.filter.where.levelName = value;
+		} else {
+			delete this.filter.where.levelName;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getStudentList({ filter: this.filter });
+	}
+
 	render() {
 		const { store: { studentList } } = this.props;
 
@@ -113,10 +125,15 @@ export default class StudentPage extends Component {
 					userList={studentList}
 					onChangePagination={this.handleChangePagination}
 				>
+					<SelectLevel
+						onChange={this.handleChangeLevel}
+						style={{ width: 120 }}
+						search
+					/>
 					<div>
-						<Search
+						<InputSearch
 							placeholder="Search name, phone..."
-							onSearch={this.handleChangeSearch}
+							onChange={this.handleChangeSearch}
 							style={{ width: 200 }}
 						/>
 					</div>

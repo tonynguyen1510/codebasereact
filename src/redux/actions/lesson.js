@@ -8,24 +8,29 @@
 
 import { SINGLE_API } from 'src/redux/actions/type';
 
-export const getLessonInfo = (id, next) => {
+export const getLessonInfo = (payload, next) => {
+	const { id, filter } = payload;
+
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'lessons/' + id,
+			uri: 'lessons/' + id + (filter ? `?filter=${JSON.stringify(filter)}` : ''),
+			beforeCallType: 'LESSON_RESET_STATE_INFO',
 			successType: 'GET_LESSON_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const upsertLessonContent = (data, id, next) => {
+export const upsertLesson = (payload, next) => {
+	const { id, ...lesson } = payload;
+
 	if (!id) {
 		return {
 			type: SINGLE_API,
 			payload: {
 				uri: 'lessons',
-				params: data,
+				params: lesson,
 				opt: { method: 'POST' },
 				successType: 'UPSERT_LESSON_SUCCESS',
 				afterSuccess: next,
@@ -36,19 +41,19 @@ export const upsertLessonContent = (data, id, next) => {
 		type: SINGLE_API,
 		payload: {
 			uri: 'lessons/' + id,
-			params: data,
-			opt: { method: 'PUT' },
+			params: lesson,
+			opt: { method: 'PATCH' },
 			successType: 'UPSERT_LESSON_SUCCESS',
 			afterSuccess: next,
 		},
 	};
 };
 
-export const getLessonContents = (filter, next) => {
+export const getLessons = (payload, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: `lessons?filter=${JSON.stringify(filter)}`,
+			uri: `lessons?filter=${JSON.stringify(payload.filter)}`,
 			successType: 'GET_LESSONS_SUCCESS',
 			afterSuccess: next,
 		},
@@ -61,13 +66,15 @@ export const resetStateLessonInfo = () => {
 	};
 };
 
-export const deleteLessonContent = (data, id, next) => {
+export const deleteLesson = (payload, next) => {
+	const { id, ...lesson } = payload;
+
 	return {
 		type: SINGLE_API,
 		payload: {
 			uri: 'lessons/' + id,
-			params: { ...data, isDelete: true },
-			opt: { method: 'PUT' },
+			params: { ...lesson, isDelete: true },
+			opt: { method: 'PATCH' },
 			successType: 'DELETE_LESSON_SUCCESS',
 			afterSuccess: next,
 		},
