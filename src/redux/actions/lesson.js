@@ -8,7 +8,7 @@
 
 import { SINGLE_API } from 'src/redux/actions/type';
 
-export const getLessonInfo = (payload, next) => {
+export const getLessonInfo = (payload, next, nextError) => {
 	const { id, filter } = payload;
 
 	return {
@@ -18,11 +18,12 @@ export const getLessonInfo = (payload, next) => {
 			beforeCallType: 'LESSON_RESET_STATE_INFO',
 			successType: 'GET_LESSON_SUCCESS',
 			afterSuccess: next,
+			afterError: nextError,
 		},
 	};
 };
 
-export const upsertLesson = (payload, next) => {
+export const upsertLesson = (payload, next, nextError) => {
 	const { id, ...lesson } = payload;
 
 	if (!id) {
@@ -34,6 +35,7 @@ export const upsertLesson = (payload, next) => {
 				opt: { method: 'POST' },
 				successType: 'UPSERT_LESSON_SUCCESS',
 				afterSuccess: next,
+				afterError: nextError,
 			},
 		};
 	}
@@ -45,6 +47,7 @@ export const upsertLesson = (payload, next) => {
 			opt: { method: 'PATCH' },
 			successType: 'UPSERT_LESSON_SUCCESS',
 			afterSuccess: next,
+			afterError: nextError,
 		},
 	};
 };
@@ -54,6 +57,7 @@ export const getLessons = (payload, next) => {
 		type: SINGLE_API,
 		payload: {
 			uri: `lessons?filter=${JSON.stringify(payload.filter)}`,
+			beforeCallType: 'GET_LESSONS_REQUEST',
 			successType: 'GET_LESSONS_SUCCESS',
 			afterSuccess: next,
 		},

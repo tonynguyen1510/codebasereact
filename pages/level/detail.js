@@ -15,24 +15,25 @@ import withRoot from 'src/root';
 
 import MainLayout from 'src/layout/Main';
 
-// import ClassPage from 'src/components/Pages/Class';
+import LevelPage from 'src/components/Pages/Level/Detail';
 
 @withRoot
-export default class ClassDetailPage extends PureComponent {
+export default class LevelDetailPage extends PureComponent {
 	static async getInitialProps({ query, res }) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
 		// }
-		return { id: query.id };
+		return { levelId: query.id };
 	}
 
 	render() {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Admin - Class - {this.props.id}</title>
+					<title>IPP Admin - Level - {this.props.levelId}</title>
 				</Head>
-				class id = {this.props.id}
+
+				<LevelPage levelId={this.props.levelId} />
 			</MainLayout>
 		);
 	}

@@ -22,7 +22,7 @@ export const getLevelInfo = (payload, next, nextError) => {
 	};
 };
 
-export const upsertLevel = (payload, next) => {
+export const upsertLevel = (payload, next, nextError) => {
 	const { id, ...level } = payload;
 
 	if (!id) {
@@ -34,6 +34,7 @@ export const upsertLevel = (payload, next) => {
 				opt: { method: 'POST' },
 				successType: 'UPSERT_LEVEL_SUCCESS',
 				afterSuccess: next,
+				afterError: nextError,
 			},
 		};
 	}
@@ -45,6 +46,7 @@ export const upsertLevel = (payload, next) => {
 			opt: { method: 'PATCH' },
 			successType: 'UPSERT_LEVEL_SUCCESS',
 			afterSuccess: next,
+			afterError: nextError,
 		},
 	};
 };
@@ -54,6 +56,7 @@ export const getLevels = (payload, next) => {
 		type: SINGLE_API,
 		payload: {
 			uri: `levels?filter=${JSON.stringify(payload.filter)}`,
+			beforeCallType: 'GET_LEVELS_REQUEST',
 			successType: 'GET_LEVELS_SUCCESS',
 			afterSuccess: next,
 		},

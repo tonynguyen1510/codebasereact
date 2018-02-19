@@ -24,6 +24,11 @@ export const initialState = {
 
 export default (state = initialState, action) => {
 	switch (action.type) {
+		case 'GET_LESSONS_REQUEST':
+			return {
+				...state,
+				lessonList: initialState.lessonList,
+			};
 		case 'GET_LESSONS_SUCCESS':
 			return {
 				...state,

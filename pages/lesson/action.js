@@ -16,10 +16,8 @@ import LessonAction from 'src/components/Pages/Lesson/Action';
 @withRoot
 export default class LessonActionPage extends PureComponent {
 	static async getInitialProps(ctx) {
-		// if (AuthStorage.loggedIn) {
-		// 	ctx.store.dispatch(getUserAuth());
-		// }
-		// return { auth: ctx.store.getState().auth };
+		const { query } = ctx;
+		return { lessonId: query.id, levelId: query.levelId, levelName: query.levelName };
 	}
 
 	render() {
@@ -28,7 +26,11 @@ export default class LessonActionPage extends PureComponent {
 				<Head>
 					<title>IPP Admin - Lesson - New</title>
 				</Head>
-				<LessonAction />
+				<LessonAction
+					lessonId={this.props.lessonId}
+					levelId={this.props.levelId}
+					levelName={this.props.levelName}
+				/>
 			</MainLayout>
 		);
 	}

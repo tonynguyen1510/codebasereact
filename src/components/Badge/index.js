@@ -12,10 +12,10 @@ import PropTypes from 'prop-types';
 import { stylesheet, classNames } from './style.less';
 
 const Badge = (props) => {
-	const { children, type } = props;
+	const { children, type, ...rest } = props;
 
 	return (
-		<div className={classNames.root + ' ' + classNames[type]}>
+		<div className={classNames.root + ' ' + classNames[type]} {...rest}>
 			<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 			{children}
 		</div>

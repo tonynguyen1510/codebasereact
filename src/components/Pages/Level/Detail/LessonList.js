@@ -1,11 +1,10 @@
-/*--------------------------------------------------------
- * Author Ngo An Ninh
- * Email ninh.uit@gmail.com
- * Phone 0978 108 807
- *
- * Created: 2018-01-10 23:20:59
- * Edit by Duc Tien at 2018-02-18 10:27:01
- *-------------------------------------------------------*/
+/* --------------------------------------------------------
+* Author Trần Đức Tiến
+* Email ductienas@gmail.com
+* Phone 0972970075
+*
+* Created: 2018-02-19 01:28:41
+*------------------------------------------------------- */
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -18,47 +17,49 @@ import { Table, Divider, Icon, Button, DatePicker, notification, Modal, Select }
 import { Router, Link } from 'src/routes';
 
 import InputSearch from 'src/components/Form/InputSearch';
+import SelectLevel from 'src/components/Form/SelectLevel';
 
-import { getLevels, deleteLevel, upsertLevel } from 'src/redux/actions/level';
+import { getLessons, deleteLesson, upsertLesson } from 'src/redux/actions/lesson';
 
 import { stylesheet, classNames } from './style.less';
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
-			getLevels,
-			deleteLevel,
-			upsertLevel,
+			getLessons,
+			deleteLesson,
+			upsertLesson,
 		}, dispatch),
 	};
 };
 const mapStateToProps = (state) => {
 	return {
 		store: {
-			levelList: state.level.levelList,
+			lessonList: state.lesson.lessonList,
 		},
 	};
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class LevelPage extends PureComponent {
+export default class LessonList extends PureComponent {
 	static propTypes = {
+		levelData: PropTypes.object.isRequired,
 		// store
 		store: PropTypes.shape({
-			levelList: PropTypes.object.isRequired,
+			lessonList: PropTypes.object.isRequired,
 		}).isRequired,
 		// action
 		action: PropTypes.shape({
-			getLevels: PropTypes.func.isRequired,
-			deleteLevel: PropTypes.func.isRequired,
-			upsertLevel: PropTypes.func.isRequired,
+			getLessons: PropTypes.func.isRequired,
+			deleteLesson: PropTypes.func.isRequired,
+			upsertLesson: PropTypes.func.isRequired,
 		}).isRequired,
 	}
 
 	static defaultProps = {}
 
 	componentDidMount() {
-		this.props.action.getLevels({ filter: this.filter });
+		this.props.action.getLessons({ filter: this.filter });
 	}
 
 	columns = [{
@@ -107,15 +108,7 @@ export default class LevelPage extends PureComponent {
 			return (
 				<div className={classNames.actionWrapper}>
 					<div className={classNames.action}>
-						<Link route={'/level/' + record.id}>
-							<a>
-								<Icon type="eye-o" />
-							</a>
-						</Link>
-					</div>
-					<Divider type="vertical" />
-					<div className={classNames.action}>
-						<Link route={'/level/edit/' + record.id}>
+						<Link route={'/lesson/edit/' + record.id}>
 							<a>
 								<Icon type="edit" />
 							</a>
@@ -128,12 +121,12 @@ export default class LevelPage extends PureComponent {
 								Modal.confirm({
 									title: 'Do you want to delete these items?',
 									onOk: () => {
-										this.props.action.deleteLevel(record, () => {
+										this.props.action.deleteLesson(record, () => {
 											notification.success({
 												message: 'Congratulation',
 												description: 'Delete level success!',
 											});
-											this.props.action.getLevels({ filter: this.filter });
+											this.props.action.getLessons({ filter: this.filter });
 										});
 									},
 								});
@@ -158,7 +151,7 @@ export default class LevelPage extends PureComponent {
 		onChange: (page) => {
 			this.filter.skip = (page - 1) * this.filter.limit;
 
-			this.props.action.getLevels({ filter: this.filter });
+			this.props.action.getLessons({ filter: this.filter });
 		},
 	}
 
@@ -167,6 +160,7 @@ export default class LevelPage extends PureComponent {
 		limit: 12,
 		where: {
 			isDelete: false,
+			levelName: this.props.levelData.name,
 		},
 	}
 
@@ -174,12 +168,12 @@ export default class LevelPage extends PureComponent {
 		Modal.confirm({
 			title: 'Are you sure?',
 			onOk: () => {
-				this.props.action.upsertLevel({ id: record.id, updatedAt: new Date(), status: val }, () => {
+				this.props.action.upsertLesson({ id: record.id, updatedAt: new Date(), status: val }, () => {
 					notification.success({
 						message: 'Congratulation',
 						description: 'Change status success!',
 					});
-					this.props.action.getLevels({ filter: this.filter });
+					this.props.action.getLessons({ filter: this.filter });
 				});
 			},
 		});
@@ -193,7 +187,7 @@ export default class LevelPage extends PureComponent {
 		}
 		this.filter.skip = 0;
 
-		this.props.action.getLevels({ filter: this.filter });
+		this.props.action.getLessons({ filter: this.filter });
 	}
 
 	handleChangeSearch = (value) => {
@@ -209,7 +203,18 @@ export default class LevelPage extends PureComponent {
 		}
 		this.filter.skip = 0;
 
-		this.props.action.getLevels({ filter: this.filter });
+		this.props.action.getLessons({ filter: this.filter });
+	}
+
+	handleChangeLevel = (value) => {
+		if (value) {
+			this.filter.where.levelName = value;
+		} else {
+			delete this.filter.where.levelName;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getLessons({ filter: this.filter });
 	}
 
 	handleTableChange = (pagination, filters, sorter) => {
@@ -226,34 +231,34 @@ export default class LevelPage extends PureComponent {
 		}
 		this.filter.skip = 0;
 
-		this.props.action.getLevels({ filter: this.filter });
+		this.props.action.getLessons({ filter: this.filter });
 	}
 
 	render() {
-		const { store: { levelList } } = this.props;
+		const { store: { lessonList }, levelData } = this.props;
 
 		return (
-			<div className={classNames.root}>
-				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
+			<div className={classNames.tableWrapper}>
+				<h3>List Lessons</h3>
 				<div className={classNames.control}>
 					<InputSearch onChange={this.handleChangeSearch} />
 					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} onChange={this.handleChangeDate} /></div>
 					<div>
-						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/level/new')}>Create Level</Button>
+						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/level/' + levelData.id + '/add-lesson?levelName=' + levelData.name)}>Add Lesson</Button>
 					</div>
 				</div>
 				<Table
 					columns={this.columns}
 					size="small"
-					loading={levelList.loading}
-					dataSource={levelList.data}
+					loading={lessonList.loading}
+					dataSource={lessonList.data}
 					rowKey={(record) => record.id}
 					onChange={this.handleTableChange}
 					pagination={{
 						...this.paginationConfig,
-						total: levelList.total,
-						pageSize: levelList.limit,
-						current: (levelList.skip / levelList.limit) + 1,
+						total: lessonList.total,
+						pageSize: lessonList.limit,
+						current: (lessonList.skip / lessonList.limit) + 1,
 					}}
 				/>
 			</div>

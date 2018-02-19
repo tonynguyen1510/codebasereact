@@ -15,14 +15,17 @@ export const initialState = {
 		loading: true,
 	},
 	levelInfo: {
-		name: '',
-		desc: '',
-		status: 'active',
+		loading: true,
 	},
 };
 
 export default (state = initialState, action) => {
 	switch (action.type) {
+		case 'GET_LEVELS_REQUEST':
+			return {
+				...state,
+				lessonList: initialState.lessonList,
+			};
 		case 'GET_LEVELS_SUCCESS':
 			return {
 				...state,
@@ -31,7 +34,7 @@ export default (state = initialState, action) => {
 		case 'GET_LEVEL_SUCCESS':
 			return {
 				...state,
-				levelInfo: action.payload,
+				levelInfo: { ...action.payload, loading: false },
 			};
 		case 'LEVEL_RESET_STATE_INFO':
 			return {
@@ -41,7 +44,7 @@ export default (state = initialState, action) => {
 		case 'UPSERT_LEVEL_SUCCESS':
 			return {
 				...state,
-				levelInfo: action.payload,
+				levelInfo: { ...action.payload, loading: false },
 			};
 		default:
 			return state;

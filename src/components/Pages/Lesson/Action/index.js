@@ -10,7 +10,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Router from 'next/router';
+
+import { Router } from 'src/routes';
 
 import { Form, Select, Input, Button } from 'antd';
 
@@ -42,6 +43,9 @@ const mapStateToProps = (state) => {
 export default class LessonAction extends Component {
 	static propTypes = {
 		form: PropTypes.object.isRequired,
+		lessonId: PropTypes.string,
+		levelId: PropTypes.string,
+		levelName: PropTypes.string,
 		// store
 		store: PropTypes.shape({
 			lessonObject: PropTypes.object.isRequired,
@@ -52,12 +56,17 @@ export default class LessonAction extends Component {
 			upsertLesson: PropTypes.func.isRequired,
 		}).isRequired,
 	}
+	static defaultProps = {
+		lessonId: undefined,
+		levelId: undefined,
+		levelName: undefined,
+	}
 	state = {
 		loading: false,
 	}
 	componentDidMount() {
-		if (Router.router.query.id) {
-			this.props.action.getLessonInfo({ id: Router.router.query.id }, () => {
+		if (this.props.lessonId) {
+			this.props.action.getLessonInfo({ id: this.props.lessonId }, () => {
 				this.props.form.setFieldsValue({
 					name: this.props.store.lessonObject.name || '',
 					status: this.props.store.lessonObject.status || 'active',
@@ -73,12 +82,19 @@ export default class LessonAction extends Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				const data = { ...values, updatedAt: new Date(), id: Router.router.query.id };
+				const data = { ...values, updatedAt: new Date(), id: this.props.lessonId };
+				if (this.props.levelName && this.props.levelId) {
+					data.levelName = this.props.levelName;
+				}
 				this.setState({
 					loading: true,
 				});
 				this.props.action.upsertLesson(data, () => {
-					Router.push('/lesson');
+					if (this.props.levelName && this.props.levelId) {
+						Router.pushRoute('/level/' + this.props.levelId);
+					} else {
+						Router.pushRoute('/lesson');
+					}
 				}, () => {
 					this.setState({
 						loading: false,
@@ -88,7 +104,7 @@ export default class LessonAction extends Component {
 		});
 	}
 	render() {
-		const { form: { getFieldDecorator } } = this.props;
+		const { form: { getFieldDecorator }, levelName, levelId } = this.props;
 		return (
 			<Form layout="horizontal" onSubmit={this.handleSubmit} style={{ margin: '100px 0' }}>
 				<FormItem
@@ -105,19 +121,23 @@ export default class LessonAction extends Component {
 						/>,
 					)}
 				</FormItem>
-				<FormItem
-					label="Level"
-					labelCol={{ span: 8 }}
-					wrapperCol={{ span: 8 }}
-				>
-					{getFieldDecorator('levelName', {
-						rules: [{ required: false }],
-					})(
-						<SelectLevel
-							size="large"
-						/>,
-					)}
-				</FormItem>
+				{
+					(!levelName || !levelId ) &&
+					<FormItem
+						label="Level"
+						labelCol={{ span: 8 }}
+						wrapperCol={{ span: 8 }}
+					>
+						{getFieldDecorator('levelName', {
+							rules: [{ required: false }],
+						})(
+							<SelectLevel
+								size="large"
+							/>,
+						)}
+					</FormItem>
+				}
+
 				<FormItem
 					label="Status"
 					labelCol={{ span: 8 }}
@@ -185,7 +205,7 @@ export default class LessonAction extends Component {
 					<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
 						Submit
 					</Button>
-					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.push('/lesson')}>
+					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.pushRoute('/lesson')}>
 						Cancel
 					</Button>
 				</Form.Item>
