@@ -10,6 +10,7 @@ import auth, { initialState as initialAuth } from './auth';
 import loading, { initialState as initialLoading } from './loading';
 import user, { initialState as initialUser } from './user';
 import student, { initialState as initialStudent } from './student';
+import payment, { initialState as initialPayment } from './payment';
 import level, { initialState as initialLevel } from './level';
 import lesson, { initialState as initialLesson } from './lesson';
 
@@ -18,6 +19,7 @@ export const initialState = {
 	loading: initialLoading,
 	user: initialUser,
 	student: initialStudent,
+	payment: initialPayment,
 	level: initialLevel,
 	lesson: initialLesson,
 };
@@ -27,6 +29,7 @@ export default {
 	loading,
 	user,
 	student,
+	payment,
 	level,
 	lesson,
 };

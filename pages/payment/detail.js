@@ -11,15 +11,18 @@ import React, { PureComponent } from 'react';
 import Head from 'next/head';
 import withRoot from 'src/root';
 
-import AuthStorage from 'src/utils/AuthStorage';
+// import AuthStorage from 'src/utils/AuthStorage';
 
 import MainLayout from 'src/layout/Main';
 
-import LevelAction from 'src/components/Pages/Level/Action';
+import LevelPage from 'src/components/Pages/Level/Detail';
 
 @withRoot
-export default class ClassActionPage extends PureComponent {
-	static async getInitialProps({ query }) {
+export default class LevelDetailPage extends PureComponent {
+	static async getInitialProps({ query, res }) {
+		// if (AuthStorage.loggedIn) {
+		// 	ctx.store.dispatch(getUserAuth());
+		// }
 		return { levelId: query.id };
 	}
 
@@ -27,14 +30,10 @@ export default class ClassActionPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					{
-						this.props.levelId ?
-							<title>IPP Admin - Level - Edit {this.props.levelId}</title> :
-							<title>IPP Admin - Level - New</title>
-					}
-					<title>IPP Admin - Level - Action</title>
+					<title>IPP Admin - Level - {this.props.levelId}</title>
 				</Head>
-				<LevelAction />
+
+				<LevelPage levelId={this.props.levelId} />
 			</MainLayout>
 		);
 	}

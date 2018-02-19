@@ -24,7 +24,11 @@ export default class LessonActionPage extends PureComponent {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Admin - Lesson - New</title>
+					{
+						this.props.lessonId ?
+							<title>IPP Admin - Lesson - Edit {this.props.lessonId}</title> :
+							<title>IPP Admin - Lesson - New</title>
+					}
 				</Head>
 				<LessonAction
 					lessonId={this.props.lessonId}

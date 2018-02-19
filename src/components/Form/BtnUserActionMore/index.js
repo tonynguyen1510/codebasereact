@@ -13,6 +13,8 @@ import { bindActionCreators } from 'redux';
 
 import { Menu, Dropdown, Spin, Icon, Popconfirm, notification, Modal } from 'antd';
 
+import { Router } from 'src/routes';
+
 import { updateUser, resendInvitation } from 'src/redux/actions/user';
 import { updateStudent } from 'src/redux/actions/student';
 
@@ -191,6 +193,8 @@ export default class BtnUserActionMore extends PureComponent {
 			onOk: () => {
 				if (key === 'assign') {
 					this.handleAssign();
+				} else if (key === 'payment') {
+					Router.pushRoute('/student/' + this.props.userData.id + '/new-payment');
 				} else {
 					this.handleChangeStatusStudent(key);
 				}
@@ -246,6 +250,9 @@ export default class BtnUserActionMore extends PureComponent {
 				</Menu.SubMenu>
 				<Menu.Item key="assign">
 					Assign into a level
+				</Menu.Item>
+				<Menu.Item key="payment">
+					Make A Payment
 				</Menu.Item>
 			</Menu>
 		);
