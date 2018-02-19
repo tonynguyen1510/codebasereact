@@ -14,6 +14,8 @@ import moment from 'moment';
 
 import Router from 'next/router';
 
+import AuthStorage from 'src/utils/AuthStorage';
+
 import { Input, Form, Select, DatePicker, Button } from 'antd';
 
 import { createUser, getUserData, updateUser } from 'src/redux/actions/user';
@@ -104,6 +106,7 @@ export default class ConsultorAction extends Component {
 					});
 				} else {
 					// create user
+					data.creatorId = AuthStorage.userId;
 					this.props.action.createUser(data, () => {
 						Router.push('/teacher');
 					}, () => {

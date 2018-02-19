@@ -7,6 +7,7 @@
  *-------------------------------------------------------*/
 
 import { SINGLE_API } from 'src/redux/actions/type';
+import AuthStorage from 'src/utils/AuthStorage';
 
 export const getLessonInfo = (payload, next, nextError) => {
 	const { id, filter } = payload;
@@ -27,6 +28,8 @@ export const upsertLesson = (payload, next, nextError) => {
 	const { id, ...lesson } = payload;
 
 	if (!id) {
+		lesson.creatorId = AuthStorage.userId;
+
 		return {
 			type: SINGLE_API,
 			payload: {

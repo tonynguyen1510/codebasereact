@@ -14,6 +14,8 @@ import moment from 'moment';
 
 import Router from 'next/router';
 
+import AuthStorage from 'src/utils/AuthStorage';
+
 import { Input, Form, Select, DatePicker, Button } from 'antd';
 
 import SelectLevel from 'src/components/Form/SelectLevel';
@@ -111,6 +113,8 @@ export default class ConsultorAction extends Component {
 					});
 				} else {
 					// create user
+					data.creatorId = AuthStorage.userId;
+
 					this.props.action.createStudent(data, () => {
 						Router.push('/student');
 					}, () => {

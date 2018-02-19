@@ -69,6 +69,38 @@ const SideBar = (props) => {
 					</a>
 				</Link>
 			</Menu.Item>
+			<Menu.Item key="/test">
+				<Link href="/test">
+					<a>
+						<Icon type="file" />
+						<span>Test</span>
+					</a>
+				</Link>
+			</Menu.Item>
+			<Menu.Item key="/study-session">
+				<Link href="/study-session">
+					<a>
+						<Icon type="book" />
+						<span>Study Session</span>
+					</a>
+				</Link>
+			</Menu.Item>
+			<Menu.Item key="/tracking">
+				<Link href="/tracking">
+					<a>
+						<Icon type="hdd" />
+						<span>Tracking</span>
+					</a>
+				</Link>
+			</Menu.Item>
+			<Menu.Item key="/payment">
+				<Link href="/payment">
+					<a>
+						<Icon type="credit-card" />
+						<span>Payment</span>
+					</a>
+				</Link>
+			</Menu.Item>
 		</Menu>
 	);
 };

@@ -7,6 +7,7 @@
  *-------------------------------------------------------*/
 
 import { SINGLE_API } from 'src/redux/actions/type';
+import AuthStorage from 'src/utils/AuthStorage';
 
 export const getLevelInfo = (payload, next, nextError) => {
 	const { id, filter } = payload;
@@ -26,6 +27,8 @@ export const upsertLevel = (payload, next, nextError) => {
 	const { id, ...level } = payload;
 
 	if (!id) {
+		level.creatorId = AuthStorage.userId;
+
 		return {
 			type: SINGLE_API,
 			payload: {
