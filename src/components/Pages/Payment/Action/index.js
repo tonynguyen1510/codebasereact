@@ -114,7 +114,7 @@ export default class PaymentAction extends Component {
 					const data = { ...rest, rest: rest.quantity, total: (rest.quantity * rest.unitPrice) - rest.discount, expiredDate: { start: expiredDate[0], end: expiredDate[1] } };
 
 					if (values.status === 'conservated') {
-						data.conservationDate = { start: expiredDate[0], end: expiredDate[1] };
+						data.conservationDate = { start: conservationDate[0], end: conservationDate[1] };
 					}
 
 					data.updatedAt = new Date();

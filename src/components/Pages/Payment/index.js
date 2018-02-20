@@ -88,17 +88,17 @@ export default class PaymentPage extends PureComponent {
 			return moment(text).format('DD-MM-YYYY HH:mm');
 		},
 	}, {
-		title: 'Expired Date',
+		title: Router.router && Router.router.query.status === 'conservated' ? 'Conservation Date' : 'Expired Date',
 		children: [{
 			title: 'Start',
-			dataIndex: 'expiredDate.start',
+			dataIndex: Router.router && Router.router.query.status === 'conservated' ? 'conservationDate.start' : 'expiredDate.start',
 			key: 'start',
 			render: (text) => {
 				return moment(text).format('DD-MM-YYYY');
 			},
 		}, {
 			title: 'End',
-			dataIndex: 'expiredDate.end',
+			dataIndex: Router.router && Router.router.query.status === 'conservated' ? 'conservationDate.end' : 'expiredDate.end',
 			key: 'end',
 			render: (text) => {
 				return moment(text).format('DD-MM-YYYY');
@@ -259,8 +259,9 @@ export default class PaymentPage extends PureComponent {
 			const regex = '/' + value + '/i';
 
 			this.filter.where.or = [
-				{ name: { regexp: regex } },
-				{ desc: { regexp: regex } },
+				{ content: { regexp: regex } },
+				{ note: { regexp: regex } },
+				{ studentId: { regexp: regex } },
 			];
 		} else {
 			delete this.filter.where.or;
@@ -271,12 +272,6 @@ export default class PaymentPage extends PureComponent {
 	}
 
 	handleTableChange = (pagination, filters, sorter) => {
-		if (filters.status && filters.status.length > 0) {
-			this.filter.where.status = { inq: filters.status };
-		} else {
-			delete this.filter.where.status;
-		}
-
 		if (sorter.order && sorter.field) {
 			this.filter.order = sorter.field + ' ' + (sorter.order === 'ascend' ? 'ASC' : 'DESC');
 		} else {
@@ -288,6 +283,11 @@ export default class PaymentPage extends PureComponent {
 	}
 
 	handleClickTab = (tab) => {
+		this.filter.skip = 0;
+		this.filter.where.status = tab;
+
+		this.props.action.getPaymentList({ filter: this.filter });
+
 		Router.pushRoute('/payment?status=' + tab);
 	}
 

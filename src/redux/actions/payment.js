@@ -71,7 +71,7 @@ export const deletePayment = (payload, next) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'levels/' + id,
+			uri: 'payments/' + id,
 			params: { ...payment, isDelete: true },
 			opt: { method: 'PATCH' },
 			successType: 'DELETE_PAYMENT_SUCCESS',
