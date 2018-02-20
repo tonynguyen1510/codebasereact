@@ -1,35 +1,49 @@
 /* --------------------------------------------------------
-* Author Ngo An Ninh
-* Email ninh.uit@gmail.com
-* Phone 0978108807
+* Author Trần Đức Tiến
+* Email ductienas@gmail.com
+* Phone 0972970075
 *
-* Created: 2018-02-09 11:27:16
+* Created: 2018-02-19 22:53:51
 *------------------------------------------------------- */
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
+
 import Router from 'next/router';
 
-import { Form, Select, Input, Button } from 'antd';
+import AuthStorage from 'src/utils/AuthStorage';
+import { formatNumber } from 'src/utils';
 
-import { getLevelInfo, upsertLevel } from 'src/redux/actions/level';
+import { Form, Select, Input, Button, DatePicker } from 'antd';
+
+import Avatar from 'src/components/Avatar';
+import Badge from 'src/components/Badge';
+
+import { getPaymentData, createPayment, updatePayment } from 'src/redux/actions/payment';
+import { getStudentData } from 'src/redux/actions/student';
+
+import { stylesheet, classNames } from './style.less';
 
 const FormItem = Form.Item;
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
-			getLevelInfo,
-			upsertLevel,
+			getPaymentData,
+			createPayment,
+			getStudentData,
+			updatePayment,
 		}, dispatch),
 	};
 };
 const mapStateToProps = (state) => {
 	return {
 		store: {
-			levelObject: state.level.levelInfo,
+			paymentView: state.payment.paymentView,
+			studentView: state.student.studentView,
 		},
 	};
 };
@@ -39,27 +53,50 @@ const mapStateToProps = (state) => {
 export default class PaymentAction extends Component {
 	static propTypes = {
 		form: PropTypes.object.isRequired,
+		studentId: PropTypes.string,
+		paymentId: PropTypes.string,
 		// store
 		store: PropTypes.shape({
-			levelObject: PropTypes.object.isRequired,
+			paymentView: PropTypes.object.isRequired,
+			studentView: PropTypes.object.isRequired,
 		}).isRequired,
 		// action
 		action: PropTypes.shape({
-			getLevelInfo: PropTypes.func.isRequired,
-			upsertLevel: PropTypes.func.isRequired,
+			getPaymentData: PropTypes.func.isRequired,
+			createPayment: PropTypes.func.isRequired,
+			getStudentData: PropTypes.func.isRequired,
+			updatePayment: PropTypes.func.isRequired,
 		}).isRequired,
+	}
+	static defaultProps = {
+		studentId: '',
+		paymentId: '',
 	}
 	state = {
 		loading: false,
 	}
 	componentDidMount() {
-		if (Router.router.query.id) {
-			this.props.action.getLevelInfo({ id: Router.router.query.id }, () => {
+		if (this.props.studentId) {
+			this.props.action.getStudentData({ id: this.props.studentId });
+		}
+		if (this.props.paymentId) {
+			this.props.action.getPaymentData({ id: this.props.paymentId, filter: { include: 'student' } }, (payment) => {
 				this.props.form.setFieldsValue({
-					name: this.props.store.levelObject.name || '',
-					status: this.props.store.levelObject.status || 'active',
-					desc: this.props.store.levelObject.desc || '',
+					content: payment.content || '',
+					status: payment.status || 'active',
+					note: payment.note || '',
+					expiredDate: [moment(payment.expiredDate.start, 'YYYY-MM-DD'), moment(payment.expiredDate.end, 'YYYY-MM-DD')],
+					quantity: payment.quantity || 0,
+					unitPrice: payment.unitPrice || 0,
+					discount: payment.discount || 0,
 				});
+
+				if (payment.status === 'conservated') {
+					this.props.form.setFieldsValue({
+						conservationDate: [moment(payment.conservationDate.start, 'YYYY-MM-DD'), moment(payment.conservationDate.end, 'YYYY-MM-DD')],
+					});
+				}
+
 			});
 		}
 	}
@@ -67,31 +104,82 @@ export default class PaymentAction extends Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				const data = { ...values, updatedAt: new Date(), id: Router.router.query.id };
+				const { expiredDate, conservationDate, ...rest } = values;
+
 				this.setState({
 					loading: true,
 				});
-				this.props.action.upsertLevel(data, () => {
-					Router.push('/level');
-				}, () => {
-					this.setState({
-						loading: false,
+
+				if (this.props.paymentId) {
+					const data = { ...rest, rest: rest.quantity, total: (rest.quantity * rest.unitPrice) - rest.discount, expiredDate: { start: expiredDate[0], end: expiredDate[1] } };
+
+					if (values.status === 'conservated') {
+						data.conservationDate = { start: expiredDate[0], end: expiredDate[1] };
+					}
+
+					data.updatedAt = new Date();
+					data.id = this.props.paymentId;
+
+					this.props.action.updatePayment(data, () => {
+						if (values.status === 'conservated') {
+							Router.push('/payment?status=conservated');
+						} else {
+							Router.push('/payment');
+						}
+					}, () => {
+						this.setState({
+							loading: false,
+						});
 					});
-				});
+				} else {
+					const data = { ...rest, rest: rest.quantity, total: (rest.quantity * rest.unitPrice) - rest.discount, studentId: this.props.studentId, creatorId: AuthStorage.userId, expiredDate: { start: expiredDate[0], end: expiredDate[1] } };
+
+					this.props.action.createPayment(data, () => {
+						Router.push('/payment');
+					}, () => {
+						this.setState({
+							loading: false,
+						});
+					});
+				}
 			}
 		});
 	}
 	render() {
-		const { form: { getFieldDecorator } } = this.props;
+		const { form: { getFieldDecorator }, store: { studentView, paymentView }, paymentId } = this.props;
+
+		let userData = studentView || {};
+
+		if (paymentId) {
+			userData = paymentView.student || {};
+		}
+
 		return (
 			<Form layout="horizontal" onSubmit={this.handleSubmit} style={{ margin: '100px 0' }}>
+				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
+
+				<FormItem
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8, offset: 8 }}
+				>
+					<div className={classNames.student}>
+						<Avatar url={userData.avatar} size="large" className={classNames.avatar} />
+						<div>
+							<h3>{userData.fullName}</h3>
+							<Badge className={classNames.status} type={userData.status === 'studying' ? 'success' : userData.status === 'finished' ? 'warning' : userData.status === 'old' ? 'default' : userData.status === 'suspending' ? 'error' : 'info'}>
+								{userData.status}
+							</Badge>
+						</div>
+					</div>
+				</FormItem>
+
 				<FormItem
 					label="Content"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
 				>
 					{getFieldDecorator('content', {
-						rules: [{ required: true, message: 'Please input level name!' }],
+						rules: [{ required: true, message: 'Please input content!' }],
 					})(
 						<Input
 							size="large"
@@ -99,37 +187,137 @@ export default class PaymentAction extends Component {
 						/>,
 					)}
 				</FormItem>
-				<FormItem
-					label="Status"
+				<Form.Item
+					label="Expired Date"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
 				>
-					{getFieldDecorator('status', {
-						initialValue: 'active',
-						rules: [{ required: false }],
+					{getFieldDecorator('expiredDate', {
+						rules: [{ required: true, message: 'Please input expired date!' }],
 					})(
-						<Select
-							size="large"
-						>
-							<Select.Option value="active" selected>Active</Select.Option>
-							<Select.Option value="inactive">Inactive</Select.Option>
-						</Select>,
+						<DatePicker.RangePicker size="large" />,
 					)}
-				</FormItem>
+				</Form.Item>
+
+				{
+					paymentId &&
+					<FormItem
+						label="Status"
+						labelCol={{ span: 8 }}
+						wrapperCol={{ span: 8 }}
+					>
+						{getFieldDecorator('status', {
+							initialValue: 'active',
+							rules: [{ required: false }],
+						})(
+							<Select
+								size="large"
+							>
+								<Select.Option value="active" selected>Active</Select.Option>
+								<Select.Option value="conservated">Conservated</Select.Option>
+							</Select>,
+						)}
+					</FormItem>
+				}
+
+
+				{
+					this.props.form.getFieldValue('status') === 'conservated' &&
+					<Form.Item
+						label="Conservation Date"
+						labelCol={{ span: 8 }}
+						wrapperCol={{ span: 8 }}
+					>
+						{getFieldDecorator('conservationDate', {
+							rules: [{ required: true, message: 'Please input Conservation Date!' }],
+						})(
+							<DatePicker.RangePicker size="large" />,
+						)}
+					</Form.Item>
+				}
+
 				<FormItem
-					label="Description"
+					label="Note"
 					labelCol={{ span: 8 }}
 					wrapperCol={{ span: 8 }}
 				>
-					{getFieldDecorator('desc', {
+					{getFieldDecorator('note', {
 						rules: [{ required: false }],
 					})(
 						<Input.TextArea
 							size="large"
-							rows={2}
-							placeholder="Description"
+							rows={5}
+							placeholder="Note"
 						/>,
 					)}
+				</FormItem>
+
+				<FormItem
+					label="Quantity"
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8 }}
+				>
+					{getFieldDecorator('quantity', {
+						rules: [{ required: true }],
+					})(
+						<Input
+							size="large"
+							type="number"
+							placeholder="Quantity"
+							suffix="ss"
+							className={classNames.inputNumber}
+						/>,
+					)}
+				</FormItem>
+
+				<FormItem
+					label="Unit Price"
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8 }}
+				>
+					{getFieldDecorator('unitPrice', {
+						rules: [{ required: true }],
+					})(
+						<Input
+							size="large"
+							type="number"
+							placeholder="Unit Price"
+							suffix="vnd"
+							className={classNames.inputNumber}
+						/>,
+					)}
+				</FormItem>
+
+				<FormItem
+					label="Discount"
+					labelCol={{ span: 8 }}
+					wrapperCol={{ span: 8 }}
+				>
+					{getFieldDecorator('discount', {
+						initialValue: 0,
+						rules: [{ required: true }],
+					})(
+						<Input
+							size="large"
+							type="number"
+							placeholder="Discount"
+							suffix="vnd"
+							className={classNames.inputNumber}
+						/>,
+					)}
+				</FormItem>
+				<FormItem
+					labelCol={{ span: 6 }}
+					wrapperCol={{ span: 10, offset: 6 }}
+				>
+					<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+						<div style={{ marginRight: '30px', fontSize: '30px' }}>Total:</div>
+						<div style={{ fontSize: '30px' }}>
+							{
+								formatNumber((this.props.form.getFieldValue('quantity') * this.props.form.getFieldValue('unitPrice')) - this.props.form.getFieldValue('discount')) || 0
+							} vnd
+						</div>
+					</div>
 				</FormItem>
 				<Form.Item
 					style={{ marginTop: 48 }}
@@ -138,7 +326,7 @@ export default class PaymentAction extends Component {
 					<Button size="large" type="primary" htmlType="submit" loading={this.state.loading}>
 						Submit
 					</Button>
-					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.push('/level')}>
+					<Button size="large" style={{ marginLeft: 8 }} onClick={() => Router.push('/payment')}>
 						Cancel
 					</Button>
 				</Form.Item>

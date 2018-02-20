@@ -22,7 +22,7 @@ export const initialState = {
 export default (state = initialState, action) => {
 	switch (action.type) {
 		case 'GET_PAYMENT_LIST_REQUEST':
-			return { ...state, paymentView: { ...initialState.paymentList } };
+			return { ...state, paymentList: { ...initialState.paymentList } };
 
 		case 'GET_PAYMENT_LIST_SUCCESS':
 			return { ...state, paymentList: { ...action.payload, loading: false } };

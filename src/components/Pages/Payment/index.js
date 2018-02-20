@@ -13,11 +13,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 
-import { Table, Divider, Icon, Button, DatePicker, notification, Modal, Tabs } from 'antd';
+import { Table, Divider, Icon, DatePicker, notification, Modal, Tabs } from 'antd';
 
 import { Router, Link } from 'src/routes';
+import { formatNumber } from 'src/utils';
 
 import InputSearch from 'src/components/Form/InputSearch';
+import Avatar from 'src/components/Avatar';
 
 import { getPaymentList, deletePayment, updatePayment } from 'src/redux/actions/payment';
 
@@ -62,14 +64,20 @@ export default class PaymentPage extends PureComponent {
 	}
 
 	columns = [{
-		title: 'Name',
-		dataIndex: 'name',
-		key: 'name',
-		sorter: true,
-	}, {
-		title: 'Description',
-		dataIndex: 'desc',
-		key: 'desc',
+		title: 'Student',
+		key: 'student',
+		dataIndex: 'student',
+		width: 200,
+		render: (data = {}) => {
+			return (
+				<Link route={'/student/' + data.id}>
+					<a className={classNames.student}>
+						<Avatar size="small" url={data.avatar} />
+						<div>{data.fullName}</div>
+					</a>
+				</Link>
+			);
+		},
 	}, {
 		title: 'Created at',
 		dataIndex: 'createdAt',
@@ -80,6 +88,73 @@ export default class PaymentPage extends PureComponent {
 			return moment(text).format('DD-MM-YYYY HH:mm');
 		},
 	}, {
+		title: 'Expired Date',
+		children: [{
+			title: 'Start',
+			dataIndex: 'expiredDate.start',
+			key: 'start',
+			render: (text) => {
+				return moment(text).format('DD-MM-YYYY');
+			},
+		}, {
+			title: 'End',
+			dataIndex: 'expiredDate.end',
+			key: 'end',
+			render: (text) => {
+				return moment(text).format('DD-MM-YYYY');
+			},
+		}],
+	},
+	// {
+	// 	title: 'Content',
+	// 	dataIndex: 'content',
+	// 	key: 'content',
+	// 	sorter: true,
+	// },
+	{
+		title: 'Quantity',
+		dataIndex: 'quantity',
+		key: 'quantity',
+		sorter: true,
+	}, {
+		title: 'Rest of session',
+		dataIndex: 'rest',
+		key: 'rest',
+		sorter: true,
+		render: (text) => {
+			return text || 0;
+		},
+	},
+	// {
+	// 	title: 'Unit Price',
+	// 	dataIndex: 'unitPrice',
+	// 	key: 'unitPrice',
+	// 	sorter: true,
+	// 	render: (text) => {
+	// 		return text || 0 + ' vnd';
+	// 	},
+	// }, {
+	// 	title: 'Discount',
+	// 	dataIndex: 'discount',
+	// 	key: 'discount',
+	// 	sorter: true,
+	// 	render: (text) => {
+	// 		return text || 0 + ' vnd';
+	// 	},
+	// }, {
+	// 	title: 'Total',
+	// 	dataIndex: 'total',
+	// 	key: 'total',
+	// 	sorter: true,
+	// 	render: (text) => {
+	// 		return text || 0 + ' vnd';
+	// 	},
+	// }, {
+	// 	title: 'Note',
+	// 	dataIndex: 'note',
+	// 	key: 'note',
+	// },
+	{
 		title: 'Action',
 		key: 'action',
 		className: 'text-center',
@@ -87,16 +162,16 @@ export default class PaymentPage extends PureComponent {
 		render: (text, record) => {
 			return (
 				<div className={classNames.actionWrapper}>
-					<div className={classNames.action}>
+					{/* <div className={classNames.action}>
 						<Link route={'/level/' + record.id}>
 							<a>
 								<Icon type="eye-o" />
 							</a>
 						</Link>
 					</div>
-					<Divider type="vertical" />
+					<Divider type="vertical" /> */}
 					<div className={classNames.action}>
-						<Link route={'/level/edit/' + record.id}>
+						<Link route={'/payment/edit/' + record.id}>
 							<a>
 								<Icon type="edit" />
 							</a>
@@ -216,6 +291,37 @@ export default class PaymentPage extends PureComponent {
 		Router.pushRoute('/payment?status=' + tab);
 	}
 
+	handleExpandedRowRender = (record = {}) => {
+		return (
+			<div className={classNames.subTable}>
+				<div className={classNames.item}>
+					<div className={classNames.label}>Content:</div>
+					<div className={classNames.value}>{record.content}</div>
+				</div>
+				<div className={classNames.item}>
+					<div className={classNames.label}>Note:</div>
+					<div className={classNames.value}>{record.note}</div>
+				</div>
+				<div className={classNames.item}>
+					<div className={classNames.label}>Quantity:</div>
+					<div className={classNames.value}>{formatNumber(record.quantity) || 0}</div>
+				</div>
+				<div className={classNames.item}>
+					<div className={classNames.label}>Unit Price:</div>
+					<div className={classNames.value}>{(formatNumber(record.unitPrice) || 0) + ' vnd'}</div>
+				</div>
+				<div className={classNames.item}>
+					<div className={classNames.label}>Discount:</div>
+					<div className={classNames.value}>{(formatNumber(record.discount) || 0) + ' vnd'}</div>
+				</div>
+				<div className={classNames.item}>
+					<div className={classNames.label}>Total:</div>
+					<div className={classNames.value}>{(formatNumber(record.total) || 0) + ' vnd'}</div>
+				</div>
+			</div>
+		);
+	}
+
 	render() {
 		const { store: { paymentList } } = this.props;
 
@@ -240,10 +346,12 @@ export default class PaymentPage extends PureComponent {
 				<Table
 					columns={this.columns}
 					size="small"
+					bordered
 					loading={paymentList.loading}
 					dataSource={paymentList.data}
 					rowKey={(record) => record.id}
 					onChange={this.handleTableChange}
+					expandedRowRender={this.handleExpandedRowRender}
 					pagination={{
 						...this.paginationConfig,
 						total: paymentList.total,

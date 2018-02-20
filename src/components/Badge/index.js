@@ -12,10 +12,10 @@ import PropTypes from 'prop-types';
 import { stylesheet, classNames } from './style.less';
 
 const Badge = (props) => {
-	const { children, type, ...rest } = props;
+	const { children, type, className, ...rest } = props;
 
 	return (
-		<div className={classNames.root + ' ' + classNames[type]} {...rest}>
+		<div className={classNames.root + ' ' + classNames[type] + ' ' + className} {...rest}>
 			<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 			{children}
 		</div>
@@ -24,11 +24,13 @@ const Badge = (props) => {
 
 Badge.propTypes = {
 	children: PropTypes.string.isRequired,
+	className: PropTypes.string,
 	type: PropTypes.string,
 };
 
 Badge.defaultProps = {
 	type: 'default',
+	className: '',
 };
 
 export default Badge;

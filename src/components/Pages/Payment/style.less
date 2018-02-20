@@ -22,3 +22,35 @@
     margin: 0 10px;
   }
 }
+
+.student {
+  display: flex;
+  align-items: center;
+  &>div {
+    margin-left: 10px;
+  }
+}
+
+.subTable {
+  margin: 10px 40px;
+  border: 1px solid #e8e9e8;
+  .item {
+    display: flex;
+    border-bottom: 1px solid #e8e9e8;
+    &:last-child {
+      border-bottom: 0;
+    }
+    .label {
+      padding: 10px 20px;
+      background: #52bce9;
+      color: #fff;
+	  flex: 1;
+	  text-align: right;
+    }
+    .value {
+      padding: 10px 20px;
+      flex: 2;
+      text-align: left;
+    }
+  }
+}

@@ -18,10 +18,8 @@ import PaymentActionPage from 'src/components/Pages/Payment/Action';
 @withRoot
 export default class PaymentAction extends PureComponent {
 	static async getInitialProps(ctx) {
-		// if (AuthStorage.loggedIn) {
-		// 	ctx.store.dispatch(getUserAuth());
-		// }
-		// return { auth: ctx.store.getState().auth };
+		const { query } = ctx;
+		return { paymentId: query.id, studentId: query.studentId };
 	}
 
 	render() {
@@ -30,7 +28,10 @@ export default class PaymentAction extends PureComponent {
 				<Head>
 					<title>IPP Admin - Payment - Action</title>
 				</Head>
-				<PaymentActionPage />
+				<PaymentActionPage
+					paymentId={this.props.paymentId}
+					studentId={this.props.studentId}
+				/>
 			</MainLayout>
 		);
 	}

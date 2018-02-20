@@ -38,12 +38,12 @@ export const updatePayment = (payload, next, nextError) => {
 };
 
 export const getPaymentData = (payload, next, nextError) => {
-	const { id } = payload;
+	const { id, filter } = payload;
 
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'payments/' + id,
+			uri: 'payments/' + id + (filter ? `?filter=${JSON.stringify(filter)}` : ''),
 			beforeCallType: 'GET_PAYMENT_DATA_REQUEST',
 			successType: 'GET_PAYMENT_DATA_SUCCESS',
 			afterSuccess: next,

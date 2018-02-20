@@ -79,7 +79,7 @@ export const getLabel = (value, arr = []) => {
 	return arr[index].label;
 };
 
-export const formatNumber = (value, fixed = 2) => {
+export const formatNumber = (value, fixed = 0) => {
 	if (!value || ~~value === 0) {
 		return 0;
 	}
