@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 
-import { Table, Divider, Icon, DatePicker, notification, Modal, Tabs } from 'antd';
+import { Table, Divider, Icon, DatePicker, notification, Modal, Tabs, Button } from 'antd';
 
 import { Router, Link } from 'src/routes';
 import { formatNumber } from 'src/utils';
@@ -43,7 +43,7 @@ const mapStateToProps = (state) => {
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class PaymentPage extends PureComponent {
+export default class StudySessionPage extends PureComponent {
 	static propTypes = {
 		// store
 		store: PropTypes.shape({
@@ -116,16 +116,13 @@ export default class PaymentPage extends PureComponent {
 		dataIndex: 'quantity',
 		key: 'quantity',
 		sorter: true,
-		render: (text) => {
-			return formatNumber(text) || 0;
-		},
 	}, {
 		title: 'Rest of session',
 		dataIndex: 'rest',
 		key: 'rest',
 		sorter: true,
 		render: (text) => {
-			return formatNumber(text) || 0;
+			return text || 0;
 		},
 	},
 	// {
@@ -291,7 +288,7 @@ export default class PaymentPage extends PureComponent {
 
 		this.props.action.getPaymentList({ filter: this.filter });
 
-		Router.pushRoute('/payment?status=' + tab);
+		Router.pushRoute('/study-session?status=' + tab);
 	}
 
 	handleExpandedRowRender = (record = {}) => {
@@ -334,9 +331,9 @@ export default class PaymentPage extends PureComponent {
 				<div className={classNames.control}>
 					<InputSearch onChange={this.handleChangeSearch} />
 					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} onChange={this.handleChangeDate} /></div>
-					{/* <div>
-						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/payment/new')}>Create Payment</Button>
-					</div> */}
+					<div>
+						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/study-session/new')}>Create Session</Button>
+					</div>
 				</div>
 
 				<Tabs onTabClick={this.handleClickTab} activeKey={Router.router && Router.router.query.status ? Router.router.query.status : 'active'}>

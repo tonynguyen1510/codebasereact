@@ -3,37 +3,32 @@
 * Email ductienas@gmail.com
 * Phone 0972970075
 *
-* Created: 2018-01-10 23:32:12
+* Created: 2018-02-20 22:18:10
 *------------------------------------------------------- */
 
 import React, { PureComponent } from 'react';
 
 import Head from 'next/head';
 import withRoot from 'src/root';
-
-// import AuthStorage from 'src/utils/AuthStorage';
-
 import MainLayout from 'src/layout/Main';
-
-import LevelPage from 'src/components/Pages/Level/Detail';
+import StudySessionPage from 'src/components/Pages/StudySession';
 
 @withRoot
-export default class LevelDetailPage extends PureComponent {
-	static async getInitialProps({ query, res }) {
+export default class StudySession extends PureComponent {
+	static async getInitialProps(ctx) {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
 		// }
-		return { levelId: query.id };
+		// return { auth: ctx.store.getState().auth };
 	}
 
 	render() {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Admin - Level - {this.props.levelId}</title>
+					<title>IPP Admin - Study Session</title>
 				</Head>
-
-				<LevelPage levelId={this.props.levelId} />
+				<StudySessionPage />
 			</MainLayout>
 		);
 	}

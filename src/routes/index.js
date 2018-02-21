@@ -17,6 +17,10 @@ routes.add({ pattern: '/lesson/new', page: 'lesson/action' });
 routes.add({ pattern: '/lesson/edit/:id', page: 'lesson/action' });
 routes.add({ pattern: '/lesson/:id', page: 'lesson/detail' });
 
+routes.add({ pattern: '/study-session/new', page: 'study-session/action' });
+routes.add({ pattern: '/study-session/edit/:id', page: 'study-session/action' });
+routes.add({ pattern: '/study-session/:id', page: 'study-session/detail' });
+
 // routes.add({ pattern: '/payment/new', page: 'payment/action' });
 routes.add({ pattern: '/payment/edit/:id', page: 'payment/action' });
 routes.add({ pattern: '/payment/:id', page: 'payment/detail' });

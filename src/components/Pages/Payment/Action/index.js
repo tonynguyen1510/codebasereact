@@ -17,7 +17,7 @@ import Router from 'next/router';
 import AuthStorage from 'src/utils/AuthStorage';
 import { formatNumber } from 'src/utils';
 
-import { Form, Select, Input, Button, DatePicker } from 'antd';
+import { Form, Select, Input, Button, DatePicker, InputNumber } from 'antd';
 
 import Avatar from 'src/components/Avatar';
 import Badge from 'src/components/Badge';
@@ -260,12 +260,13 @@ export default class PaymentAction extends Component {
 					{getFieldDecorator('quantity', {
 						rules: [{ required: true }],
 					})(
-						<Input
+						<InputNumber
 							size="large"
-							type="number"
+							formatter={value => `${value} sessions`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+							parser={value => value.replace(/\ sessions\s?|(,*)/g, '')}
 							placeholder="Quantity"
-							suffix="ss"
 							className={classNames.inputNumber}
+							style={{ width: '100%' }}
 						/>,
 					)}
 				</FormItem>
@@ -278,11 +279,12 @@ export default class PaymentAction extends Component {
 					{getFieldDecorator('unitPrice', {
 						rules: [{ required: true }],
 					})(
-						<Input
+						<InputNumber
 							size="large"
-							type="number"
+							formatter={value => `${value} vnd`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+							parser={value => value.replace(/\ vnd\s?|(,*)/g, '')}
 							placeholder="Unit Price"
-							suffix="vnd"
+							style={{ width: '100%' }}
 							className={classNames.inputNumber}
 						/>,
 					)}
@@ -297,11 +299,12 @@ export default class PaymentAction extends Component {
 						initialValue: 0,
 						rules: [{ required: true }],
 					})(
-						<Input
+						<InputNumber
 							size="large"
-							type="number"
-							placeholder="Discount"
-							suffix="vnd"
+							formatter={value => `${value} vnd`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+							parser={value => value.replace(/\ vnd\s?|(,*)/g, '')}
+							placeholder="Unit Price"
+							style={{ width: '100%' }}
 							className={classNames.inputNumber}
 						/>,
 					)}
