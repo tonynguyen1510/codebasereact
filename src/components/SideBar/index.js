@@ -56,7 +56,7 @@ const SideBar = (props) => {
 			<Menu.Item key="/level">
 				<Link href="/level">
 					<a>
-						<Icon type="profile" />
+						<Icon type="bar-chart" />
 						<span>Level</span>
 					</a>
 				</Link>
@@ -69,11 +69,11 @@ const SideBar = (props) => {
 					</a>
 				</Link>
 			</Menu.Item>
-			<Menu.Item key="/test">
-				<Link href="/test">
+			<Menu.Item key="/testing">
+				<Link href="/testing">
 					<a>
-						<Icon type="file" />
-						<span>Test</span>
+						<Icon type="file-text" />
+						<span>Testing</span>
 					</a>
 				</Link>
 			</Menu.Item>

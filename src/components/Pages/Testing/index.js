@@ -15,51 +15,50 @@ import moment from 'moment';
 import { Table, Divider, Icon, DatePicker, notification, Modal, Tabs, Button } from 'antd';
 
 import { Router, Link } from 'src/routes';
-import { formatNumber } from 'src/utils';
 
 import InputSearch from 'src/components/Form/InputSearch';
 import Avatar from 'src/components/Avatar';
 
-import { getSessionList, deleteSession, updateSession } from 'src/redux/actions/session';
+import { getTestingList, deleteTesting, updateTesting } from 'src/redux/actions/testing';
 
 import { stylesheet, classNames } from './style.less';
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		action: bindActionCreators({
-			getSessionList,
-			deleteSession,
-			updateSession,
+			getTestingList,
+			deleteTesting,
+			updateTesting,
 		}, dispatch),
 	};
 };
 const mapStateToProps = (state) => {
 	return {
 		store: {
-			sessionList: state.session.sessionList,
+			testingList: state.testing.testingList,
 		},
 	};
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class StudySessionPage extends PureComponent {
+export default class TestingPage extends PureComponent {
 	static propTypes = {
 		// store
 		store: PropTypes.shape({
-			sessionList: PropTypes.object.isRequired,
+			testingList: PropTypes.object.isRequired,
 		}).isRequired,
 		// action
 		action: PropTypes.shape({
-			getSessionList: PropTypes.func.isRequired,
-			deleteSession: PropTypes.func.isRequired,
-			updateSession: PropTypes.func.isRequired,
+			getTestingList: PropTypes.func.isRequired,
+			deleteTesting: PropTypes.func.isRequired,
+			updateTesting: PropTypes.func.isRequired,
 		}).isRequired,
 	}
 
 	static defaultProps = {}
 
 	componentDidMount() {
-		this.props.action.getSessionList({ filter: this.filter });
+		this.props.action.getTestingList({ filter: this.filter });
 	}
 
 	columns = [{
@@ -99,13 +98,6 @@ export default class StudySessionPage extends PureComponent {
 		dataIndex: 'levelName',
 		key: 'levelName',
 	}, {
-		title: 'Lesson',
-		dataIndex: 'lessonData',
-		key: 'lessonData',
-		render: (data = {}) => {
-			return data.name;
-		},
-	}, {
 		title: 'Branch',
 		dataIndex: 'branch',
 		key: 'branch',
@@ -122,7 +114,7 @@ export default class StudySessionPage extends PureComponent {
 			return (
 				<div className={classNames.actionWrapper}>
 					<div className={classNames.action}>
-						<Link route={'/study-session/' + record.id}>
+						<Link route={'/testing/' + record.id}>
 							<a>
 								<Icon type="eye-o" />
 							</a>
@@ -130,7 +122,7 @@ export default class StudySessionPage extends PureComponent {
 					</div>
 					<Divider type="vertical" />
 					<div className={classNames.action}>
-						<Link route={'/study-session/edit/' + record.id}>
+						<Link route={'/testing/edit/' + record.id}>
 							<a>
 								<Icon type="edit" />
 							</a>
@@ -143,12 +135,12 @@ export default class StudySessionPage extends PureComponent {
 								Modal.confirm({
 									title: 'Do you want to delete these items?',
 									onOk: () => {
-										this.props.action.deleteSession(record, () => {
+										this.props.action.deleteTesting(record, () => {
 											notification.success({
 												message: 'Congratulation',
 												description: 'Delete level success!',
 											});
-											this.props.action.getSessionList({ filter: this.filter });
+											this.props.action.getTestingList({ filter: this.filter });
 										});
 									},
 								});
@@ -173,7 +165,7 @@ export default class StudySessionPage extends PureComponent {
 		onChange: (page) => {
 			this.filter.skip = (page - 1) * this.filter.limit;
 
-			this.props.action.getSessionList({ filter: this.filter });
+			this.props.action.getTestingList({ filter: this.filter });
 		},
 	}
 
@@ -191,12 +183,12 @@ export default class StudySessionPage extends PureComponent {
 		Modal.confirm({
 			title: 'Are you sure?',
 			onOk: () => {
-				this.props.action.updateSession({ id: record.id, updatedAt: new Date(), status: val }, () => {
+				this.props.action.updateTesting({ id: record.id, updatedAt: new Date(), status: val }, () => {
 					notification.success({
 						message: 'Congratulation',
 						description: 'Change status success!',
 					});
-					this.props.action.getSessionList({ filter: this.filter });
+					this.props.action.getTestingList({ filter: this.filter });
 				});
 			},
 		});
@@ -210,7 +202,7 @@ export default class StudySessionPage extends PureComponent {
 		}
 		this.filter.skip = 0;
 
-		this.props.action.getSessionList({ filter: this.filter });
+		this.props.action.getTestingList({ filter: this.filter });
 	}
 
 	handleChangeSearch = (value) => {
@@ -221,14 +213,13 @@ export default class StudySessionPage extends PureComponent {
 				{ levelName: { regexp: regex } },
 				{ note: { regexp: regex } },
 				{ creatorId: { regexp: regex } },
-				{ 'lesson.name': { regexp: regex } },
 			];
 		} else {
 			delete this.filter.where.or;
 		}
 		this.filter.skip = 0;
 
-		this.props.action.getSessionList({ filter: this.filter });
+		this.props.action.getTestingList({ filter: this.filter });
 	}
 
 	handleTableChange = (pagination, filters, sorter) => {
@@ -239,20 +230,20 @@ export default class StudySessionPage extends PureComponent {
 		}
 		this.filter.skip = 0;
 
-		this.props.action.getSessionList({ filter: this.filter });
+		this.props.action.getTestingList({ filter: this.filter });
 	}
 
 	handleClickTab = (tab) => {
 		this.filter.skip = 0;
 		this.filter.where.status = tab;
 
-		this.props.action.getSessionList({ filter: this.filter });
+		this.props.action.getTestingList({ filter: this.filter });
 
-		Router.pushRoute('/study-session?status=' + tab);
+		Router.pushRoute('/testing?status=' + tab);
 	}
 
 	render() {
-		const { store: { sessionList } } = this.props;
+		const { store: { testingList } } = this.props;
 
 		return (
 			<div className={classNames.root}>
@@ -261,7 +252,7 @@ export default class StudySessionPage extends PureComponent {
 					<InputSearch onChange={this.handleChangeSearch} />
 					<div>Created at: <DatePicker.RangePicker style={{ marginLeft: 10 }} onChange={this.handleChangeDate} /></div>
 					<div>
-						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/study-session/new')}>Create Session</Button>
+						<Button type="primary" icon="file-add" onClick={() => Router.pushRoute('/testing/new')}>Create Testing</Button>
 					</div>
 				</div>
 
@@ -274,15 +265,15 @@ export default class StudySessionPage extends PureComponent {
 					columns={this.columns}
 					size="small"
 					bordered
-					loading={sessionList.loading}
-					dataSource={sessionList.data}
+					loading={testingList.loading}
+					dataSource={testingList.data}
 					rowKey={(record) => record.id}
 					onChange={this.handleTableChange}
 					pagination={{
 						...this.paginationConfig,
-						total: sessionList.total,
-						pageSize: sessionList.limit,
-						current: (sessionList.skip / sessionList.limit) + 1,
+						total: testingList.total,
+						pageSize: testingList.limit,
+						current: (testingList.skip / testingList.limit) + 1,
 					}}
 				/>
 			</div>

@@ -3,25 +3,33 @@
 * Email ductienas@gmail.com
 * Phone 0972970075
 *
-* Created: 2018-02-22 22:20:37
+* Created: 2018-02-23 00:28:33
 *------------------------------------------------------- */
 
-import React from 'react';
+import React, { PureComponent } from 'react';
+// import PropTypes from 'prop-types';
 
 import { Select } from 'antd';
 
-const SelectBranch = (props) => {
-	return (
-		<Select
-			placeholder="Select a branch"
-			style={{ width: '100%' }}
-			{...props}
-		>
-			<Select.Option value="HN">HN</Select.Option>
-			<Select.Option value="HQV">HQV</Select.Option>
-			<Select.Option value="HCMC">HCMC</Select.Option>
-		</Select>
-	);
-};
+export default class SelectBranch extends PureComponent {
+	static propTypes = {
+		// classes: PropTypes.object.isRequired,
+	}
 
-export default SelectBranch;
+	static defaultProps = {}
+
+	render() {
+		return (
+			<Select
+				placeholder="Select a branch"
+				style={{ width: '100%' }}
+				{...this.props}
+			>
+				<Select.Option value="HN">HN</Select.Option>
+				<Select.Option value="HQV">HQV</Select.Option>
+				<Select.Option value="HCMC">HCMC</Select.Option>
+			</Select>
+		);
+	}
+}
+

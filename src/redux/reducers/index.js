@@ -13,6 +13,8 @@ import student, { initialState as initialStudent } from './student';
 import payment, { initialState as initialPayment } from './payment';
 import session, { initialState as initialSession } from './session';
 import sessionDetail, { initialState as initialSessionDetail } from './sessionDetail';
+import testing, { initialState as initialTesting } from './testing';
+import testingDetail, { initialState as initialTestingDetail } from './testingDetail';
 import level, { initialState as initialLevel } from './level';
 import lesson, { initialState as initialLesson } from './lesson';
 
@@ -24,6 +26,8 @@ export const initialState = {
 	payment: initialPayment,
 	session: initialSession,
 	sessionDetail: initialSessionDetail,
+	testing: initialTesting,
+	testingDetail: initialTestingDetail,
 	level: initialLevel,
 	lesson: initialLesson,
 };
@@ -36,6 +40,8 @@ export default {
 	payment,
 	session,
 	sessionDetail,
+	testing,
+	testingDetail,
 	level,
 	lesson,
 };
