@@ -10,11 +10,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
 
-import { Table, Divider, Icon, Button, notification, Modal, Select } from 'antd';
+import { Table, Divider, Icon, notification, Modal, Select } from 'antd';
 
-import { Router, Link } from 'src/routes';
+import { Link } from 'src/routes';
 
 import InputSearch from 'src/components/Form/InputSearch';
 import Avatar from 'src/components/Avatar';
@@ -22,6 +21,7 @@ import Avatar from 'src/components/Avatar';
 import { getSessionDetailList, deleteSessionDetail, updateSessionDetail } from 'src/redux/actions/sessionDetail';
 
 import BtnAddStudent from '../BtnAddStudent';
+import BtnAddComment from '../BtnAddComment';
 
 import { stylesheet, classNames } from './style.less';
 
@@ -143,9 +143,7 @@ export default class StudentList extends PureComponent {
 			return (
 				<div className={classNames.actionWrapper}>
 					<div className={classNames.action}>
-						<a>
-							Comment
-						</a>
+						<BtnAddComment sessionDetailData={record} onAfterAdd={this.handleAfterAdd} />
 					</div>
 					<Divider type="vertical" />
 					<div className={classNames.action}>

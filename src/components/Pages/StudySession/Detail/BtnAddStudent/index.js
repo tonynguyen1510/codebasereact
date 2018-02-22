@@ -12,9 +12,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 
-import { Modal, Button, Table, Divider, Icon, notification, Select } from 'antd';
+import { Modal, Button, Table } from 'antd';
 
-import { Router, Link } from 'src/routes';
+import { Link } from 'src/routes';
 
 import AuthStorage from 'src/utils/AuthStorage';
 
