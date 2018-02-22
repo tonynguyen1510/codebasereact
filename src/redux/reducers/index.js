@@ -11,6 +11,8 @@ import loading, { initialState as initialLoading } from './loading';
 import user, { initialState as initialUser } from './user';
 import student, { initialState as initialStudent } from './student';
 import payment, { initialState as initialPayment } from './payment';
+import session, { initialState as initialSession } from './session';
+import sessionDetail, { initialState as initialSessionDetail } from './sessionDetail';
 import level, { initialState as initialLevel } from './level';
 import lesson, { initialState as initialLesson } from './lesson';
 
@@ -20,6 +22,8 @@ export const initialState = {
 	user: initialUser,
 	student: initialStudent,
 	payment: initialPayment,
+	session: initialSession,
+	sessionDetail: initialSessionDetail,
 	level: initialLevel,
 	lesson: initialLesson,
 };
@@ -30,6 +34,8 @@ export default {
 	user,
 	student,
 	payment,
+	session,
+	sessionDetail,
 	level,
 	lesson,
 };

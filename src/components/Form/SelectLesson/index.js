@@ -87,6 +87,8 @@ export default class UserRemoteSelect extends React.Component {
 		const { fetching, data, value } = this.state;
 		const { onChange, onFocus, ...rest } = this.props;
 
+		console.log('ptorp--------', this.props);
+
 		return (
 			<Select
 				ref={(select) => this.select = select} // eslint-disable-line
@@ -94,7 +96,7 @@ export default class UserRemoteSelect extends React.Component {
 				labelInValue
 				showArrow
 				value={value}
-				placeholder="Select users"
+				placeholder="Select Lesson"
 				notFoundContent={fetching ? <Spin size="small" /> : 'Not Found'}
 				filterOption={false}
 				style={{ width: '100%' }}

@@ -12,9 +12,10 @@ export const createSession = (payload, next, nextError) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'sessions',
+			uri: 'study-sessions',
 			params: payload,
 			opt: { method: 'POST' },
+			successType: 'CREATE_SESSION_SUCCESS',
 			afterSuccess: next,
 			afterError: nextError,
 		},
@@ -27,7 +28,7 @@ export const updateSession = (payload, next, nextError) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'sessions/' + id,
+			uri: 'study-sessions/' + id,
 			params: session,
 			opt: { method: 'PATCH' },
 			successType: 'UPDATE_SESSION_SUCCESS',
@@ -43,7 +44,7 @@ export const getSessionData = (payload, next, nextError) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'sessions/' + id + (filter ? `?filter=${JSON.stringify(filter)}` : ''),
+			uri: 'study-sessions/' + id + (filter ? `?filter=${JSON.stringify(filter)}` : ''),
 			beforeCallType: 'GET_SESSION_DATA_REQUEST',
 			successType: 'GET_SESSION_DATA_SUCCESS',
 			afterSuccess: next,
@@ -56,7 +57,7 @@ export const getSessionList = (payload, next, nextError) => {
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: `sessions?filter=${JSON.stringify(payload.filter)}`,
+			uri: `study-sessions?filter=${JSON.stringify(payload.filter)}`,
 			beforeCallType: 'GET_SESSION_LIST_REQUEST',
 			successType: 'GET_SESSION_LIST_SUCCESS',
 			afterSuccess: next,
@@ -66,12 +67,12 @@ export const getSessionList = (payload, next, nextError) => {
 };
 
 export const deleteSession = (payload, next) => {
-	const { id, ...Session } = payload;
+	const { id, ...session } = payload;
 
 	return {
 		type: SINGLE_API,
 		payload: {
-			uri: 'sessions/' + id,
+			uri: 'study-sessions/' + id,
 			params: { ...session, isDelete: true },
 			opt: { method: 'PATCH' },
 			successType: 'DELETE_SESSION_SUCCESS',

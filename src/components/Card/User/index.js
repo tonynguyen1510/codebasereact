@@ -133,6 +133,13 @@ const UserCard = (props) => {
 					</div>
 					<div className={classNames.item} >
 						<div className={classNames.label}>
+							<Icon type="bank" />
+							Branch:
+						</div>
+						<div className={classNames.value}>{userData.branch || '-'}</div>
+					</div>
+					<div className={classNames.item} >
+						<div className={classNames.label}>
 							<Icon type="calendar" />
 							Birth Date:
 						</div>

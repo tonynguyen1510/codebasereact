@@ -19,7 +19,7 @@ import StudySessionActionPage from 'src/components/Pages/StudySession/Action';
 export default class StudySessionAction extends PureComponent {
 	static async getInitialProps(ctx) {
 		const { query } = ctx;
-		return { studySessionId: query.id };
+		return { sessionId: query.id };
 	}
 
 	render() {
@@ -29,7 +29,7 @@ export default class StudySessionAction extends PureComponent {
 					<title>IPP Admin - Study Session - Action</title>
 				</Head>
 				<StudySessionActionPage
-					studentId={this.props.studySessionId}
+					sessionId={this.props.sessionId}
 				/>
 			</MainLayout>
 		);

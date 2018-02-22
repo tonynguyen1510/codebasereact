@@ -15,7 +15,7 @@ import withRoot from 'src/root';
 
 import MainLayout from 'src/layout/Main';
 
-import LevelPage from 'src/components/Pages/Level/Detail';
+import SessionDetailPage from 'src/components/Pages/StudySession/Detail';
 
 @withRoot
 export default class StudySessionDetail extends PureComponent {
@@ -23,17 +23,17 @@ export default class StudySessionDetail extends PureComponent {
 		// if (AuthStorage.loggedIn) {
 		// 	ctx.store.dispatch(getUserAuth());
 		// }
-		return { levelId: query.id };
+		return { sessionId: query.id };
 	}
 
 	render() {
 		return (
 			<MainLayout>
 				<Head>
-					<title>IPP Admin - Study Session - {this.props.levelId}</title>
+					<title>IPP Admin - Study Session - {this.props.sessionId}</title>
 				</Head>
 
-				<LevelPage levelId={this.props.levelId} />
+				<SessionDetailPage sessionId={this.props.sessionId} />
 			</MainLayout>
 		);
 	}

@@ -24,15 +24,13 @@ const InputSearch = (props) => {
 	const { onChange, ...rest } = props;
 
 	return (
-		<div>
-			<Input.Search
-				placeholder="Input search text"
-				style={{ width: 180 }}
-				{...rest}
-				onChange={(e) => handleSearch(e, onChange)}
-				onPressEnter={(e) => handleSearch(e, onChange, true)}
-			/>
-		</div>
+		<Input.Search
+			placeholder="Input search text"
+			style={{ width: 180 }}
+			{...rest}
+			onChange={(e) => handleSearch(e, onChange)}
+			onPressEnter={(e) => handleSearch(e, onChange, true)}
+		/>
 	);
 };
 

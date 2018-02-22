@@ -6,9 +6,7 @@
  * LastModified: 2018-02-17 12:01:16
  *-------------------------------------------------------*/
 
-import AuthStorage from 'src/utils/AuthStorage';
-
-import { SINGLE_API, REQUEST_ERROR } from 'src/redux/actions/type';
+import { SINGLE_API } from 'src/redux/actions/type';
 
 export const createStudent = (payload, next, nextError) => {
 	return {
