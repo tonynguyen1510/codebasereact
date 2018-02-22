@@ -16,10 +16,11 @@ import { Router } from 'src/routes';
 
 import AuthStorage from 'src/utils/AuthStorage';
 
-import { Form, Select, Input, Button, TimePicker } from 'antd';
+import { Form, Input, Button, TimePicker } from 'antd';
 
 import SelectLevel from 'src/components/Form/SelectLevel';
 import SelectLesson from 'src/components/Form/SelectLesson';
+import SelectBranch from 'src/components/Form/SelectBranch';
 
 import { getSessionData, createSession, updateSession } from 'src/redux/actions/session';
 import { getStudentData } from 'src/redux/actions/student';
@@ -53,9 +54,9 @@ export default class StudySessionAction extends Component {
 		form: PropTypes.object.isRequired,
 		sessionId: PropTypes.string,
 		// store
-		store: PropTypes.shape({
-			sessionView: PropTypes.object.isRequired,
-		}).isRequired,
+		// store: PropTypes.shape({
+		// 	sessionView: PropTypes.object.isRequired,
+		// }).isRequired,
 		// action
 		action: PropTypes.shape({
 			getSessionData: PropTypes.func.isRequired,
@@ -228,10 +229,7 @@ export default class StudySessionAction extends Component {
 					{getFieldDecorator('branch', {
 						initialValue: 'HN',
 					})(
-						<Select>
-							<Select.Option value="HN">Hà Nội</Select.Option>
-							<Select.Option value="HCM">HCM</Select.Option>
-						</Select>,
+						<SelectBranch />,
 					)}
 				</Form.Item>
 				<FormItem

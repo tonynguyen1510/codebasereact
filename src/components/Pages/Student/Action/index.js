@@ -19,6 +19,7 @@ import AuthStorage from 'src/utils/AuthStorage';
 import { Input, Form, Select, DatePicker, Button } from 'antd';
 
 import SelectLevel from 'src/components/Form/SelectLevel';
+import SelectBranch from 'src/components/Form/SelectBranch';
 
 import { createStudent, getStudentData, updateStudent } from 'src/redux/actions/student';
 
@@ -310,10 +311,7 @@ export default class ConsultorAction extends Component {
 					{getFieldDecorator('branch', {
 						initialValue: 'HN',
 					})(
-						<Select size="large" style={{ width: 192 }}>
-							<Select.Option value="HN">Hà Nội</Select.Option>
-							<Select.Option value="HCM">HCM</Select.Option>
-						</Select>,
+						<SelectBranch size="large" style={{ width: 192 }} />,
 					)}
 				</Form.Item>
 

@@ -20,6 +20,8 @@ import { Input, Form, Select, DatePicker, Button } from 'antd';
 
 import { createUser, getUserData, updateUser } from 'src/redux/actions/user';
 
+import SelectBranch from 'src/components/Form/SelectBranch';
+
 function mapStateToProps(state) {
 	return {
 		store: {
@@ -233,10 +235,7 @@ export default class ConsultorAction extends Component {
 					{getFieldDecorator('branch', {
 						initialValue: 'HN',
 					})(
-						<Select size="large" style={{ width: 192 }}>
-							<Select.Option value="HN">Hà Nội</Select.Option>
-							<Select.Option value="HCM">HCM</Select.Option>
-						</Select>,
+						<SelectBranch size="large" style={{ width: 192 }} />,
 					)}
 				</Form.Item>
 

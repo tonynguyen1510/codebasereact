@@ -15,19 +15,15 @@ import moment from 'moment';
 import Router from 'next/router';
 
 import AuthStorage from 'src/utils/AuthStorage';
-import { formatNumber } from 'src/utils';
 
-import { Form, Select, Input, Button, DatePicker, Row, Col, TimePicker } from 'antd';
+import { Form, Input, Button, Row, Col, TimePicker } from 'antd';
 
-import Avatar from 'src/components/Avatar';
-import Badge from 'src/components/Badge';
 import SelectLevel from 'src/components/Form/SelectLevel';
 import SelectLesson from 'src/components/Form/SelectLesson';
+import SelectBranch from 'src/components/Form/SelectBranch';
 
 import { getSessionData, createSession, updateSession } from 'src/redux/actions/session';
 import { getStudentData } from 'src/redux/actions/student';
-
-import StudentList from './StudentList';
 
 import { stylesheet, classNames } from './style.less';
 
@@ -249,10 +245,7 @@ export default class StudySessionAction extends Component {
 								{getFieldDecorator('branch', {
 									initialValue: 'HN',
 								})(
-									<Select>
-										<Select.Option value="HN">Hà Nội</Select.Option>
-										<Select.Option value="HCM">HCM</Select.Option>
-									</Select>,
+									<SelectBranch />,
 								)}
 							</Form.Item>
 							<FormItem
