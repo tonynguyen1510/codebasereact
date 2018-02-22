@@ -66,17 +66,17 @@ export default class StudentList extends PureComponent {
 
 	columns = [{
 		title: 'Student',
-		dataIndex: 'studentData',
-		key: 'studentData',
+		dataIndex: 'studentData.fullName',
+		key: 'studentData.fullName',
 		sorter: true,
 		width: 200,
 		className: 'text-left',
-		render: (data = {}) => {
+		render: (text, data = {}) => {
 			return (
-				<Link route={'/student/' + data.id}>
+				<Link route={'/student/' + data.studentData.id}>
 					<a className={classNames.student}>
-						<Avatar size="small" url={data.avatar} />
-						<div>{data.fullName}</div>
+						<Avatar size="small" url={data.studentData.avatar} />
+						<div>{data.studentData.fullName}</div>
 					</a>
 				</Link>
 			);

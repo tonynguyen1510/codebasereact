@@ -66,6 +66,17 @@ export const getSessionDetailList = (payload, next, nextError) => {
 	};
 };
 
+export const getSessionDetailIdList = (payload, next, nextError) => {
+	return {
+		type: SINGLE_API,
+		payload: {
+			uri: `study-session-details?filter=${JSON.stringify(payload.filter)}`,
+			afterSuccess: next,
+			afterError: nextError,
+		},
+	};
+};
+
 export const deleteSessionDetail = (payload, next) => {
 	const { id, ...sessionDetail } = payload;
 

@@ -22,7 +22,7 @@ import InputSearch from 'src/components/Form/InputSearch';
 import Avatar from 'src/components/Avatar';
 
 import { getStudentList } from 'src/redux/actions/student';
-import { createSessionDetail } from 'src/redux/actions/sessionDetail';
+import { createSessionDetail, getSessionDetailIdList } from 'src/redux/actions/sessionDetail';
 
 import { stylesheet, classNames } from './style.less';
 
@@ -31,6 +31,7 @@ const mapDispatchToProps = (dispatch) => {
 		action: bindActionCreators({
 			getStudentList,
 			createSessionDetail,
+			getSessionDetailIdList,
 		}, dispatch),
 	};
 };
@@ -55,6 +56,7 @@ export default class BtnAddStudent extends PureComponent {
 		action: PropTypes.shape({
 			getStudentList: PropTypes.func.isRequired,
 			createSessionDetail: PropTypes.func.isRequired,
+			getSessionDetailIdList: PropTypes.func.isRequired,
 		}).isRequired,
 	}
 
@@ -135,9 +137,9 @@ export default class BtnAddStudent extends PureComponent {
 		skip: 0,
 		limit: 2,
 		where: {
-			// status: 'studying',
-			// levelName: this.props.sessionData.levelName,
-			// branch: this.props.sessionData.branch,
+			status: 'studying',
+			levelName: this.props.sessionData.levelName,
+			branch: this.props.sessionData.branch,
 		},
 	}
 
@@ -154,17 +156,6 @@ export default class BtnAddStudent extends PureComponent {
 				selectedRowsMap,
 			});
 		},
-	}
-
-	handleChangeDate = (value) => {
-		if (value.length === 2) {
-			this.filter.where.createdAt = { between: value };
-		} else {
-			delete this.filter.where.createdAt;
-		}
-		this.filter.skip = 0;
-
-		this.props.action.getStudentList({ filter: this.filter });
 	}
 
 	handleChangeSearch = (value) => {
@@ -190,20 +181,34 @@ export default class BtnAddStudent extends PureComponent {
 	}
 
 	handleShowModal = () => {
-		this.filter = {
+		this.props.action.getSessionDetailIdList({ filter: {
 			skip: 0,
-			limit: 2,
+			limit: 1000,
+			fields: ['id', 'studentId'],
 			where: {
-				// status: 'studying',
-				// levelName: this.props.sessionData.levelName,
-				// branch: this.props.sessionData.branch,
+				sessionId: this.props.sessionData.id,
+				isDelete: false,
 			},
-		};
+		} }, (listDetail) => {
+			const idList = listDetail.data.map((el) => {
+				return el.studentId;
+			});
+			this.filter = {
+				skip: 0,
+				limit: 2,
+				where: {
+					id: { nin: idList },
+					status: 'studying',
+					levelName: this.props.sessionData.levelName,
+					branch: this.props.sessionData.branch,
+				},
+			};
 
-		this.props.action.getStudentList({ filter: this.filter });
-		this.setState({
-			visible: true,
-			confirmLoading: false,
+			this.props.action.getStudentList({ filter: this.filter });
+			this.setState({
+				visible: true,
+				confirmLoading: false,
+			});
 		});
 	}
 	handleOk = () => {
@@ -245,6 +250,17 @@ export default class BtnAddStudent extends PureComponent {
 		});
 	}
 
+	handleTableChange = (pagination, filters, sorter) => {
+		if (sorter.order && sorter.field) {
+			this.filter.order = sorter.field + ' ' + (sorter.order === 'ascend' ? 'ASC' : 'DESC');
+		} else {
+			delete this.filter.order;
+		}
+		this.filter.skip = 0;
+
+		this.props.action.getStudentList({ filter: this.filter });
+	}
+
 	render() {
 		const { store: { studentList } } = this.props;
 
@@ -265,7 +281,7 @@ export default class BtnAddStudent extends PureComponent {
 					<div className={classNames.root + ' hidden-check-all'}>
 						<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
 						<div className={classNames.control}>
-							<InputSearch onChange={this.handleChangeSearch} style={{ flex: 1, marginRight: 15 }} />
+							<InputSearch onChange={this.handleChangeSearch} style={{ flex: 1 }} />
 						</div>
 						<Table
 							columns={this.columns}
