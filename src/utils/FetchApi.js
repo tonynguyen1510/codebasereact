@@ -97,21 +97,23 @@ export default function* ({ uri, params = {}, opt = {}, loading = true, uploadIm
 		}
 
 		response = yield call(fetching, url, options);
-
 		if (loading) {
 			yield put({ type: 'TOGGLE_LOADING' });
 		}
 	} catch (error) {
 		response = { error };
-
-		if (error.statusCode === 401 && (error.code === 'INVALID_TOKEN' || error.code === 'AUTHORIZATION_REQUIRED')) {
-			// Access token has expired
-			if (AuthStorage.loggedIn) {
-				yield put({ type: 'LOGOUT_SUCCESS' });
+		if (error.statusCode === 401 && error.code !== 'ACCOUNT_DISABLED') {
+			if (error.code === 'INVALID_TOKEN') {
+				// Access token has expired
+				if (AuthStorage.loggedIn) {
+					yield put({ type: 'LOGOUT_SUCCESS' });
+				}
+				yield put({ type: REQUEST_ERROR, payload: 'Access token has expired' });
+				Router.push('/login');
 			}
-
-			yield put({ type: REQUEST_ERROR, payload: 'Access token has expired' });
-			Router.push('/login');
+			if (error.code === 'AUTHORIZATION_REQUIRED') {
+				yield put({ type: REQUEST_ERROR, payload: "You don't have permission for this action!" });
+			}
 		} else if (error.statusCode === 401 && error.code === 'ACCOUNT_DISABLED') {
 			// Access token has expired
 			if (AuthStorage.loggedIn) {
@@ -119,6 +121,13 @@ export default function* ({ uri, params = {}, opt = {}, loading = true, uploadIm
 			}
 
 			yield put({ type: REQUEST_ERROR, payload: 'Account has been disabled' });
+			Router.push('/login');
+		} else if (error.statusCode === 404 && error.code === 'MODEL_NOT_FOUND') {
+			// Access token has expired
+			if (AuthStorage.loggedIn) {
+				yield put({ type: 'LOGOUT_SUCCESS' });
+			}
+			yield put({ type: REQUEST_ERROR, payload: 'Access token has expired' });
 			Router.push('/login');
 		} else {
 			yield put({ type: REQUEST_ERROR, payload: error.message || error });
