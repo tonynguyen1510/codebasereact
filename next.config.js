@@ -9,8 +9,9 @@
 /* eslint-disable */
 const fs = require('fs');
 const trash = require('trash');
+const withCSS = require('@zeit/next-css')
 
-module.exports = {
+module.exports = withCSS({
 	webpack: (config) => {
 		config.plugins = config.plugins.filter(
 			(plugin) => (plugin.constructor.name !== 'UglifyJsPlugin'),
@@ -68,4 +69,4 @@ module.exports = {
 
 		return config;
 	},
-};
+});

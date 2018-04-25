@@ -10,10 +10,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import { notification, Button } from 'antd';
-
-import Link from 'next/link';
+import { getNotes, deleteNote } from 'src/redux/actions/note';
+import { notification, Button, Row, Col, Modal } from 'antd';
+import { Router, Link } from 'src/routes';
 
 import AuthStorage from 'src/utils/AuthStorage';
 
@@ -23,15 +22,18 @@ const mapStateToProps = (state) => {
 	return {
 		store: {
 			auth: state.auth,
+			noteInfo: state.note.noteInfo,
+			noteList: state.note.noteList,
 		},
 	};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		// action: bindActionCreators({
-		// 	getFeedsFb,
-		// }, dispatch),
+		actions: bindActionCreators({
+			getNotes,
+			deleteNote,
+		}, dispatch),
 	};
 };
 
@@ -41,12 +43,14 @@ export default class IndexPage extends PureComponent {
 		// classes: PropTypes.object.isRequired,
 		// store
 		store: PropTypes.shape({
-			auth: PropTypes.object.isRequired,
+			noteInfo: PropTypes.object.isRequired,
+			noteList: PropTypes.object.isRequired,
 		}).isRequired,
 		// action
-		// action: PropTypes.shape({
-		// 	getFeedsFb: PropTypes.func.isRequired,
-		// }).isRequired,
+		actions: PropTypes.shape({
+			getNotes: PropTypes.func.isRequired,
+			deleteNote: PropTypes.func.isRequired,
+		}).isRequired,
 
 	}
 
@@ -54,8 +58,20 @@ export default class IndexPage extends PureComponent {
 
 	}
 
+	componentWillMount = () => {
+		if (this.props.store.noteList.data.length < 2) {
+			this.props.actions.getNotes({ filter: this.filter });
+		}
+	};
+
+
 	componentDidMount() {
 		// this.props.action.getFeedsFb();
+	}
+
+	filter = {
+		skip: 0,
+		limit: 6,
 	}
 
 	notify = () => {
@@ -66,13 +82,45 @@ export default class IndexPage extends PureComponent {
 	}
 
 	render() {
-		const { store: { auth } } = this.props;
+		const { noteInfo } = this.props.store;
 
 		return (
-			<div>
+			<div className={classNames.mainContain}>
 				<style dangerouslySetInnerHTML={{ __html: stylesheet }} />
-
-				<Button className={classNames.btn} onClick={this.notify} type="primary">Primary</Button>
+				<Row className={classNames.controlBar}>
+					<Col span={12}>
+						<h2 className={classNames.textTitle}> {noteInfo.name} </h2>
+					</Col>
+					<Col span={10} className={classNames.textRight}>
+						<Link route="/note/new">
+							<Button size="large" type="primary" shape="circle" icon="plus" style={{ marginRight: '10px' }} />
+						</Link>
+						<Link route={'/note/edit/' + noteInfo.id}>
+							<Button size="large" type="primary" shape="circle" icon="edit" style={{ marginRight: '10px' }} />
+						</Link>
+						<Button
+							onClick={() => {
+								Modal.confirm({
+									title: 'Do you want to delete these items?',
+									onOk: () => {
+										this.props.actions.deleteNote(noteInfo.id, () => {
+											notification.success({
+												message: 'Congratulation',
+												description: 'Delete note success!',
+											});
+											this.props.actions.getNotes({ filter: this.filter });
+										});
+									},
+								});
+							}}
+							size="large" type="danger" shape="circle" icon="delete"
+						/>
+					</Col>
+				</Row>
+				<Row className={classNames.content}>
+					<p><strong><i>{ noteInfo.description }</i></strong></p>
+					<div dangerouslySetInnerHTML={{ __html: noteInfo.content }} />
+				</Row>
 			</div>
 		);
 	}
